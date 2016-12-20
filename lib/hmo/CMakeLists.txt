@@ -1,1 +1,1 @@
-add_library(hmo_utils Node.cpp Node.h)
+add_library(hmo_utils Instance.cpp Instance.h)

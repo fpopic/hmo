@@ -1,10 +1,9 @@
 #include <gtest/gtest.h>
-#include "hmo/Node.h"
+#include "hmo/Instance.h"
 
 using namespace std;
 
-TEST(test, first) {
-    Node node;
-    EXPECT_EQ(1, 1);
-
+TEST(hmo, constants) {
+    EXPECT_EQ(A, 0);
+    EXPECT_EQ(B, 1);
 }
