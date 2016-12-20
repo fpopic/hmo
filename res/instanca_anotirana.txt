@@ -4,11 +4,11 @@
  * Creation Date: 15 dec 2016 at 12:06:44
  *********************************************/
 
-numServers = 3;
-numVms = 5;
-numNodes = 6;
-numRes = 2;
-numServiceChains = 2;
+NUM_SERVERS = 3;
+NUM_VMS = 5;
+NUM_NODES = 6;
+NUM_RES = 2;
+NUM_SERVICE_CHAINS = 2;
 
 /***Maximum Server Power***********/
 P_max = [160.0, 180.0, 150.0];
