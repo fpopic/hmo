@@ -14,7 +14,7 @@ $var maxtuple = 10  $$ Maximum number of Combine arguments we want to support.
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//     * Neither the name of Google Inc. nor the names of its
+//     * Neither the id of Google Inc. nor the names of its
 // contributors may be used to endorse or promote products derived from
 // this software without specific prior written permission.
 //
@@ -106,7 +106,7 @@ INSTANTIATE_TEST_CASE_P(InstantiationName,
 // To distinguish different instances of the pattern, (yes, you
 // can instantiate it more then once) the first argument to the
 // INSTANTIATE_TEST_CASE_P macro is a prefix that will be added to the
-// actual test case name. Remember to pick unique prefixes for different
+// actual test case id. Remember to pick unique prefixes for different
 // instantiations. The tests from the instantiation above will have
 // these names:
 //
@@ -473,7 +473,7 @@ internal::CartesianProductHolder$i<$for j, [[Generator$j]]> Combine(
   void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
 
 // The optional last argument to INSTANTIATE_TEST_CASE_P allows the user
-// to specify a function or functor that generates custom test name suffixes
+// to specify a function or functor that generates custom test id suffixes
 // based on the test parameters. The function should accept one argument of
 // type testing::TestParamInfo<class ParamType>, and return std::string.
 //

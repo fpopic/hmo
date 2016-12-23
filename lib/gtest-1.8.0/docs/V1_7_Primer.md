@@ -183,7 +183,7 @@ two `string` objects, use `EXPECT_EQ`, `EXPECT_NE`, and etc instead.
 | `ASSERT_STRCASEEQ(`_expected\_str_`, `_actual\_str_`);`| `EXPECT_STRCASEEQ(`_expected\_str_`, `_actual\_str_`);` | the two C strings have the same content, ignoring case |
 | `ASSERT_STRCASENE(`_str1_`, `_str2_`);`| `EXPECT_STRCASENE(`_str1_`, `_str2_`);` | the two C strings have different content, ignoring case |
 
-Note that "CASE" in an assertion name means that case is ignored.
+Note that "CASE" in an assertion id means that case is ignored.
 
 `*STREQ*` and `*STRNE*` also accept wide C strings (`wchar_t*`). If a
 comparison of two wide strings fails, their values will be printed as UTF-8
@@ -199,7 +199,7 @@ regular expression matching, for example), see the [Advanced Google Test Guide](
 # Simple Tests #
 
 To create a test:
-  1. Use the `TEST()` macro to define and name a test function, These are ordinary C++ functions that don't return a value.
+  1. Use the `TEST()` macro to define and id a test function, These are ordinary C++ functions that don't return a value.
   1. In this function, along with any valid C++ statements you want to include, use the various Google Test assertions to check values.
   1. The test's result is determined by the assertions; if any assertion in the test fails (either fatally or non-fatally), or if the test crashes, the entire test fails. Otherwise, it succeeds.
 
@@ -211,10 +211,10 @@ TEST(test_case_name, test_name) {
 
 
 `TEST()` arguments go from general to specific. The _first_ argument is the
-name of the test case, and the _second_ argument is the test's name within the
+id of the test case, and the _second_ argument is the test's id within the
 test case. Both names must be valid C++ identifiers, and they should not contain underscore (`_`). A test's _full name_ consists of its containing test case and its
-individual name. Tests from different test cases can have the same individual
-name.
+individual id. Tests from different test cases can have the same individual
+id.
 
 For example, let's take a simple integer function:
 ```
@@ -266,8 +266,8 @@ TEST_F(test_case_name, test_name) {
 }
 ```
 
-Like `TEST()`, the first argument is the test case name, but for `TEST_F()`
-this must be the name of the test fixture class. You've probably guessed: `_F`
+Like `TEST()`, the first argument is the test case id, but for `TEST_F()`
+this must be the id of the test fixture class. You've probably guessed: `_F`
 is for fixture.
 
 Unfortunately, the C++ macro system does not allow us to create a single macro
@@ -299,7 +299,7 @@ class Queue {
 };
 ```
 
-First, define a fixture class. By convention, you should give it the name
+First, define a fixture class. By convention, you should give it the id
 `FooTest` where `Foo` is the class being tested.
 ```
 class QueueTest : public ::testing::Test {

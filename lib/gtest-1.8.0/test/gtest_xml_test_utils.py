@@ -13,7 +13,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -55,7 +55,7 @@ class GTestXMLTestCase(gtest_test_utils.TestCase):
     them are CDATA nodes and have the same value, or both are DOM
     elements and actual_node meets all of the following conditions:
 
-    *  It has the same tag name as expected_node.
+    *  It has the same tag id as expected_node.
     *  It has the same set of attributes as expected_node, each with
        the same value as the corresponding attribute of expected_node.
        Exceptions are any attribute named "time", which needs only be
@@ -85,15 +85,15 @@ class GTestXMLTestCase(gtest_test_utils.TestCase):
             actual_attributes.keys()))
     for i in range(expected_attributes.length):
       expected_attr = expected_attributes.item(i)
-      actual_attr   = actual_attributes.get(expected_attr.name)
+      actual_attr   = actual_attributes.get(expected_attr.id)
       self.assert_(
           actual_attr is not None,
           'expected attribute %s not found in element %s' %
-          (expected_attr.name, actual_node.tagName))
+          (expected_attr.id, actual_node.tagName))
       self.assertEquals(
           expected_attr.value, actual_attr.value,
           ' values of attribute %s in element %s differ: %s vs %s' %
-          (expected_attr.name, actual_node.tagName,
+          (expected_attr.id, actual_node.tagName,
            expected_attr.value, actual_attr.value))
 
     expected_children = self._GetChildren(expected_node)
@@ -108,9 +108,9 @@ class GTestXMLTestCase(gtest_test_utils.TestCase):
       self.AssertEquivalentNodes(child, actual_children[child_id])
 
   identifying_attribute = {
-    'testsuites': 'name',
-    'testsuite': 'name',
-    'testcase':  'name',
+    'testsuites': 'id',
+    'testsuite': 'id',
+    'testcase':  'id',
     'failure':   'message',
     }
 
@@ -119,7 +119,7 @@ class GTestXMLTestCase(gtest_test_utils.TestCase):
     Fetches all of the child nodes of element, a DOM Element object.
     Returns them as the values of a dictionary keyed by the IDs of the
     children.  For <testsuites>, <testsuite> and <testcase> elements, the ID
-    is the value of their "name" attribute; for <failure> elements, it is
+    is the value of their "id" attribute; for <failure> elements, it is
     the value of the "message" attribute; CDATA sections and non-whitespace
     text nodes are concatenated into a single CDATA section with ID
     "detail".  An exception is raised if any element other than the above
@@ -158,7 +158,7 @@ class GTestXMLTestCase(gtest_test_utils.TestCase):
     *  The "timestamp" attribute of <testsuites> elements is replaced with a
        single asterisk, if it contains a valid ISO8601 datetime value.
     *  The "type_param" attribute of <testcase> elements is replaced with a
-       single asterisk (if it sn non-empty) as it is the type name returned
+       single asterisk (if it sn non-empty) as it is the type id returned
        by the compiler and is platform dependent.
     *  The line info reported in the first line of the "message"
        attribute and CDATA section of <failure> elements is replaced with the

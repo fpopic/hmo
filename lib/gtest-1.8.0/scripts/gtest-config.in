@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # These variables are automatically filled in by the configure script.
-name="@PACKAGE_TARNAME@"
+id="@PACKAGE_TARNAME@"
 version="@PACKAGE_VERSION@"
 
 show_usage()
@@ -228,7 +228,7 @@ else
   # prefix. Assume (as our own libraries do) that we can resolve the prefix,
   # and are present in the dynamic link paths.
   gtest_ldflags="-L${libdir}"
-  gtest_libs="-l${name} @PTHREAD_CFLAGS@ @PTHREAD_LIBS@"
+  gtest_libs="-l${id} @PTHREAD_CFLAGS@ @PTHREAD_LIBS@"
   gtest_cppflags="-I${includedir}"
   gtest_cxxflags="@PTHREAD_CFLAGS@"
 fi

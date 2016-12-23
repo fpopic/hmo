@@ -19,7 +19,7 @@
 				4089A0980FFAD34A000B29AE /* PBXTargetDependency */,
 				40C849F9101A43490083642A /* PBXTargetDependency */,
 			);
-			name = Check;
+			id = Check;
 			productName = Check;
 		};
 		40C44ADC0E3798F4008FCC51 /* Version Info */ = {
@@ -31,7 +31,7 @@
 			comments = "The generation of Version.h must be performed in its own target. Since the Info.plist is preprocessed before any of the other build phases in gtest, the Version.h file would not be ready if included as a build phase of that target.";
 			dependencies = (
 			);
-			name = "Version Info";
+			id = "Version Info";
 			productName = Version.h;
 		};
 /* End PBXAggregateTarget section */
@@ -193,7 +193,7 @@
 				40899F500FFA7281000B29AE /* gtest-tuple.h in Copy Headers Internal */,
 				3BF6F2A00E79B5AD000F2EEE /* gtest-type-util.h in Copy Headers Internal */,
 			);
-			name = "Copy Headers Internal";
+			id = "Copy Headers Internal";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -217,11 +217,11 @@
 		404883E40E2F799B00CF7658 /* gtest-internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "gtest-internal.h"; sourceTree = "<group>"; };
 		404883E50E2F799B00CF7658 /* gtest-port.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "gtest-port.h"; sourceTree = "<group>"; };
 		404883E60E2F799B00CF7658 /* gtest-string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "gtest-string.h"; sourceTree = "<group>"; };
-		404883F60E2F799B00CF7658 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = SOURCE_ROOT; };
+		404883F60E2F799B00CF7658 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; id = README.md; path = ../README.md; sourceTree = SOURCE_ROOT; };
 		4048840D0E2F799B00CF7658 /* gtest_main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gtest_main.cc; sourceTree = "<group>"; };
-		404884A90E2F7CD900CF7658 /* CHANGES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGES; path = ../CHANGES; sourceTree = SOURCE_ROOT; };
-		404884AA0E2F7CD900CF7658 /* CONTRIBUTORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CONTRIBUTORS; path = ../CONTRIBUTORS; sourceTree = SOURCE_ROOT; };
-		404884AB0E2F7CD900CF7658 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = SOURCE_ROOT; };
+		404884A90E2F7CD900CF7658 /* CHANGES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; id = CHANGES; path = ../CHANGES; sourceTree = SOURCE_ROOT; };
+		404884AA0E2F7CD900CF7658 /* CONTRIBUTORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; id = CONTRIBUTORS; path = ../CONTRIBUTORS; sourceTree = SOURCE_ROOT; };
+		404884AB0E2F7CD900CF7658 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; id = LICENSE; path = ../LICENSE; sourceTree = SOURCE_ROOT; };
 		40899F430FFA7184000B29AE /* gtest_unittest-framework */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gtest_unittest-framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40899F4D0FFA7271000B29AE /* gtest-tuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "gtest-tuple.h"; sourceTree = "<group>"; };
 		40899FB30FFA7567000B29AE /* StaticLibraryTarget.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = StaticLibraryTarget.xcconfig; sourceTree = "<group>"; };
@@ -297,7 +297,7 @@
 				4089A0130FFACEFC000B29AE /* sample1_unittest-framework */,
 				40C84997101A36A60083642A /* sample1_unittest-static */,
 			);
-			name = Products;
+			id = Products;
 			sourceTree = "<group>";
 		};
 		0867D691FE84028FC02AAC07 /* gtest */ = {
@@ -309,7 +309,7 @@
 				403EE37B0E377822004BD1E2 /* Scripts */,
 				034768DDFF38A45A11DB9C8B /* Products */,
 			);
-			name = gtest;
+			id = gtest;
 			sourceTree = "<group>";
 		};
 		08FB77ACFE841707C02AAC07 /* Source */ = {
@@ -324,7 +324,7 @@
 				404884070E2F799B00CF7658 /* src */,
 				3B238BF00E7FE13B00846E11 /* test */,
 			);
-			name = Source;
+			id = Source;
 			sourceTree = "<group>";
 		};
 		3B238BF00E7FE13B00846E11 /* test */ = {
@@ -332,7 +332,7 @@
 			children = (
 				3B238C120E7FE13C00846E11 /* gtest_unittest.cc */,
 			);
-			name = test;
+			id = test;
 			path = ../test;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -350,7 +350,7 @@
 			children = (
 				404883DA0E2F799B00CF7658 /* gtest */,
 			);
-			name = include;
+			id = include;
 			path = ../include;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -395,7 +395,7 @@
 				224A12A10E9EADA700BD17FD /* gtest-all.cc */,
 				4048840D0E2F799B00CF7658 /* gtest_main.cc */,
 			);
-			name = src;
+			id = src;
 			path = ../src;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -406,7 +406,7 @@
 				4089A02D0FFACF7F000B29AE /* sample1.h */,
 				4089A02E0FFACF7F000B29AE /* sample1_unittest.cc */,
 			);
-			name = samples;
+			id = samples;
 			path = ../samples;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -465,7 +465,7 @@
 			dependencies = (
 				40C849A0101A36F10083642A /* PBXTargetDependency */,
 			);
-			name = "gtest_unittest-framework";
+			id = "gtest_unittest-framework";
 			productName = gtest_unittest;
 			productReference = 40899F430FFA7184000B29AE /* gtest_unittest-framework */;
 			productType = "com.apple.product-type.tool";
@@ -482,7 +482,7 @@
 			dependencies = (
 				40C8499E101A36E50083642A /* PBXTargetDependency */,
 			);
-			name = "sample1_unittest-framework";
+			id = "sample1_unittest-framework";
 			productName = sample1_unittest;
 			productReference = 4089A0130FFACEFC000B29AE /* sample1_unittest-framework */;
 			productType = "com.apple.product-type.tool";
@@ -497,7 +497,7 @@
 			);
 			dependencies = (
 			);
-			name = "gtest-static";
+			id = "gtest-static";
 			productName = "gtest-static";
 			productReference = 40C848FA101A209C0083642A /* libgtest.a */;
 			productType = "com.apple.product-type.library.static";
@@ -512,7 +512,7 @@
 			);
 			dependencies = (
 			);
-			name = "gtest_main-static";
+			id = "gtest_main-static";
 			productName = "gtest_main-static";
 			productReference = 40C8490B101A217E0083642A /* libgtest_main.a */;
 			productType = "com.apple.product-type.library.static";
@@ -530,7 +530,7 @@
 				40C8497B101A36850083642A /* PBXTargetDependency */,
 				40C8497D101A36850083642A /* PBXTargetDependency */,
 			);
-			name = "gtest_unittest-static";
+			id = "gtest_unittest-static";
 			productName = gtest_unittest;
 			productReference = 40C84987101A36850083642A /* gtest_unittest */;
 			productType = "com.apple.product-type.tool";
@@ -548,7 +548,7 @@
 				40C8498A101A36A60083642A /* PBXTargetDependency */,
 				40C8498C101A36A60083642A /* PBXTargetDependency */,
 			);
-			name = "sample1_unittest-static";
+			id = "sample1_unittest-static";
 			productName = sample1_unittest;
 			productReference = 40C84997101A36A60083642A /* sample1_unittest-static */;
 			productType = "com.apple.product-type.tool";
@@ -569,7 +569,7 @@
 				408BEC101046CFE900DEF522 /* PBXTargetDependency */,
 				40C8499C101A36DC0083642A /* PBXTargetDependency */,
 			);
-			name = "gtest-framework";
+			id = "gtest-framework";
 			productInstallPath = "$(HOME)/Library/Frameworks";
 			productName = gtest;
 			productReference = 4539C8FF0EC27F6400A70F4C /* gtest.framework */;
@@ -650,7 +650,7 @@
 				"$(SRCROOT)/Scripts/versiongenerate.py",
 				"$(SRCROOT)/../configure.ac",
 			);
-			name = "Generate Version.h";
+			id = "Generate Version.h";
 			outputPaths = (
 				"$(PROJECT_TEMP_DIR)/Version.h",
 			);
@@ -801,7 +801,7 @@
 				PRODUCT_NAME = Check;
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		3B238F610E828B5400846E11 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -814,7 +814,7 @@
 				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
-			name = Release;
+			id = Release;
 		};
 		40899F450FFA7185000B29AE /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -824,7 +824,7 @@
 				PRODUCT_NAME = "gtest_unittest-framework";
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		40899F460FFA7185000B29AE /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -834,7 +834,7 @@
 				PRODUCT_NAME = "gtest_unittest-framework";
 				SDKROOT = macosx;
 			};
-			name = Release;
+			id = Release;
 		};
 		4089A0150FFACEFD000B29AE /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -843,7 +843,7 @@
 				PRODUCT_NAME = "sample1_unittest-framework";
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		4089A0160FFACEFD000B29AE /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -852,7 +852,7 @@
 				PRODUCT_NAME = "sample1_unittest-framework";
 				SDKROOT = macosx;
 			};
-			name = Release;
+			id = Release;
 		};
 		40C44ADF0E3798F4008FCC51 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -864,7 +864,7 @@
 				SDKROOT = macosx;
 				TARGET_NAME = gtest;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		40C44AE00E3798F4008FCC51 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -876,7 +876,7 @@
 				SDKROOT = macosx;
 				TARGET_NAME = gtest;
 			};
-			name = Release;
+			id = Release;
 		};
 		40C848FB101A209D0083642A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -893,7 +893,7 @@
 				PRODUCT_NAME = gtest;
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		40C848FC101A209D0083642A /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -910,7 +910,7 @@
 				PRODUCT_NAME = gtest;
 				SDKROOT = macosx;
 			};
-			name = Release;
+			id = Release;
 		};
 		40C8490E101A217F0083642A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -925,7 +925,7 @@
 				PRODUCT_NAME = gtest_main;
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		40C8490F101A217F0083642A /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -940,7 +940,7 @@
 				PRODUCT_NAME = gtest_main;
 				SDKROOT = macosx;
 			};
-			name = Release;
+			id = Release;
 		};
 		40C84985101A36850083642A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -950,7 +950,7 @@
 				PRODUCT_NAME = gtest_unittest;
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		40C84986101A36850083642A /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -960,7 +960,7 @@
 				PRODUCT_NAME = gtest_unittest;
 				SDKROOT = macosx;
 			};
-			name = Release;
+			id = Release;
 		};
 		40C84995101A36A60083642A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -969,7 +969,7 @@
 				PRODUCT_NAME = "sample1_unittest-static";
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			id = Debug;
 		};
 		40C84996101A36A60083642A /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -978,7 +978,7 @@
 				PRODUCT_NAME = "sample1_unittest-static";
 				SDKROOT = macosx;
 			};
-			name = Release;
+			id = Release;
 		};
 		4FADC24308B4156D00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -999,7 +999,7 @@
 				SDKROOT = macosx;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Debug;
+			id = Debug;
 		};
 		4FADC24408B4156D00ABE55E /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -1020,21 +1020,21 @@
 				SDKROOT = macosx;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Release;
+			id = Release;
 		};
 		4FADC24708B4156D00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40D4CDF10E30E07400294801 /* DebugProject.xcconfig */;
 			buildSettings = {
 			};
-			name = Debug;
+			id = Debug;
 		};
 		4FADC24808B4156D00ABE55E /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40D4CDF40E30E07400294801 /* ReleaseProject.xcconfig */;
 			buildSettings = {
 			};
-			name = Release;
+			id = Release;
 		};
 /* End XCBuildConfiguration section */
 

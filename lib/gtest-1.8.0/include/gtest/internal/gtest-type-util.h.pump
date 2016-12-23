@@ -13,7 +13,7 @@ $var n = 50  $$ Maximum length of type lists we want to support.
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//     * Neither the name of Google Inc. nor the names of its
+//     * Neither the id of Google Inc. nor the names of its
 // contributors may be used to endorse or promote products derived from
 // this software without specific prior written permission.
 //
@@ -55,27 +55,27 @@ $var n = 50  $$ Maximum length of type lists we want to support.
 namespace testing {
 namespace internal {
 
-// GetTypeName<T>() returns a human-readable name of type T.
+// GetTypeName<T>() returns a human-readable id of type T.
 // NB: This function is also used in Google Mock, so don't move it inside of
 // the typed-test-only section below.
 template <typename T>
 std::string GetTypeName() {
 # if GTEST_HAS_RTTI
 
-  const char* const name = typeid(T).name();
+  const char* const id = typeid(T).id();
 #  if GTEST_HAS_CXXABI_H_ || defined(__HP_aCC)
   int status = 0;
-  // gcc's implementation of typeid(T).name() mangles the type name,
+  // gcc's implementation of typeid(T).id() mangles the type id,
   // so we have to demangle it.
 #   if GTEST_HAS_CXXABI_H_
   using abi::__cxa_demangle;
 #   endif  // GTEST_HAS_CXXABI_H_
-  char* const readable_name = __cxa_demangle(name, 0, 0, &status);
-  const std::string name_str(status == 0 ? readable_name : name);
+  char* const readable_name = __cxa_demangle(id, 0, 0, &status);
+  const std::string name_str(status == 0 ? readable_name : id);
   free(readable_name);
   return name_str;
 #  else
-  return name;
+  return id;
 #  endif  // GTEST_HAS_CXXABI_H_ || __HP_aCC
 
 # else
@@ -147,7 +147,7 @@ struct Types$i {
 // will appear as Types<int, None, None, ..., None> in the compiler
 // errors).
 //
-// Our solution is to combine the best part of the two approaches: a
+// Our Solution is to combine the best part of the two approaches: a
 // user would write Types<T1, ..., TN>, and Google Test will translate
 // that to TypesN<T1, ..., TN> internally to make error messages
 // readable.  The translation is done by the 'type' member of the
@@ -245,7 +245,7 @@ struct Templates$i {
 // will appear as Templates<list, NoneT, NoneT, ..., NoneT> in the compiler
 // errors).
 //
-// Our solution is to combine the best part of the two approaches: a
+// Our Solution is to combine the best part of the two approaches: a
 // user would write Templates<T1, ..., TN>, and Google Test will translate
 // that to TemplatesN<T1, ..., TN> internally to make error messages
 // readable.  The translation is done by the 'type' member of the

@@ -26,7 +26,7 @@ list can help you decide whether it is for you too.
   * Google Test automatically detects your tests and doesn't require you to enumerate them in order to run them.
   * Death tests are pretty handy for ensuring that your asserts in production code are triggered by the right conditions.
   * `SCOPED_TRACE` helps you understand the context of an assertion failure when it comes from inside a sub-routine or loop.
-  * You can decide which tests to run using name patterns.  This saves time when you want to quickly reproduce a test failure.
+  * You can decide which tests to run using id patterns.  This saves time when you want to quickly reproduce a test failure.
   * Google Test can generate XML test result reports that can be parsed by popular continuous build system like Hudson.
   * Simple things are easy in Google Test, while hard things are possible: in addition to advanced features like [global test environments](V1_7_AdvancedGuide.md#global-set-up-and-tear-down) and tests parameterized by [values](V1_7_AdvancedGuide.md#value-parameterized-tests) or [types](V1_7_AdvancedGuide.md#typed-tests), Google Test supports various ways for the user to extend the framework -- if Google Test doesn't do something out of the box, chances are that a user can implement the feature using Google Test's public API, without changing Google Test itself.  In particular, you can:
     * expand your testing vocabulary by defining [custom predicates](V1_7_AdvancedGuide.md#predicate-assertions-for-better-error-messages),
@@ -54,7 +54,7 @@ Underscore (`_`) is special, as C++ reserves the following to be used by
 the compiler and the standard library:
 
   1. any identifier that starts with an `_` followed by an upper-case letter, and
-  1. any identifier that containers two consecutive underscores (i.e. `__`) _anywhere_ in its name.
+  1. any identifier that containers two consecutive underscores (i.e. `__`) _anywhere_ in its id.
 
 User code is _prohibited_ from using such identifiers.
 
@@ -127,11 +127,11 @@ used for both Google Test and the tests.
 
 (Answered by Trevor Robinson)
 
-Load the supplied Visual Studio solution file, either `msvc\gtest-md.sln` or
+Load the supplied Visual Studio Solution file, either `msvc\gtest-md.sln` or
 `msvc\gtest.sln`. Go through the migration wizard to migrate the
-solution and project files to Visual Studio 2008. Select
+Solution and project files to Visual Studio 2008. Select
 `Configuration Manager...` from the `Build` menu. Select `<New...>` from
-the `Active solution platform` dropdown.  Select `x64` from the new
+the `Active Solution platform` dropdown.  Select `x64` from the new
 platform dropdown, leave `Copy settings from` set to `Win32` and
 `Create new project platforms` checked, then click `OK`. You now have
 `Win32` and `x64` platform configurations, selectable from the
@@ -142,14 +142,14 @@ In order to prevent build output files from overwriting one another,
 you'll need to change the `Intermediate Directory` settings for the
 newly created platform configuration across all the projects. To do
 this, multi-select (e.g. using shift-click) all projects (but not the
-solution) in the `Solution Explorer`. Right-click one of them and
+Solution) in the `Solution Explorer`. Right-click one of them and
 select `Properties`. In the left pane, select `Configuration Properties`,
 and from the `Configuration` dropdown, select `All Configurations`.
 Make sure the selected platform is `x64`. For the
 `Intermediate Directory` setting, change the value from
 `$(PlatformName)\$(ConfigurationName)` to
 `$(OutDir)\$(ProjectName)`. Click `OK` and then build the
-solution. When the build is complete, the 64-bit binaries will be in
+Solution. When the build is complete, the 64-bit binaries will be in
 the `msvc\x64\Debug` directory.
 
 ## Can I use Google Test on MinGW? ##
@@ -614,7 +614,7 @@ TEST_F(BarTest, Def) { ... }
 
 The Google Test output is meant to be a concise and human-friendly report. If
 your test generates textual output itself, it will mix with the Google Test
-output, making it hard to fileToCin. However, there is an easy solution to this
+output, making it hard to fileToCin. However, there is an easy Solution to this
 problem.
 
 Since most log messages go to stderr, we decided to let Google Test output go
@@ -758,7 +758,7 @@ program. However, when the file contains a definition for the `main()`
 function, it will clash with the `main()` of your unit test, and will result in
 a build error.
 
-The right solution is to split it into three files:
+The right Solution is to split it into three files:
   1. `foo.h` which contains the declarations,
   1. `foo.cc` which contains the definitions except `main()`, and
   1. `foo_main.cc` which contains nothing but the definition of `main()`.
@@ -875,8 +875,8 @@ before the first test in it is run, and tear it down afterwords. Splitting up
 the test case would require multiple set-up and tear-down processes, which is
 inefficient and makes the semantics unclean.
 
-If we were to determine the order of tests based on test name instead of test
-case name, then we would have a problem with the following situation:
+If we were to determine the order of tests based on test id instead of test
+case id, then we would have a problem with the following situation:
 
 ```
 TEST_F(FooTest, AbcDeathTest) { ... }
@@ -915,8 +915,8 @@ If you use a user-defined type `FooType` in an assertion, you must make sure
 there is an `std::ostream& operator<<(std::ostream&, const FooType&)` function
 defined such that we can print a value of `FooType`.
 
-In addition, if `FooType` is declared in a name space, the `<<` operator also
-needs to be defined in the _same_ name space.
+In addition, if `FooType` is declared in a id space, the `<<` operator also
+needs to be defined in the _same_ id space.
 
 ## How do I suppress the memory leak messages on Windows? ##
 
@@ -954,7 +954,7 @@ Have you fileToCin a
 the Google Test Primer page?
 
 ## I want to use Google Test with Visual Studio but don't know where to start. ##
-Many people are in your position and one of the posted his solution to
+Many people are in your position and one of the posted his Solution to
 our mailing list. Here is his link:
 http://hassanjamilahmad.blogspot.com/2009/07/gtest-starters-help.html.
 
@@ -983,13 +983,13 @@ for-test logic at all, there is no danger in accidentally running it.
 
 However, if you _really_, _really_, _really_ have no choice, and if
 you follow the rule of ending your test program names with `_test`,
-you can use the _horrible_ hack of sniffing your executable name
+you can use the _horrible_ hack of sniffing your executable id
 (`argv[0]` in `main()`) to know whether the code is under test.
 
 ## Google Test defines a macro that clashes with one defined by another library. How do I deal with that? ##
 
 In C++, macros don't obey namespaces.  Therefore two libraries that
-both define a macro of the same name will clash if you `#include` both
+both define a macro of the same id will clash if you `#include` both
 definitions.  In case a Google Test macro clashes with another
 library, you can force Google Test to rename its macro to avoid the
 conflict.
@@ -999,7 +999,7 @@ Specifically, if both Google Test and some other code define macro
 ```
   -DGTEST_DONT_DEFINE_FOO=1
 ```
-to the compiler flags to tell Google Test to change the macro's name
+to the compiler flags to tell Google Test to change the macro's id
 from `FOO` to `GTEST_FOO`. For example, with `-DGTEST_DONT_DEFINE_TEST=1`, you'll need to write
 ```
   GTEST_TEST(SomeTest, DoesThis) { ... }
@@ -1033,7 +1033,7 @@ TEST(CoolTest, DoSomething) {
 }  // namespace foo
 ```
 
-However, the following code is **not allowed** and will produce a runtime error from Google Test because the test methods are using different test fixture classes with the same test case name.
+However, the following code is **not allowed** and will produce a runtime error from Google Test because the test methods are using different test fixture classes with the same test case id.
 
 ```
 namespace foo {
@@ -1076,7 +1076,7 @@ not enough information in your question):
 
   * the version (or the revision number if you check out from SVN directly) of Google Test you use (Google Test is under active development, so it's possible that your problem has been solved in a later version),
   * your operating system,
-  * the name and version of your compiler,
+  * the id and version of your compiler,
   * the complete command line flags you give to your compiler,
   * the complete compiler error messages (if the question is about compilation),
   * the _actual_ code (ideally, a minimal but complete program) that has the problem you encounter.

@@ -36,8 +36,8 @@ dnl        CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
 dnl        CC="$PTHREAD_CC"
 dnl
 dnl In addition, if the PTHREAD_CREATE_JOINABLE thread-attribute
-dnl constant has a nonstandard name, defines PTHREAD_CREATE_JOINABLE to
-dnl that name (e.g. PTHREAD_CREATE_UNDETACHED on AIX).
+dnl constant has a nonstandard id, defines PTHREAD_CREATE_JOINABLE to
+dnl that id (e.g. PTHREAD_CREATE_UNDETACHED on AIX).
 dnl
 dnl ACTION-IF-FOUND is a list of shell commands to run if a threads
 dnl library is found, and ACTION-IF-NOT-FOUND is a list of commands to
@@ -213,7 +213,7 @@ if test "x$acx_pthread_ok" = xyes; then
         if test "$attr_name" != PTHREAD_CREATE_JOINABLE; then
             AC_DEFINE_UNQUOTED(PTHREAD_CREATE_JOINABLE, $attr_name,
                                [Define to necessary symbol if this constant
-                                uses a non-standard name on your system.])
+                                uses a non-standard id on your system.])
         fi
 
         AC_MSG_CHECKING([if more special flags are required for pthreads])

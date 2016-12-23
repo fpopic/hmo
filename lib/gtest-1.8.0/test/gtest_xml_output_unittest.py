@@ -13,7 +13,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -58,20 +58,20 @@ else:
   STACK_TRACE_TEMPLATE = ''
 
 EXPECTED_NON_EMPTY_XML = """<?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="23" failures="4" disabled="2" errors="0" time="*" timestamp="*" name="AllTests" ad_hoc_property="42">
-  <testsuite name="SuccessfulTest" tests="1" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="Succeeds" status="run" time="*" classname="SuccessfulTest"/>
+<testsuites tests="23" failures="4" disabled="2" errors="0" time="*" timestamp="*" id="AllTests" ad_hoc_property="42">
+  <testsuite id="SuccessfulTest" tests="1" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="Succeeds" status="run" time="*" classname="SuccessfulTest"/>
   </testsuite>
-  <testsuite name="FailedTest" tests="1" failures="1" disabled="0" errors="0" time="*">
-    <testcase name="Fails" status="run" time="*" classname="FailedTest">
+  <testsuite id="FailedTest" tests="1" failures="1" disabled="0" errors="0" time="*">
+    <testcase id="Fails" status="run" time="*" classname="FailedTest">
       <failure message="gtest_xml_output_unittest_.cc:*&#x0A;      Expected: 1&#x0A;To be equal to: 2" type=""><![CDATA[gtest_xml_output_unittest_.cc:*
       Expected: 1
 To be equal to: 2%(stack)s]]></failure>
     </testcase>
   </testsuite>
-  <testsuite name="MixedResultTest" tests="3" failures="1" disabled="1" errors="0" time="*">
-    <testcase name="Succeeds" status="run" time="*" classname="MixedResultTest"/>
-    <testcase name="Fails" status="run" time="*" classname="MixedResultTest">
+  <testsuite id="MixedResultTest" tests="3" failures="1" disabled="1" errors="0" time="*">
+    <testcase id="Succeeds" status="run" time="*" classname="MixedResultTest"/>
+    <testcase id="Fails" status="run" time="*" classname="MixedResultTest">
       <failure message="gtest_xml_output_unittest_.cc:*&#x0A;      Expected: 1&#x0A;To be equal to: 2" type=""><![CDATA[gtest_xml_output_unittest_.cc:*
       Expected: 1
 To be equal to: 2%(stack)s]]></failure>
@@ -79,68 +79,68 @@ To be equal to: 2%(stack)s]]></failure>
       Expected: 2
 To be equal to: 3%(stack)s]]></failure>
     </testcase>
-    <testcase name="DISABLED_test" status="notrun" time="*" classname="MixedResultTest"/>
+    <testcase id="DISABLED_test" status="notrun" time="*" classname="MixedResultTest"/>
   </testsuite>
-  <testsuite name="XmlQuotingTest" tests="1" failures="1" disabled="0" errors="0" time="*">
-    <testcase name="OutputsCData" status="run" time="*" classname="XmlQuotingTest">
+  <testsuite id="XmlQuotingTest" tests="1" failures="1" disabled="0" errors="0" time="*">
+    <testcase id="OutputsCData" status="run" time="*" classname="XmlQuotingTest">
       <failure message="gtest_xml_output_unittest_.cc:*&#x0A;Failed&#x0A;XML output: &lt;?xml encoding=&quot;utf-8&quot;&gt;&lt;top&gt;&lt;![CDATA[cdata text]]&gt;&lt;/top&gt;" type=""><![CDATA[gtest_xml_output_unittest_.cc:*
 Failed
 XML output: <?xml encoding="utf-8"><top><![CDATA[cdata text]]>]]&gt;<![CDATA[</top>%(stack)s]]></failure>
     </testcase>
   </testsuite>
-  <testsuite name="InvalidCharactersTest" tests="1" failures="1" disabled="0" errors="0" time="*">
-    <testcase name="InvalidCharactersInMessage" status="run" time="*" classname="InvalidCharactersTest">
+  <testsuite id="InvalidCharactersTest" tests="1" failures="1" disabled="0" errors="0" time="*">
+    <testcase id="InvalidCharactersInMessage" status="run" time="*" classname="InvalidCharactersTest">
       <failure message="gtest_xml_output_unittest_.cc:*&#x0A;Failed&#x0A;Invalid characters in brackets []" type=""><![CDATA[gtest_xml_output_unittest_.cc:*
 Failed
 Invalid characters in brackets []%(stack)s]]></failure>
     </testcase>
   </testsuite>
-  <testsuite name="DisabledTest" tests="1" failures="0" disabled="1" errors="0" time="*">
-    <testcase name="DISABLED_test_not_run" status="notrun" time="*" classname="DisabledTest"/>
+  <testsuite id="DisabledTest" tests="1" failures="0" disabled="1" errors="0" time="*">
+    <testcase id="DISABLED_test_not_run" status="notrun" time="*" classname="DisabledTest"/>
   </testsuite>
-  <testsuite name="PropertyRecordingTest" tests="4" failures="0" disabled="0" errors="0" time="*" SetUpTestCase="yes" TearDownTestCase="aye">
-    <testcase name="OneProperty" status="run" time="*" classname="PropertyRecordingTest" key_1="1"/>
-    <testcase name="IntValuedProperty" status="run" time="*" classname="PropertyRecordingTest" key_int="1"/>
-    <testcase name="ThreeProperties" status="run" time="*" classname="PropertyRecordingTest" key_1="1" key_2="2" key_3="3"/>
-    <testcase name="TwoValuesForOneKeyUsesLastValue" status="run" time="*" classname="PropertyRecordingTest" key_1="2"/>
+  <testsuite id="PropertyRecordingTest" tests="4" failures="0" disabled="0" errors="0" time="*" SetUpTestCase="yes" TearDownTestCase="aye">
+    <testcase id="OneProperty" status="run" time="*" classname="PropertyRecordingTest" key_1="1"/>
+    <testcase id="IntValuedProperty" status="run" time="*" classname="PropertyRecordingTest" key_int="1"/>
+    <testcase id="ThreeProperties" status="run" time="*" classname="PropertyRecordingTest" key_1="1" key_2="2" key_3="3"/>
+    <testcase id="TwoValuesForOneKeyUsesLastValue" status="run" time="*" classname="PropertyRecordingTest" key_1="2"/>
   </testsuite>
-  <testsuite name="NoFixtureTest" tests="3" failures="0" disabled="0" errors="0" time="*">
-     <testcase name="RecordProperty" status="run" time="*" classname="NoFixtureTest" key="1"/>
-     <testcase name="ExternalUtilityThatCallsRecordIntValuedProperty" status="run" time="*" classname="NoFixtureTest" key_for_utility_int="1"/>
-     <testcase name="ExternalUtilityThatCallsRecordStringValuedProperty" status="run" time="*" classname="NoFixtureTest" key_for_utility_string="1"/>
+  <testsuite id="NoFixtureTest" tests="3" failures="0" disabled="0" errors="0" time="*">
+     <testcase id="RecordProperty" status="run" time="*" classname="NoFixtureTest" key="1"/>
+     <testcase id="ExternalUtilityThatCallsRecordIntValuedProperty" status="run" time="*" classname="NoFixtureTest" key_for_utility_int="1"/>
+     <testcase id="ExternalUtilityThatCallsRecordStringValuedProperty" status="run" time="*" classname="NoFixtureTest" key_for_utility_string="1"/>
   </testsuite>
-  <testsuite name="Single/ValueParamTest" tests="4" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="HasValueParamAttribute/0" value_param="33" status="run" time="*" classname="Single/ValueParamTest" />
-    <testcase name="HasValueParamAttribute/1" value_param="42" status="run" time="*" classname="Single/ValueParamTest" />
-    <testcase name="AnotherTestThatHasValueParamAttribute/0" value_param="33" status="run" time="*" classname="Single/ValueParamTest" />
-    <testcase name="AnotherTestThatHasValueParamAttribute/1" value_param="42" status="run" time="*" classname="Single/ValueParamTest" />
+  <testsuite id="Single/ValueParamTest" tests="4" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="HasValueParamAttribute/0" value_param="33" status="run" time="*" classname="Single/ValueParamTest" />
+    <testcase id="HasValueParamAttribute/1" value_param="42" status="run" time="*" classname="Single/ValueParamTest" />
+    <testcase id="AnotherTestThatHasValueParamAttribute/0" value_param="33" status="run" time="*" classname="Single/ValueParamTest" />
+    <testcase id="AnotherTestThatHasValueParamAttribute/1" value_param="42" status="run" time="*" classname="Single/ValueParamTest" />
   </testsuite>
-  <testsuite name="TypedTest/0" tests="1" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="TypedTest/0" />
+  <testsuite id="TypedTest/0" tests="1" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="TypedTest/0" />
   </testsuite>
-  <testsuite name="TypedTest/1" tests="1" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="TypedTest/1" />
+  <testsuite id="TypedTest/1" tests="1" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="TypedTest/1" />
   </testsuite>
-  <testsuite name="Single/TypeParameterizedTestCase/0" tests="1" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="Single/TypeParameterizedTestCase/0" />
+  <testsuite id="Single/TypeParameterizedTestCase/0" tests="1" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="Single/TypeParameterizedTestCase/0" />
   </testsuite>
-  <testsuite name="Single/TypeParameterizedTestCase/1" tests="1" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="Single/TypeParameterizedTestCase/1" />
+  <testsuite id="Single/TypeParameterizedTestCase/1" tests="1" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="HasTypeParamAttribute" type_param="*" status="run" time="*" classname="Single/TypeParameterizedTestCase/1" />
   </testsuite>
 </testsuites>""" % {'stack': STACK_TRACE_TEMPLATE}
 
 EXPECTED_FILTERED_TEST_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <testsuites tests="1" failures="0" disabled="0" errors="0" time="*"
-            timestamp="*" name="AllTests" ad_hoc_property="42">
-  <testsuite name="SuccessfulTest" tests="1" failures="0" disabled="0"
+            timestamp="*" id="AllTests" ad_hoc_property="42">
+  <testsuite id="SuccessfulTest" tests="1" failures="0" disabled="0"
              errors="0" time="*">
-    <testcase name="Succeeds" status="run" time="*" classname="SuccessfulTest"/>
+    <testcase id="Succeeds" status="run" time="*" classname="SuccessfulTest"/>
   </testsuite>
 </testsuites>"""
 
 EXPECTED_EMPTY_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <testsuites tests="0" failures="0" disabled="0" errors="0" time="*"
-            timestamp="*" name="AllTests">
+            timestamp="*" id="AllTests">
 </testsuites>"""
 
 GTEST_PROGRAM_PATH = gtest_test_utils.GetTestExecutablePath(GTEST_PROGRAM_NAME)
@@ -201,7 +201,7 @@ class GTestXMLOutputUnitTest(gtest_xml_test_utils.GTestXMLTestCase):
   def testDefaultOutputFile(self):
     """
     Confirms that Google Test produces an XML output file with the expected
-    default name if no name is explicitly specified.
+    default id if no id is explicitly specified.
     """
     output_file = os.path.join(gtest_test_utils.GetTempDir(),
                                GTEST_DEFAULT_OUTPUT_FILE)

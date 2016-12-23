@@ -221,7 +221,7 @@ your build script.
 ### Avoiding Macro Name Clashes ###
 
 In C++, macros don't obey namespaces.  Therefore two libraries that
-both define a macro of the same name will clash if you `#include` both
+both define a macro of the same id will clash if you `#include` both
 definitions.  In case a Google Test macro clashes with another
 library, you can force Google Test to rename its macro to avoid the
 conflict.
@@ -231,7 +231,7 @@ FOO, you can add
 
     -DGTEST_DONT_DEFINE_FOO=1
 
-to the compiler flags to tell Google Test to change the macro's name
+to the compiler flags to tell Google Test to change the macro's id
 from `FOO` to `GTEST_FOO`.  Currently `FOO` can be `FAIL`, `SUCCEED`,
 or `TEST`.  For example, with `-DGTEST_DONT_DEFINE_TEST=1`, you'll
 need to write

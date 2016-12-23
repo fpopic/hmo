@@ -278,7 +278,7 @@ class.  However, in test case MixedUpTestCaseTest,
 you defined test FirstTestFromNamespaceFoo and test ThisShouldFail
 using two different test fixture classes.  This can happen if
 the two classes are from different namespaces or translation
-units and have the same name.  You should probably rename one
+units and have the same id.  You should probably rename one
 of the classes to put the tests into different test cases.
 [0;31m[  FAILED  ] [mMixedUpTestCaseTest.ThisShouldFail
 [0;32m[ RUN      ] [mMixedUpTestCaseTest.ThisShouldFailToo
@@ -289,7 +289,7 @@ class.  However, in test case MixedUpTestCaseTest,
 you defined test FirstTestFromNamespaceFoo and test ThisShouldFailToo
 using two different test fixture classes.  This can happen if
 the two classes are from different namespaces or translation
-units and have the same name.  You should probably rename one
+units and have the same id.  You should probably rename one
 of the classes to put the tests into different test cases.
 [0;31m[  FAILED  ] [mMixedUpTestCaseTest.ThisShouldFailToo
 [0;32m[----------] [m2 tests from MixedUpTestCaseWithSameTestNameTest
@@ -303,7 +303,7 @@ class.  However, in test case MixedUpTestCaseWithSameTestNameTest,
 you defined test TheSecondTestWithThisNameShouldFail and test TheSecondTestWithThisNameShouldFail
 using two different test fixture classes.  This can happen if
 the two classes are from different namespaces or translation
-units and have the same name.  You should probably rename one
+units and have the same id.  You should probably rename one
 of the classes to put the tests into different test cases.
 [0;31m[  FAILED  ] [mMixedUpTestCaseWithSameTestNameTest.TheSecondTestWithThisNameShouldFail
 [0;32m[----------] [m2 tests from TEST_F_before_TEST_in_same_test_case

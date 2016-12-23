@@ -13,7 +13,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -45,17 +45,17 @@ GTEST_OUTPUT_1_TEST = "gtest_xml_outfile1_test_"
 GTEST_OUTPUT_2_TEST = "gtest_xml_outfile2_test_"
 
 EXPECTED_XML_1 = """<?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="*" timestamp="*" name="AllTests">
-  <testsuite name="PropertyOne" tests="1" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="TestSomeProperties" status="run" time="*" classname="PropertyOne" SetUpProp="1" TestSomeProperty="1" TearDownProp="1" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="*" timestamp="*" id="AllTests">
+  <testsuite id="PropertyOne" tests="1" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="TestSomeProperties" status="run" time="*" classname="PropertyOne" SetUpProp="1" TestSomeProperty="1" TearDownProp="1" />
   </testsuite>
 </testsuites>
 """
 
 EXPECTED_XML_2 = """<?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="*" timestamp="*" name="AllTests">
-  <testsuite name="PropertyTwo" tests="1" failures="0" disabled="0" errors="0" time="*">
-    <testcase name="TestSomeProperties" status="run" time="*" classname="PropertyTwo" SetUpProp="2" TestSomeProperty="2" TearDownProp="2" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="*" timestamp="*" id="AllTests">
+  <testsuite id="PropertyTwo" tests="1" failures="0" disabled="0" errors="0" time="*">
+    <testcase id="TestSomeProperties" status="run" time="*" classname="PropertyTwo" SetUpProp="2" TestSomeProperty="2" TearDownProp="2" />
   </testsuite>
 </testsuites>
 """

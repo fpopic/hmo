@@ -5,6 +5,11 @@
 #ifndef HMO_PROJECT_INSTANCE_H
 #define HMO_PROJECT_INSTANCE_H
 
+#include <unordered_map>
+#include <vector>
+
+#include "Macros.h"
+
 //region macro
 
 // broj posluzitelja
@@ -22,23 +27,25 @@
 // broj usluznih lanaca
 #define NUM_SERVICE_CHAINS 62
 
-// two nodes: first <==> second
+// dva cvora: prvi <==> drugi
 #define A 0
 #define B 1
 
-// between two nodes
+// atributi veze izmedju dva cvora
 #define CAPACITY 2
 #define ENERGY 3
 #define LATENCY 4
 
-// between two components
+// zahtjevana propusnost izmedju dvije komponente
 #define BANDWITH 2
 
 //endregion
 
+using namespace std;
+
 struct Instance {
 
-    // maksimalna potrosnja energije na posluoitelju
+    // maksimalna potrosnja energije na posluzitelju
     // indeks oznacava broj posluzitelja
     static const double P_max[NUM_SERVERS];
 
@@ -46,8 +53,8 @@ struct Instance {
     // ukoliko je utilizacija procesora 0%
     static const double P_min[NUM_SERVERS];
 
-    // dostupnost oba resursa na posluzitelju
-    // index je oznaka posluzitelja
+    // zahtjev svake komponente za oba resursa
+    // index je oznaka komponente
     static const double req[NUM_RES][NUM_VMS];
 
     // dostupnost oba resursa na posluzitelju
@@ -69,11 +76,11 @@ struct Instance {
     // definicija veza izmedju cvorova
     // <prvi cvor, drugi cvor, kapacitet, potrosnja energije, kasnjenje>
     // <int, int, int, double, int>
-    static const double Edges[][5];
+    static unordered_map<pair<node, node>, vector<double>> Edges;
 
     // zahtijevana propusnost izmedju komponenti koje komuniciraju
     // <komponenta1, komponenta2, propusnost>
-    static const int VmDemands[][3];
+    static unordered_map<pair<component, component>, int> VmDemands;
 
     // maksimalno dopusteno kasnjenje za svaki usluzni lanac
     // indeks je oznaka usluznog lanca

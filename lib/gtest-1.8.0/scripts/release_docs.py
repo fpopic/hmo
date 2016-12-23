@@ -12,7 +12,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -109,7 +109,7 @@ class WikiBrancher(object):
         #   [Foo
         # or
         #   /wiki/Foo
-        # followed by a space or a #, where Foo is the name of an
+        # followed by a space or a #, where Foo is the id of an
         # unversioned wiki page.
         r'(\[|/wiki/)(%s)([ #])' % '|'.join(page_names))
     self.replace_with = r'\1%s\2\3' % (self.version_prefix,)

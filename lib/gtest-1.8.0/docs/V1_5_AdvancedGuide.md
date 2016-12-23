@@ -634,7 +634,7 @@ it may be difficult or impossible to clean them up.
 Google Test has three features intended to raise awareness of threading issues.
 
   1. A warning is emitted if multiple threads are running when a death test is encountered.
-  1. Test cases with a name ending in "DeathTest" are run before all other tests.
+  1. Test cases with a id ending in "DeathTest" are run before all other tests.
   1. It uses `clone()` instead of `fork()` to spawn the child process on Linux (`clone()` is not available on Cygwin and Mac), as `fork()` is more likely to cause the child to hang when the parent process has multiple threads.
 
 It's perfectly fine to create threads inside a death test statement; they are
@@ -712,13 +712,13 @@ If a test sub-routine is called from several places, when an assertion
 inside it fails, it can be hard to tell which invocation of the
 sub-routine the failure is from.  You can alleviate this problem using
 extra logging or custom failure messages, but that usually clutters up
-your tests. A better solution is to use the `SCOPED_TRACE` macro:
+your tests. A better Solution is to use the `SCOPED_TRACE` macro:
 
 | `SCOPED_TRACE(`_message_`);` |
 |:-----------------------------|
 
 where _message_ can be anything streamable to `std::ostream`. This
-macro will cause the current file name, line number, and the given
+macro will cause the current file id, line number, and the given
 message to be added in every failure message. The effect will be
 undone when the control leaves the current lexical scope.
 
@@ -897,7 +897,7 @@ will output XML like this:
 
 ```
 ...
-  <testcase name="MinAndMaxWidgets" status="run" time="6" classname="WidgetUsageTest"
+  <testcase id="MinAndMaxWidgets" status="run" time="6" classname="WidgetUsageTest"
             MaximumWidgets="12"
             MinimumWidgets="9" />
 ...
@@ -905,7 +905,7 @@ will output XML like this:
 
 _Note_:
   * `RecordProperty()` is a static member of the `Test` class. Therefore it needs to be prefixed with `::testing::Test::` if used outside of the `TEST` body and the test fixture class.
-  * `key` must be a valid XML attribute name, and cannot conflict with the ones already used by Google Test (`name`, `status`,     `time`, and `classname`).
+  * `key` must be a valid XML attribute id, and cannot conflict with the ones already used by Google Test (`id`, `status`,     `time`, and `classname`).
 
 _Availability_: Linux, Windows, Mac.
 
@@ -1130,7 +1130,7 @@ INSTANTIATE_TEST_CASE_P(InstantiationName,
 To distinguish different instances of the pattern (yes, you can
 instantiate it more than once), the first argument to
 `INSTANTIATE_TEST_CASE_P` is a prefix that will be added to the actual
-test case name. Remember to pick unique prefixes for different
+test case id. Remember to pick unique prefixes for different
 instantiations. The tests from the instantiation above will have these
 names:
 
@@ -1240,7 +1240,7 @@ for this test case.  You can repeat this as many times as you want:
 
 ```
 TYPED_TEST(FooTest, DoesBlah) {
-  // Inside a test, refer to the special name TypeParam to get the type
+  // Inside a test, refer to the special id TypeParam to get the type
   // parameter.  Since we are inside a derived class template, C++ requires
   // us to visit the members of FooTest via 'this'.
   TypeParam n = this->value_;
@@ -1312,7 +1312,7 @@ TYPED_TEST_P(FooTest, HasPropertyA) { ... }
 
 Now the tricky part: you need to register all test patterns using the
 `REGISTER_TYPED_TEST_CASE_P` macro before you can instantiate them.
-The first argument of the macro is the test case name; the rest are
+The first argument of the macro is the test case id; the rest are
 the names of the tests in this test case:
 
 ```
@@ -1331,7 +1331,7 @@ INSTANTIATE_TYPED_TEST_CASE_P(My, FooTest, MyTypes);
 
 To distinguish different instances of the pattern, the first argument
 to the `INSTANTIATE_TYPED_TEST_CASE_P` macro is a prefix that will be
-added to the actual test case name.  Remember to pick unique prefixes
+added to the actual test case id.  Remember to pick unique prefixes
 for different instances.
 
 In the special case where the type list contains only one type, you
@@ -1504,9 +1504,9 @@ the following macros:
 
 # Getting the Current Test's Name #
 
-Sometimes a function may need to know the name of the currently running test.
+Sometimes a function may need to know the id of the currently running test.
 For example, you may be using the `SetUp()` method of your test fixture to set
-the golden file name based on which test is running. The `::testing::TestInfo`
+the golden file id based on which test is running. The `::testing::TestInfo`
 class has this information:
 
 ```
@@ -1514,12 +1514,12 @@ namespace testing {
 
 class TestInfo {
  public:
-  // Returns the test case name and the test name, respectively.
+  // Returns the test case id and the test id, respectively.
   //
   // Do NOT delete or free the return value - it's managed by the
   // TestInfo class.
   const char* test_case_name() const;
-  const char* name() const;
+  const char* id() const;
 };
 
 }  // namespace testing
@@ -1535,12 +1535,12 @@ class TestInfo {
 const ::testing::TestInfo* const test_info =
   ::testing::UnitTest::GetInstance()->current_test_info();
 printf("We are in test %s of test case %s.\n",
-       test_info->name(), test_info->test_case_name());
+       test_info->id(), test_info->test_case_name());
 ```
 
 `current_test_info()` returns a null pointer if no test is running. In
-particular, you cannot find the test case name in `TestCaseSetUp()`,
-`TestCaseTearDown()` (where you know the test case name implicitly), or
+particular, you cannot find the test case id in `TestCaseSetUp()`,
+`TestCaseTearDown()` (where you know the test case id implicitly), or
 functions called from them.
 
 _Availability:_ Linux, Windows, Mac.
@@ -1585,7 +1585,7 @@ state.  Here's an example:
     // Called before a test starts.
     virtual void OnTestStart(const ::testing::TestInfo& test_info) {
       printf("*** Test %s.%s starting.\n",
-             test_info.test_case_name(), test_info.name());
+             test_info.test_case_name(), test_info.id());
     }
 
     // Called after a failed assertion or a SUCCESS().
@@ -1601,7 +1601,7 @@ state.  Here's an example:
     // Called after a test ends.
     virtual void OnTestEnd(const ::testing::TestInfo& test_info) {
       printf("*** Test %s.%s ending.\n",
-             test_info.test_case_name(), test_info.name());
+             test_info.test_case_name(), test_info.id());
     }
   };
 ```
@@ -1611,7 +1611,7 @@ state.  Here's an example:
 To use the event listener you have defined, add an instance of it to
 the Google Test event listener list (represented by class
 [TestEventListeners](../include/gtest/gtest.h#L929)
-- note the "s" at the end of the name) in your
+- note the "s" at the end of the id) in your
 `main()` function, before calling `RUN_ALL_TESTS()`:
 ```
 int main(int argc, char** argv) {
@@ -1741,7 +1741,7 @@ For example:
   * `./foo_test` Has no flag, and thus runs all its tests.
   * `./foo_test --gtest_filter=*` Also runs everything, due to the single match-everything `*` value.
   * `./foo_test --gtest_filter=FooTest.*` Runs everything in test case `FooTest`.
-  * `./foo_test --gtest_filter=*Null*:*Constructor*` Runs any test whose full name contains either `"Null"` or `"Constructor"`.
+  * `./foo_test --gtest_filter=*Null*:*Constructor*` Runs any test whose full id contains either `"Null"` or `"Constructor"`.
   * `./foo_test --gtest_filter=-*DeathTest.*` Runs all non-death tests.
   * `./foo_test --gtest_filter=FooTest.*-FooTest.Bar` Runs everything in test case `FooTest` except `FooTest.Bar`.
 
@@ -1750,13 +1750,13 @@ _Availability:_ Linux, Windows, Mac.
 ### Temporarily Disabling Tests ###
 
 If you have a broken test that you cannot fix right away, you can add the
-`DISABLED_` prefix to its name. This will exclude it from execution. This is
+`DISABLED_` prefix to its id. This will exclude it from execution. This is
 better than commenting out the code or using `#if 0`, as disabled tests are
 still compiled (and thus won't rot).
 
 If you need to disable all tests in a test case, you can either add `DISABLED_`
-to the front of the name of each test, or alternatively add it to the front of
-the test case name.
+to the front of the id of each test, or alternatively add it to the front of
+the test case id.
 
 For example, the following tests won't be run by Google Test, even though they
 will still be compiled:
@@ -1807,7 +1807,7 @@ you a chance to debug. Here's how to use it:
 |:---------------------------------|:--------------------------------------------------------|
 | `$ foo_test --gtest_repeat=-1`   | A negative count means repeating forever.               |
 | `$ foo_test --gtest_repeat=1000 --gtest_break_on_failure` | Repeat foo\_test 1000 times, stopping at the first failure. This is especially useful when running under a debugger: when the testfails, it will drop into the debugger and you can then inspect variables and stacks. |
-| `$ foo_test --gtest_repeat=1000 --gtest_filter=FooBar` | Repeat the tests whose name matches the filter 1000 times. |
+| `$ foo_test --gtest_repeat=1000 --gtest_filter=FooBar` | Repeat the tests whose id matches the filter 1000 times. |
 
 If your test program contains global set-up/tear-down code registered
 using `AddGlobalTestEnvironment()`, it will be repeated in each
@@ -1881,7 +1881,7 @@ If you specify a directory (for example, `"xml:output/directory/"` on Linux or
 `"xml:output\directory\"` on Windows), Google Test will create the XML file in
 that directory, named after the test executable (e.g. `foo_test.xml` for test
 program `foo_test` or `foo_test.exe`). If the file already exists (perhaps left
-over from a previous run), Google Test will pick a different name (e.g.
+over from a previous run), Google Test will pick a different id (e.g.
 `foo_test_1.xml`) to avoid overwriting it.
 
 The report uses the format described here.  It is based on the
@@ -1891,9 +1891,9 @@ was originally intended for Java, a little interpretation is required
 to make it apply to Google Test tests, as shown here:
 
 ```
-<testsuites name="AllTests" ...>
-  <testsuite name="test_case_name" ...>
-    <testcase name="test_name" ...>
+<testsuites id="AllTests" ...>
+  <testsuite id="test_case_name" ...>
+    <testcase id="test_name" ...>
       <failure message="..."/>
       <failure message="..."/>
       <failure message="..."/>
@@ -1918,17 +1918,17 @@ could generate this report:
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="3" failures="1" errors="0" time="35" name="AllTests">
-  <testsuite name="MathTest" tests="2" failures="1"* errors="0" time="15">
-    <testcase name="Addition" status="run" time="7" classname="">
+<testsuites tests="3" failures="1" errors="0" time="35" id="AllTests">
+  <testsuite id="MathTest" tests="2" failures="1"* errors="0" time="15">
+    <testcase id="Addition" status="run" time="7" classname="">
       <failure message="Value of: add(1, 1)&#x0A; Actual: 3&#x0A;Expected: 2" type=""/>
       <failure message="Value of: add(1, -1)&#x0A; Actual: 1&#x0A;Expected: 0" type=""/>
     </testcase>
-    <testcase name="Subtraction" status="run" time="5" classname="">
+    <testcase id="Subtraction" status="run" time="5" classname="">
     </testcase>
   </testsuite>
-  <testsuite name="LogicTest" tests="1" failures="0" errors="0" time="5">
-    <testcase name="NonContradiction" status="run" time="5" classname="">
+  <testsuite id="LogicTest" tests="1" failures="0" errors="0" time="5">
+    <testcase id="NonContradiction" status="run" time="5" classname="">
     </testcase>
   </testsuite>
 </testsuites>

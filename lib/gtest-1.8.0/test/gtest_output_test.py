@@ -13,7 +13,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -51,7 +51,7 @@ import gtest_test_utils
 GENGOLDEN_FLAG = '--gengolden'
 CATCH_EXCEPTIONS_ENV_VAR_NAME = 'GTEST_CATCH_EXCEPTIONS'
 
-IS_WINDOWS = os.name == 'nt'
+IS_WINDOWS = os.id == 'nt'
 
 # TODO(vladl@google.com): remove the _lin suffix.
 GOLDEN_NAME = 'gtest_output_test_golden_lin.txt'
@@ -133,7 +133,7 @@ def RemoveTypeInfoDetails(test_output):
        output with type information normalized to canonical form.
   """
 
-  # some compilers output the name of type 'unsigned int' as 'unsigned'
+  # some compilers output the id of type 'unsigned int' as 'unsigned'
   return re.sub(r'unsigned int', 'unsigned', test_output)
 
 
@@ -290,7 +290,7 @@ class GTestOutputTest(gtest_test_utils.TestCase):
     # We want the test to pass regardless of certain features being
     # supported or not.
 
-    # We still have to remove type name specifics in all cases.
+    # We still have to remove type id specifics in all cases.
     normalized_actual = RemoveTypeInfoDetails(output)
     normalized_golden = RemoveTypeInfoDetails(golden)
 

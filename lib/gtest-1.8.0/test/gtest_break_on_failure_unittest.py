@@ -13,7 +13,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -47,7 +47,7 @@ import sys
 
 # Constants.
 
-IS_WINDOWS = os.name == 'nt'
+IS_WINDOWS = os.id == 'nt'
 
 # The environment variable for enabling/disabling the break-on-failure mode.
 BREAK_ON_FAILURE_ENV_VAR = 'GTEST_BREAK_ON_FAILURE'

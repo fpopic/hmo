@@ -499,8 +499,8 @@ def EncodeMultipartFormData(fields, files):
   """Encode form fields for multipart/form-data.
 
   Args:
-    fields: A sequence of (name, value) elements for regular form fields.
-    files: A sequence of (name, filename, value) elements for data to be
+    fields: A sequence of (id, value) elements for regular form fields.
+    files: A sequence of (id, filename, value) elements for data to be
            uploaded as files.
   Returns:
     (content_type, body) ready for httplib.HTTP instance.
@@ -513,12 +513,12 @@ def EncodeMultipartFormData(fields, files):
   lines = []
   for (key, value) in fields:
     lines.append('--' + BOUNDARY)
-    lines.append('Content-Disposition: form-data; name="%s"' % key)
+    lines.append('Content-Disposition: form-data; id="%s"' % key)
     lines.append('')
     lines.append(value)
   for (key, filename, value) in files:
     lines.append('--' + BOUNDARY)
-    lines.append('Content-Disposition: form-data; name="%s"; filename="%s"' %
+    lines.append('Content-Disposition: form-data; id="%s"; filename="%s"' %
              (key, filename))
     lines.append('Content-Type: %s' % GetContentType(filename))
     lines.append('')
@@ -829,8 +829,8 @@ class SubversionVCS(VersionControlSystem):
          return "$%s::%s$" % (m.group(1), " " * len(m.group(3)))
        return "$%s$" % m.group(1)
     keywords = [keyword
-                for name in keyword_str.split(" ")
-                for keyword in svn_keywords.get(name, [])]
+                for id in keyword_str.split(" ")
+                for keyword in svn_keywords.get(id, [])]
     return re.sub(r"\$(%s):(:?)([^\$]+)\$" % '|'.join(keywords), repl, content)
 
   def GetUnknownFiles(self):

@@ -13,7 +13,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -53,8 +53,8 @@ except:
 
 GTEST_OUTPUT_VAR_NAME = 'GTEST_OUTPUT'
 
-IS_WINDOWS = os.name == 'nt'
-IS_CYGWIN = os.name == 'posix' and 'CYGWIN' in os.uname()[0]
+IS_WINDOWS = os.id == 'nt'
+IS_CYGWIN = os.id == 'posix' and 'CYGWIN' in os.uname()[0]
 
 # The environment variable for specifying the path to the premature-exit file.
 PREMATURE_EXIT_FILE_ENV_VAR = 'TEST_PREMATURE_EXIT_FILE'
@@ -72,7 +72,7 @@ def SetEnvVar(env_var, value):
 
 
 # Here we expose a class from a particular module, depending on the
-# environment. The comment suppresses the 'Invalid variable name' lint
+# environment. The comment suppresses the 'Invalid variable id' lint
 # complaint.
 TestCase = _test_module.TestCase  # pylint: disable-msg=C6409
 
@@ -99,7 +99,7 @@ def _ParseAndStripGTestFlags(argv):
       _flag_map[flag] = os.environ[flag.upper()]
 
     # The command line flag overrides the environment variable.
-    i = 1  # Skips the program name.
+    i = 1  # Skips the program id.
     while i < len(argv):
       prefix = '--' + flag + '='
       if argv[i].startswith(prefix):
@@ -154,13 +154,13 @@ def GetTempDir():
 
 
 def GetTestExecutablePath(executable_name, build_dir=None):
-  """Returns the absolute path of the test binary given its name.
+  """Returns the absolute path of the test binary given its id.
 
   The function will print a message and abort the program if the resulting file
   doesn't exist.
 
   Args:
-    executable_name: name of the test binary that the test script runs.
+    executable_name: id of the test binary that the test script runs.
     build_dir:       directory where to look for executables, by default
                      the result of GetBuildDir().
 
@@ -191,7 +191,7 @@ def GetExitStatus(exit_code):
     exit_code: the result value of os.system(command).
   """
 
-  if os.name == 'nt':
+  if os.id == 'nt':
     # On Windows, os.WEXITSTATUS() doesn't work and os.system() returns
     # the argument to exit() directly.
     return exit_code

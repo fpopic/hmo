@@ -12,7 +12,7 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
+#     * Neither the id of Google Inc. nor the names of its
 # contributors may be used to endorse or promote products derived from
 # this software without specific prior written permission.
 #
@@ -386,7 +386,7 @@ class GTestFilterUnitTest(gtest_test_utils.TestCase):
     self.RunAndVerifyAllowingDisabled('BadFilter', [])
 
   def testFullName(self):
-    """Tests filtering by full name."""
+    """Tests filtering by full id."""
 
     self.RunAndVerify('FooTest.Xyz', ['FooTest.Xyz'])
     self.RunAndVerifyAllowingDisabled('FooTest.Xyz', ['FooTest.Xyz'])
@@ -402,7 +402,7 @@ class GTestFilterUnitTest(gtest_test_utils.TestCase):
     self.RunAndVerifyAllowingDisabled('*.*', ACTIVE_TESTS + DISABLED_TESTS)
 
   def testFilterByTestCase(self):
-    """Tests filtering by test case name."""
+    """Tests filtering by test case id."""
 
     self.RunAndVerify('FooTest.*', ['FooTest.Abc', 'FooTest.Xyz'])
 
@@ -412,7 +412,7 @@ class GTestFilterUnitTest(gtest_test_utils.TestCase):
                                       BAZ_TESTS + ['BazTest.DISABLED_TestC'])
 
   def testFilterByTest(self):
-    """Tests filtering by test name."""
+    """Tests filtering by test id."""
 
     self.RunAndVerify('*.TestOne', ['BarTest.TestOne', 'BazTest.TestOne'])
 
@@ -442,7 +442,7 @@ class GTestFilterUnitTest(gtest_test_utils.TestCase):
         ])
 
   def testWildcardInTestCaseName(self):
-    """Tests using wildcard in the test case name."""
+    """Tests using wildcard in the test case id."""
 
     self.RunAndVerify('*a*.*', [
         'BarTest.TestOne',
@@ -454,7 +454,7 @@ class GTestFilterUnitTest(gtest_test_utils.TestCase):
         'BazTest.TestB', ] + DEATH_TESTS + PARAM_TESTS)
 
   def testWildcardInTestName(self):
-    """Tests using wildcard in the test name."""
+    """Tests using wildcard in the test id."""
 
     self.RunAndVerify('*.*A*', ['FooTest.Abc', 'BazTest.TestA'])
 
@@ -547,7 +547,7 @@ class GTestFilterUnitTest(gtest_test_utils.TestCase):
     # Value parameterized tests.
     self.RunAndVerify('*/*', PARAM_TESTS)
 
-    # Value parameterized tests filtering by the sequence name.
+    # Value parameterized tests filtering by the sequence id.
     self.RunAndVerify('SeqP/*', [
         'SeqP/ParamTest.TestX/0',
         'SeqP/ParamTest.TestX/1',
@@ -555,7 +555,7 @@ class GTestFilterUnitTest(gtest_test_utils.TestCase):
         'SeqP/ParamTest.TestY/1',
         ])
 
-    # Value parameterized tests filtering by the test name.
+    # Value parameterized tests filtering by the test id.
     self.RunAndVerify('*/0', [
         'SeqP/ParamTest.TestX/0',
         'SeqP/ParamTest.TestY/0',
