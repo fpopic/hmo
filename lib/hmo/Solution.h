@@ -18,11 +18,15 @@ public:
     // max {1, 5, 60} minuta
     const int time_limit_minutes;
 
+    // one hot vectors (vmo is/isn't stored on server)
     bool x[NUM_VMS][NUM_SERVERS] = {{0}};
 
-    unordered_map<pair<component , component>, vector<node>> routes;
+    // routes between components
+    unordered_map<pair<component, component>, vector<node>> routes;
 
     Solution::Solution(const int &id, const int &time);
+
+    const bool check_feasibility(const Solution &solution);
 
 };
 

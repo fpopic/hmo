@@ -15,7 +15,7 @@ public:
     static const string prefix = "res-";
     static const string suffix = "-popic.txt";
 
-    void writeSolution(Solution solution);
+    void writeSolution(const Solution &solution);
 
 };
 

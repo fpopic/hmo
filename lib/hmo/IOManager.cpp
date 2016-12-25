@@ -1,6 +1,6 @@
 #include "IOManager.h"
 
-void IOManager::writeSolution(const Solution solution) {
+void IOManager::writeSolution(const Solution &solution) {
     const string subfolder = to_string(solution.time_limit_minutes);
     const string file_path =
             folder + "/" + subfolder + "/" + prefix + to_string(solution.id) + suffix;
