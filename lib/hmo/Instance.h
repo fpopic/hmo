@@ -95,9 +95,9 @@ struct Instance {
  * Safe (read-only) macros to avoid using class name prefix 'Instance::'
  * and using inline method as ::operator[] instead of ::.at()
  */
-const double P_MAX(const int n);
+const double P_MAX(const int server);
 
-const double P_MIN(const int n);
+const double P_MIN(const int server);
 
 const double REQ(const int resurs, const int component);
 
@@ -108,7 +108,7 @@ const bool AL(const int server, const node node);
 const int P(const int node);
 
 const int CAPACITY(const int node_a, const int node_b);
-
+// P_ij
 const double ENERGY(const int node_a, const int node_b);
 
 const int LATENCY(const int node_a, const int node_b);

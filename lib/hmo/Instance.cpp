@@ -236,12 +236,12 @@ const int Instance::latency[NUM_SERVICE_CHAINS] = {
 
 //@formatter:on
 
-const double P_MAX(const int n) {
-    return Instance::P_max[n];
+const double P_MAX(const int server) {
+    return Instance::P_max[server];
 }
 
-const double P_MIN(const int n) {
-    return Instance::P_min[n];
+const double P_MIN(const int server) {
+    return Instance::P_min[server];
 }
 
 const double REQ(const int resurs, const int component) {
@@ -264,8 +264,7 @@ const int CAPACITY(const int node_a, const int node_b) {
     return (const int) Instance::Edges.at(make_pair(node_a, node_b))[CAPACITY_];
 }
 
-// P_ij
-inline const double ENERGY(const int node_a, const int node_b) {
+const double ENERGY(const int node_a, const int node_b) {
     return Instance::Edges.at(make_pair(node_a, node_b))[ENERGY_];
 }
 

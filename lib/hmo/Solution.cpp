@@ -50,5 +50,5 @@ const double Solution::fitness(const Solution& solution) {
     return true;
 }
 
-// but try not to double compute fitness (hash it somewhere)
+// but try not to compute fitness twice (hash it somewhere)
 const bool Solution::feasable(const Solution& solution) { return fitness(solution) > 0; }
