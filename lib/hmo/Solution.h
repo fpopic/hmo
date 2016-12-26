@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <fstream>
+#include <iostream>
 #include "Instance.h"
 
 using namespace std;
@@ -33,6 +35,14 @@ struct Solution {
     static const double fitness(const Solution& solution);
 
     static const bool feasable(const Solution& solution);
+
+    //////////////////////////////////////////////////////////////
+
+    static const string folder;
+    static const string prefix;
+    static const string suffix;
+
+    static void writeSolution(const Solution& solution);
 
 };
 
