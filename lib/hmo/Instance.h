@@ -8,8 +8,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Macros.h"
-
 //region macro
 
 // broj posluzitelja
@@ -17,31 +15,35 @@
 
 // broj komponenti virtualnih mreznih funkcija
 #define NUM_VMS 44
+typedef int component;
 
 // broj vrsta posluziteljskih resursa
 #define NUM_RES 2
 
 // broj cvorova
 #define NUM_NODES 8
+typedef int node;
 
 // broj usluznih lanaca
 #define NUM_SERVICE_CHAINS 62
 
-// dva cvora: prvi <==> drugi
-#define A 0
-#define B 1
-
 // atributi veze izmedju dva cvora
-#define CAPACITY 2
-#define ENERGY 3
-#define LATENCY 4
-
-// zahtjevana propusnost izmedju dvije komponente
-#define BANDWITH 2
+#define CAPACITY_ 2
+#define ENERGY_ 3
+#define LATENCY_ 4
 
 //endregion
 
 using namespace std;
+
+// to enable O(1) lookup for unordered container
+namespace std {
+    template<typename T, typename U>
+    class hash<pair<T, U>> {
+    public :
+        size_t operator()(const pair<T, U>& p) const { return hash<T>()(p.first) ^ hash<U>()(p.second); }
+    };
+}
 
 struct Instance {
 
@@ -53,22 +55,19 @@ struct Instance {
     // ukoliko je utilizacija procesora 0%
     static const double P_min[NUM_SERVERS];
 
-    // zahtjev svake komponente za oba resursa
+
+    // zahtjev svake komponente za oba resursa (0 -> CPU, 1 -> RES_1)
     // index je oznaka komponente
-    static const double req[NUM_RES][NUM_VMS];
+    static const double requirement[NUM_RES][NUM_VMS];
 
     // dostupnost oba resursa na posluzitelju
     // index je oznaka posluzitelja
-    static const double av[NUM_RES][NUM_SERVERS];
+    static const double availability[NUM_RES][NUM_SERVERS];
+
 
     // lokacija posluzitelja na cvorovima
     // redak oznacava posluzitelj, a stupac cvor
-    static const bool al[NUM_SERVERS][NUM_NODES];
-
-    // definicije usluznih lanaca
-    // redak predstavlja lanac, a vrijednost 1 na i-tom mjestu u retku
-    // oznacava ukljucenost komponente i u lanac
-    static bool sc[NUM_SERVICE_CHAINS][NUM_VMS];
+    static bool const allocation[NUM_SERVERS][NUM_NODES];
 
     // potrosnja energije na cvorovima 1-8
     static const int P[NUM_NODES];
@@ -76,15 +75,48 @@ struct Instance {
     // definicija veza izmedju cvorova
     // <prvi cvor, drugi cvor, kapacitet, potrosnja energije, kasnjenje>
     // <int, int, int, double, int>
-    static unordered_map<pair<node, node>, vector<double>> Edges;
+    static const unordered_map<pair<node, node>, vector<double>> Edges;
 
     // zahtijevana propusnost izmedju komponenti koje komuniciraju
     // <komponenta1, komponenta2, propusnost>
-    static unordered_map<pair<component, component>, int> VmDemands;
+    static const unordered_map<pair<component, component>, int> VmDemands;
+
+    // definicije usluznih lanaca
+    // redak predstavlja lanac, a vrijednost 1 na i-tom mjestu u retku
+    // oznacava ukljucenost komponente i u lanac
+    static const bool service_chains[NUM_SERVICE_CHAINS][NUM_VMS];
 
     // maksimalno dopusteno kasnjenje za svaki usluzni lanac
     // indeks je oznaka usluznog lanca
-    static const int lat[NUM_SERVICE_CHAINS];
+    static const int latency[NUM_SERVICE_CHAINS];
 };
+
+/**
+ * Safe (read-only) macros to avoid using class name prefix 'Instance::'
+ * and using inline method as ::operator[] instead of ::.at()
+ */
+const double P_MAX(const int n);
+
+const double P_MIN(const int n);
+
+const double REQ(const int resurs, const int component);
+
+const double AV(const int resurs, const int server);
+
+const bool AL(const int server, const node node);
+
+const int P(const int node);
+
+const int CAPACITY(const int node_a, const int node_b);
+
+const double ENERGY(const int node_a, const int node_b);
+
+const int LATENCY(const int node_a, const int node_b);
+
+const int BANDWITH(const int component_a, const int component_b);
+
+const bool SC(const int service_chain, const int component);
+
+const int LAT(const int service_chain);
 
 #endif //HMO_PROJECT_INSTANCE_H

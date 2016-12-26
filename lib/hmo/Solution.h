@@ -8,9 +8,9 @@
 
 using namespace std;
 
-class Solution {
+#define NOT_FEASABLE -1
 
-public:
+struct Solution {
 
     // redni broj rjesenja
     const int id;
@@ -18,15 +18,21 @@ public:
     // max {1, 5, 60} minuta
     const int time_limit_minutes;
 
+    ///////////////////////////////////////////////////////////////
+
     // one hot vectors (vmo is/isn't stored on server)
     bool x[NUM_VMS][NUM_SERVERS] = {{0}};
 
     // routes between components
     unordered_map<pair<component, component>, vector<node>> routes;
 
-    Solution::Solution(const int &id, const int &time);
+    ///////////////////////////////////////////////////////////////
 
-    const bool check_feasibility(const Solution &solution);
+    Solution(const int& id, const int& time);
+
+    static const double fitness(const Solution& solution);
+
+    static const bool feasable(const Solution& solution);
 
 };
 

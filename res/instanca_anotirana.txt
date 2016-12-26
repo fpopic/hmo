@@ -27,13 +27,13 @@ sc = [
 ];
 
 /***Resource Demands for each resource and Component ***********/
-req = [
+requirement = [
 [0.5,0.4,0.9,0.7,0.9]
 [0.2,0.2,0.9,0.9,0.9]
 ];
 
 /***Available resources for each server, first row: CPU, second row: MEM ***********/
-av = [
+availability = [
 [1.2,2.5,1.7]
 [1.5,2.8,2.0]
 ];
@@ -62,7 +62,7 @@ VmDemands = {
 };
 
 /***latency for each service chain***********/
-lat= [2, 2];
+latency= [2, 2];
 
 /***connection of servers to nodes: 3 servers, 6 nodes***********/
 /***server 1: connected to node 1, server 2 and 3 connected to node 6***********/

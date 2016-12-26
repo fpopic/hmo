@@ -11,12 +11,11 @@ class IOManager {
 
 public:
 
-    static const string folder = "results";
-    static const string prefix = "res-";
-    static const string suffix = "-popic.txt";
+    static const string folder;
+    static const string prefix;
+    static const string suffix;
 
-    void writeSolution(const Solution &solution);
-
+    static void writeSolution(const Solution& solution);
 };
 
 
