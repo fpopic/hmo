@@ -14,27 +14,23 @@ using namespace std;
 
 struct Solution {
 
-    // redni broj rjesenja
-    const int id;
+    const int id;       // redni broj rjesenja
+    const int minutes;  // max {1, 5, 60} minuta
 
-    // max {1, 5, 60} minuta
-    const int time_limit_minutes;
-
-    ///////////////////////////////////////////////////////////////
-
-    // one hot vectors (vmo is/isn't stored on server)
-    bool x[NUM_VMS][NUM_SERVERS] = {{0}};
+    // one hot vectors (component is/not stored on server)
+    bool x[NUM_VMS][NUM_SERVERS];
 
     // routes between components
     unordered_map<pair<component, component>, vector<node>> routes;
 
+    // only computed once
+    const double fitness;
+
     ///////////////////////////////////////////////////////////////
 
-    Solution(const int& id, const int& time);
+    Solution(const int& id, const int& minutes);
 
-    static const double fitness(const Solution& solution);
-
-    static const bool feasable(const Solution& solution);
+    static const double compute_fitness(const Solution& solution);
 
     //////////////////////////////////////////////////////////////
 

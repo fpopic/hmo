@@ -17,7 +17,7 @@
 #define NUM_VMS 44
 typedef int component;
 
-// broj vrsta posluziteljskih resursa
+// broj vrsta posluziteljskih resourcea
 #define NUM_RES 2
 
 // broj cvorova
@@ -31,6 +31,9 @@ typedef int node;
 #define CAPACITY_ 2
 #define ENERGY_ 3
 #define LATENCY_ 4
+
+#define CPU_ 0
+#define RES1_ 1
 
 //endregion
 
@@ -55,15 +58,13 @@ struct Instance {
     // ukoliko je utilizacija procesora 0%
     static const double P_min[NUM_SERVERS];
 
-
-    // zahtjev svake komponente za oba resursa (0 -> CPU, 1 -> RES_1)
+    // zahtjev svake komponente za oba resourcea (0 -> CPU, 1 -> RES_1)
     // index je oznaka komponente
     static const double requirement[NUM_RES][NUM_VMS];
 
-    // dostupnost oba resursa na posluzitelju
+    // dostupnost oba resourcea na posluzitelju
     // index je oznaka posluzitelja
     static const double availability[NUM_RES][NUM_SERVERS];
-
 
     // lokacija posluzitelja na cvorovima
     // redak oznacava posluzitelj, a stupac cvor
@@ -74,8 +75,8 @@ struct Instance {
 
     // definicija veza izmedju cvorova
     // <prvi cvor, drugi cvor, kapacitet, potrosnja energije, kasnjenje>
-    // <int, int, int, double, int>
-    static const unordered_map<pair<node, node>, vector<double>> Edges;
+    // { <int, int> : [int, int, int] }
+    static const unordered_map<pair<node, node>, vector<int>> Edges;
 
     // zahtijevana propusnost izmedju komponenti koje komuniciraju
     // <komponenta1, komponenta2, propusnost>
@@ -85,6 +86,10 @@ struct Instance {
     // redak predstavlja lanac, a vrijednost 1 na i-tom mjestu u retku
     // oznacava ukljucenost komponente i u lanac
     static const bool service_chains[NUM_SERVICE_CHAINS][NUM_VMS];
+
+    // arg_index of  Instannce::service_chains
+    // to avoid searching for next neighbour with 2 while loops
+    static const vector<vector<int>> service_chains_neighbours;
 
     // maksimalno dopusteno kasnjenje za svaki usluzni lanac
     // indeks je oznaka usluznog lanca
@@ -99,17 +104,21 @@ const double P_MAX(const int server);
 
 const double P_MIN(const int server);
 
-const double REQ(const int resurs, const int component);
+const double REQ(const int resource, const int component);
 
-const double AV(const int resurs, const int server);
+const double REQ_CPU(const int component);
+
+const double AV(const int resource, const int server);
+
+const double AV_CPU(const int server);
 
 const bool AL(const int server, const node node);
 
 const int P(const int node);
 
 const int CAPACITY(const int node_a, const int node_b);
-// P_ij
-const double ENERGY(const int node_a, const int node_b);
+
+const int ENERGY(const int node_a, const int node_b);
 
 const int LATENCY(const int node_a, const int node_b);
 
@@ -117,6 +126,9 @@ const int BANDWITH(const int component_a, const int component_b);
 
 const bool SC(const int service_chain, const int component);
 
+const vector<node>& SC_NEIGHBOURS(const int sc);
+
 const int LAT(const int service_chain);
+
 
 #endif //HMO_PROJECT_INSTANCE_H

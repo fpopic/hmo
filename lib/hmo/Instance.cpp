@@ -120,11 +120,76 @@ const bool Instance::service_chains[NUM_SERVICE_CHAINS][NUM_VMS] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0}
 };
 
+const vector<vector<int>> Instance::service_chains_neighbours = {
+        {0,  31, 34, 35},
+        {0,  40},
+        {1,  31, 33, 35},
+        {1,  38},
+        {2,  31, 32, 35},
+        {2,  37},
+        {3,  31, 33, 35},
+        {3,  38},
+        {4,  31, 32, 35},
+        {4,  37},
+        {5,  31, 34, 35},
+        {5,  41},
+        {6,  31, 34, 35},
+        {6,  40},
+        {7,  31, 33, 35},
+        {7,  39},
+        {8,  31, 34, 35},
+        {8,  40},
+        {9,  31, 32, 35},
+        {9,  37},
+        {10, 31, 32, 35},
+        {10, 37},
+        {11, 31, 32, 35},
+        {11, 37},
+        {12, 31, 32, 35},
+        {12, 36},
+        {13, 31, 33, 35},
+        {13, 39},
+        {14, 31, 33, 35},
+        {14, 39},
+        {15, 31, 34, 35},
+        {15, 40},
+        {16, 31, 33, 35},
+        {16, 39},
+        {17, 31, 34, 35},
+        {17, 41},
+        {18, 31, 32, 35},
+        {18, 36},
+        {19, 31, 34, 35},
+        {19, 41},
+        {20, 31, 32, 35},
+        {20, 36},
+        {21, 31, 33, 35},
+        {21, 39},
+        {22, 31, 33, 35},
+        {22, 38},
+        {23, 31, 33, 35},
+        {23, 39},
+        {24, 31, 34, 35},
+        {24, 40},
+        {25, 31, 34, 35},
+        {25, 41},
+        {26, 31, 32, 35},
+        {26, 37},
+        {27, 31, 32, 35},
+        {27, 36},
+        {28, 31, 32, 35},
+        {28, 37},
+        {29, 31, 32, 35},
+        {29, 36},
+        {30, 31, 33, 35},
+        {30, 39}
+};
+
 const int Instance::P[NUM_NODES] = {
     480, 350, 290, 350, 290, 600, 480, 600
 };
 
-const unordered_map<pair<node, node>, vector<double>> Instance::Edges = {
+const unordered_map<pair<node, node>, vector<int>> Instance::Edges = {
     {make_pair(1, 4), {1, 4, 1100}},
     {make_pair(1, 5), {1, 5, 1100}},
     {make_pair(1, 6), {1, 6, 1100}},
@@ -244,12 +309,20 @@ const double P_MIN(const int server) {
     return Instance::P_min[server];
 }
 
-const double REQ(const int resurs, const int component) {
-    return Instance::requirement[resurs][component];
+const double REQ(const int resource, const int component) {
+    return Instance::requirement[resource][component];
 }
 
-const double AV(const int resurs, const int server) {
-    return Instance::availability[resurs][server];
+const double AV(const int resource, const int server) {
+    return Instance::availability[resource][server];
+}
+
+const double REQ_CPU(const int component) {
+    return Instance::requirement[CPU_][component];
+}
+
+const double AV_CPU(const int server) {
+    return Instance::availability[CPU_][server];
 }
 
 const bool AL(const int server, const int node) {
@@ -261,15 +334,15 @@ const int P(const int node) {
 }
 
 const int CAPACITY(const int node_a, const int node_b) {
-    return (const int) Instance::Edges.at(make_pair(node_a, node_b))[CAPACITY_];
+    return Instance::Edges.at(make_pair(node_a, node_b))[CAPACITY_];
 }
 
-const double ENERGY(const int node_a, const int node_b) {
+const int ENERGY(const int node_a, const int node_b) {
     return Instance::Edges.at(make_pair(node_a, node_b))[ENERGY_];
 }
 
 const int LATENCY(const int node_a, const int node_b) {
-    return (const int) Instance::Edges.at(make_pair(node_a, node_b))[LATENCY_];
+    return Instance::Edges.at(make_pair(node_a, node_b))[LATENCY_];
 }
 
 const int BANDWITH(const int component_a, const int component_b) {
@@ -283,3 +356,8 @@ const bool SC(const int service_chain, const int component) {
 const int LAT(const int service_chain) {
     return Instance::latency[service_chain];
 }
+
+const vector<node>& SC_NEIGHBOURS(const int sc) {
+    return Instance::service_chains_neighbours.at(sc);
+}
+
