@@ -16,7 +16,7 @@ void Solution::writeSolution(const Solution& solution) {
     for (int i = 0; i < NUM_VMS; ++i) {
         cout << "[";
         for (int j = 0; j < NUM_SERVERS; ++j) {
-            cout << solution.x[i][i];
+            cout << solution.x[i][j];
             if (j != NUM_SERVERS - 1) {
                 cout << ",";
             }
