@@ -15,14 +15,12 @@
 
 // broj komponenti virtualnih mreznih funkcija
 #define NUM_VMS 44
-typedef int component;
 
 // broj vrsta posluziteljskih resourcea
 #define NUM_RES 2
 
 // broj cvorova
 #define NUM_NODES 8
-typedef int node;
 
 // broj usluznih lanaca
 #define NUM_SERVICE_CHAINS 62
@@ -34,6 +32,10 @@ typedef int node;
 
 #define CPU_ 0
 #define RES1_ 1
+
+typedef int node_t;
+typedef int server_t;
+typedef int component_t;
 
 //endregion
 
@@ -60,11 +62,13 @@ struct Instance {
 
     // zahtjev svake komponente za oba resourcea (0 -> CPU, 1 -> RES_1)
     // index je oznaka komponente
-    static const double requirement[NUM_RES][NUM_VMS];
+    // [NUM_RES][NUM_VMS]
+    static const vector<vector<double>> requirement;
 
     // dostupnost oba resourcea na posluzitelju
     // index je oznaka posluzitelja
-    static const double availability[NUM_RES][NUM_SERVERS];
+    // [NUM_RES][NUM_SERVERS]
+    static const vector<vector<double>> availability;
 
     // lokacija posluzitelja na cvorovima
     // redak oznacava posluzitelj, a stupac cvor
@@ -76,11 +80,11 @@ struct Instance {
     // definicija veza izmedju cvorova
     // <prvi cvor, drugi cvor, kapacitet, potrosnja energije, kasnjenje>
     // { <int, int> : [int, int, int] }
-    static const unordered_map<pair<node, node>, vector<int>> Edges;
+    static const unordered_map<pair<node_t, node_t>, vector<int>> Edges;
 
     // zahtijevana propusnost izmedju komponenti koje komuniciraju
     // <komponenta1, komponenta2, propusnost>
-    static const unordered_map<pair<component, component>, int> VmDemands;
+    static const unordered_map<pair<component_t, component_t>, int> VmDemands;
 
     // definicije usluznih lanaca
     // redak predstavlja lanac, a vrijednost 1 na i-tom mjestu u retku
@@ -89,7 +93,7 @@ struct Instance {
 
     // arg_index of  Instannce::service_chains
     // to avoid searching for next neighbour with 2 while loops
-    static const vector<vector<int>> service_chains_neighbours;
+    static const vector<vector<component_t>> service_chains_iterable;
 
     // maksimalno dopusteno kasnjenje za svaki usluzni lanac
     // indeks je oznaka usluznog lanca
@@ -112,7 +116,7 @@ const double AV(const int resource, const int server);
 
 const double AV_CPU(const int server);
 
-const bool AL(const int server, const node node);
+const bool AL(const int server, const node_t node);
 
 const int P(const int node);
 
@@ -126,7 +130,7 @@ const int BANDWITH(const int component_a, const int component_b);
 
 const bool SC(const int service_chain, const int component);
 
-const vector<node>& SC_NEIGHBOURS(const int sc);
+const vector<node_t>& SC_NEIGHBOURS(const int sc);
 
 const int LAT(const int service_chain);
 

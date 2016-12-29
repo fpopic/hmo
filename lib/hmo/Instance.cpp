@@ -14,12 +14,12 @@ const double Instance::P_min[NUM_SERVERS] = {
     108.0, 66.0, 38.0, 66.0, 38.0, 116.0, 108.0, 78.0, 112.0, 36.0, 38.0, 36.0, 32.0, 78.0, 78.0, 108.0, 78.0, 116.0, 32.0, 116.0, 32.0, 72.0, 66.0, 72.0, 108.0, 116.0, 38.0, 32.0
 };
 
-const double Instance::requirement[NUM_RES][NUM_VMS] = {
+const vector<vector<double>> Instance::requirement = {
     {0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.4, 0.5, 0.5, 0.5, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3},
     {0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.4, 0.4, 0.4, 0.4, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2}
 };
 
-const double Instance::availability[NUM_RES][NUM_SERVERS] = {
+const vector<vector<double>> Instance::availability = {
     {2.0, 1.2, 0.8, 1.2, 0.8, 2.4, 2.0, 1.8, 2.0, 0.8, 1.2, 0.8, 0.6, 1.8, 1.8, 2.0, 1.8, 2.4, 0.6, 2.4, 0.6, 1.6, 1.2, 1.6, 2.0, 2.4, 0.8, 0.6},
     {3.2, 1.6, 1.2, 1.6, 1.2, 1.6, 3.2, 2.2, 3.2, 1.2, 1.6, 1.2, 0.8, 2.2, 2.2, 3.2, 2.2, 1.6, 0.8, 1.6, 0.8, 1.8, 1.6, 1.8, 3.2, 1.6, 1.2, 0.8}
 };
@@ -53,6 +53,16 @@ const bool Instance::allocation[NUM_SERVERS][NUM_NODES] = {
     {0, 0, 1, 0, 0, 0, 0, 0},
     {1, 0, 0, 0, 0, 0, 0, 0},
     {1, 0, 0, 0, 0, 0, 0, 0}
+};
+
+const vector<node_t> server_node = {
+    2, 1, 0, 1, 0, 2, 2, 1, 2, 0, 0, 0, 0, 1, 1, 2, 1, 2, 0, 2, 0, 1, 1, 1, 2, 2, 0, 0
+};
+
+const vector<vector<int>> nodes_hosting_servers = {
+        {2, 4, 9, 10, 11, 12, 18, 20, 26, 27},
+        {1, 3, 7, 13, 14, 16, 21, 22, 23},
+        {0, 5, 6, 8, 15, 17, 19, 24, 25}
 };
 
 const bool Instance::service_chains[NUM_SERVICE_CHAINS][NUM_VMS] = {
@@ -120,7 +130,7 @@ const bool Instance::service_chains[NUM_SERVICE_CHAINS][NUM_VMS] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0}
 };
 
-const vector<vector<int>> Instance::service_chains_neighbours = {
+const vector<vector<component_t>> Instance::service_chains_iterable = {
         {0,  31, 34, 35},
         {0,  40},
         {1,  31, 33, 35},
@@ -189,7 +199,7 @@ const int Instance::P[NUM_NODES] = {
     480, 350, 290, 350, 290, 600, 480, 600
 };
 
-const unordered_map<pair<node, node>, vector<int>> Instance::Edges = {
+const unordered_map<pair<node_t, node_t>, vector<int>> Instance::Edges = {
     {make_pair(1, 4), {1, 4, 1100}},
     {make_pair(1, 5), {1, 5, 1100}},
     {make_pair(1, 6), {1, 6, 1100}},
@@ -222,7 +232,7 @@ const unordered_map<pair<node, node>, vector<int>> Instance::Edges = {
     {make_pair(8, 6), {8, 6, 733}}
 };
 
-const unordered_map<pair<component, component>, int> Instance::VmDemands = {
+const unordered_map<pair<component_t, component_t>, int> Instance::VmDemands = {
     {make_pair(1, 32), 15},
     {make_pair(1, 41), 35},
     {make_pair(2, 32), 15},
@@ -301,63 +311,65 @@ const int Instance::latency[NUM_SERVICE_CHAINS] = {
 
 //@formatter:on
 
-const double P_MAX(const int server) {
-    return Instance::P_max[server];
-}
+        const double P_MAX(const int server) {
+            return Instance::P_max[server];
+        }
 
-const double P_MIN(const int server) {
-    return Instance::P_min[server];
-}
+        const double P_MIN(const int server) {
+            return Instance::P_min[server];
+        }
 
-const double REQ(const int resource, const int component) {
-    return Instance::requirement[resource][component];
-}
+        const double REQ(const int resource, const int component) {
+            return Instance::requirement[resource][component];
+        }
 
-const double AV(const int resource, const int server) {
-    return Instance::availability[resource][server];
-}
+        const double AV(const int resource, const int server) {
+            return Instance::availability[resource][server];
+        }
 
-const double REQ_CPU(const int component) {
-    return Instance::requirement[CPU_][component];
-}
+        const double REQ_CPU(const int component) {
+            return Instance::requirement[CPU_][component];
+        }
 
-const double AV_CPU(const int server) {
-    return Instance::availability[CPU_][server];
-}
+        const double AV_CPU(const int server) {
+            return Instance::availability[CPU_][server];
+        }
 
-const bool AL(const int server, const int node) {
-    return Instance::allocation[server][node];
-}
 
-const int P(const int node) {
-    return Instance::P[node];
-}
 
-const int CAPACITY(const int node_a, const int node_b) {
-    return Instance::Edges.at(make_pair(node_a, node_b))[CAPACITY_];
-}
+        const bool AL(const int server, const int node) {
+            return Instance::allocation[server][node];
+        }
 
-const int ENERGY(const int node_a, const int node_b) {
-    return Instance::Edges.at(make_pair(node_a, node_b))[ENERGY_];
-}
+        const int P(const int node) {
+            return Instance::P[node];
+        }
 
-const int LATENCY(const int node_a, const int node_b) {
-    return Instance::Edges.at(make_pair(node_a, node_b))[LATENCY_];
-}
+        const int CAPACITY(const int node_a, const int node_b) {
+            return Instance::Edges.at(make_pair(node_a, node_b))[CAPACITY_];
+        }
 
-const int BANDWITH(const int component_a, const int component_b) {
-    return Instance::VmDemands.at(make_pair(component_a, component_b));
-}
+        const int ENERGY(const int node_a, const int node_b) {
+            return Instance::Edges.at(make_pair(node_a, node_b))[ENERGY_];
+        }
 
-const bool SC(const int service_chain, const int component) {
-    return Instance::service_chains[service_chain][component];
-}
+        const int LATENCY(const int node_a, const int node_b) {
+            return Instance::Edges.at(make_pair(node_a, node_b))[LATENCY_];
+        }
 
-const int LAT(const int service_chain) {
-    return Instance::latency[service_chain];
-}
+        const int BANDWITH(const int component_a, const int component_b) {
+            return Instance::VmDemands.at(make_pair(component_a, component_b));
+        }
 
-const vector<node>& SC_NEIGHBOURS(const int sc) {
-    return Instance::service_chains_neighbours.at(sc);
-}
+        const bool SC(const int service_chain, const int component) {
+            return Instance::service_chains[service_chain][component];
+        }
+
+        const int LAT(const int service_chain) {
+            return Instance::latency[service_chain];
+        }
+
+        const vector<node_t>& SC_NEIGHBOURS(const int sc) {
+            return Instance::service_chains_iterable.at(sc);
+        }
 

@@ -8,37 +8,33 @@
 #include <iostream>
 #include "Instance.h"
 
-using namespace std;
-
 #define NOT_FEASABLE -1
+
+using namespace std;
 
 struct Solution {
 
-    const int id;       // redni broj rjesenja
-    const int minutes;  // max {1, 5, 60} minuta
-
-    // one hot vectors (component is/not stored on server)
+    // one hot vectors (component_t is/not stored on server_t)
     bool x[NUM_VMS][NUM_SERVERS];
 
     // routes between components
-    unordered_map<pair<component, component>, vector<node>> routes;
+    unordered_map<pair<component_t, component_t>, vector<node_t>> routes;
 
     // only computed once
     const double fitness;
 
     ///////////////////////////////////////////////////////////////
 
-    Solution(const int& id, const int& minutes);
+    Solution();
 
     static const double compute_fitness(const Solution& solution);
 
-    //////////////////////////////////////////////////////////////
-
-    static const string folder;
-    static const string prefix;
-    static const string suffix;
-
-    static void writeSolution(const Solution& solution);
+    /**
+     * @param solution rjesenje
+     * @param solution_id  redni broj rjesenja
+     * @param minutes  max {1, 5, 60} minuta
+     */
+    static void writeSolution(const Solution& solution, const int& solution_id, const int& minutes);
 
 };
 

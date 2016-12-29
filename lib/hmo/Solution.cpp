@@ -1,13 +1,16 @@
-#include <map>
 #include "Solution.h"
 
-const string Solution::folder = "results";
-const string Solution::prefix = "res";
-const string Solution::suffix = "popic.txt";
+Solution::Solution() : fitness(compute_fitness(*this)),
+                       x{{0}},
+                       routes(unordered_map<pair<component_t, component_t>, vector<node_t>>()) {}
 
-void Solution::writeSolution(const Solution& solution) {
-    const string subfolder = to_string(solution.minutes);
-    const string file_path = folder + "/" + subfolder + "/" + prefix + "-" + to_string(solution.id) + "-" + suffix;
+
+void Solution::writeSolution(const Solution& solution, const int& solution_id, const int& minutes) {
+    const string folder = "results";
+    const string prefix = "res";
+    const string suffix = "popic.txt";
+    const string subfolder = to_string(minutes);
+    const string file_path = folder + "/" + subfolder + "/" + prefix + "-" + to_string(solution_id) + "-" + suffix;
 
     ofstream out(file_path);
     cout.rdbuf(out.rdbuf());
@@ -49,19 +52,13 @@ void Solution::writeSolution(const Solution& solution) {
     cout << "};" << endl;
 }
 
-Solution::Solution(const int& id, const int& minutes) :
-        id(id), minutes(minutes), fitness(compute_fitness(*this)) {
-
-    // x je na smecu
-    // routes je empty
-}
 
 // ovo mora biti sto krace moguce, jer ce se pozivati pri GA nakon krizanja/mutacije
 const double Solution::compute_fitness(const Solution& solution) {
 
     double total_cpu_consum = 0.0;
 
-    bool y[NUM_SERVERS] = {0}; // server active or not
+    bool y[NUM_SERVERS] = {0}; // server_t active or not
 
     double server_cpu[NUM_SERVERS] = {0.0};
 
@@ -87,15 +84,15 @@ const double Solution::compute_fitness(const Solution& solution) {
 
     bool z[NUM_NODES] = {0};
 
-    unordered_map<pair<node, node>, double> edge_bandwith;
+    unordered_map<pair<node_t, node_t>, double> edge_bandwith;
 
     for (const auto& route : solution.routes) {             // <7, 9> [4, 1, 2]
         const auto& component_a = route.first.first;        // 7
         const auto& component_b = route.first.second;       // 9
 
         const auto& route_nodes = route.second;             // [4, 1, 2]
-        // node is active only if it communicates with other node
-        // if componentes are on same node (no costs)
+        // node_t is active only if it communicates with other node_t
+        // if components are on the same node_t (no costs)
         for (int i = 0; i + 1 < route_nodes.size(); i++) {  // constraint 6
             const auto& node_a = route_nodes[i];
             const auto& node_b = route_nodes[i + 1];
