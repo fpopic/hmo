@@ -74,16 +74,16 @@ bool sort_by_cpu_left(const pair<double, int>& l, const pair<double, int>& r) { 
 struct BFSNode {
     BFSNode* parent;
     node_t node;
-    double capacity_left;
+    double cost;
 
-    BFSNode(BFSNode* parent, node_t node, double capacity_left) :
-            parent(parent), node(node), capacity_left(capacity_left) {}
+    BFSNode(BFSNode* parent, node_t node, double cost) :
+            parent(parent), node(node), cost(cost) {}
 
 };
 
 struct BFSNodeComparator : public binary_function<BFSNode*, BFSNode*, bool> {
     // u priority_queue ako je < onda je najveci napocetku
-    bool operator()(const BFSNode* lhs, const BFSNode* rhs) { return lhs->capacity_left < rhs->capacity_left; }
+    bool operator()(const BFSNode* lhs, const BFSNode* rhs) { return !(lhs->cost < rhs->cost); }
 };
 
 unordered_map<int, vector<int>> node_successors;
@@ -198,7 +198,7 @@ Solution* Greedy::run() {
                 priority_queue<BFSNode*, vector<BFSNode*>, BFSNodeComparator> open;
                 vector<node_t> visited(NUM_NODES, 0);
 
-                open.push(new BFSNode(nullptr, node_of_a, 99999));
+                open.push(new BFSNode(nullptr, node_of_a, 0));
                 visited[node_of_a] = 1;
 
                 BFSNode* curr = nullptr;
@@ -218,7 +218,7 @@ Solution* Greedy::run() {
                             const auto capacity_left = EDGE_CAPACITY_LEFT(curr->node, succ);
                             // dodaj samo one edge-ove koji mogu izdrzati prijelaz
                             if (bandwith_needed <= capacity_left) {
-                                open.push(new BFSNode(curr, succ, capacity_left));
+                                open.push(new BFSNode(curr, succ, curr->cost + capacity_left));
                             }
                         }
                     }
