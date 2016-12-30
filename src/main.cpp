@@ -10,6 +10,7 @@ int main() {
 
     if (solution) {
         cout << "Greedy Solution Fitness: " << solution->fitness << endl;
+        Solution::writeSolution(solution, 1, -1);
     }
     else {
         cout << "nullptr";

@@ -2,10 +2,10 @@
 
 Solution::Solution() : /*fitness(compute_fitness(*this)),*/
         x{{0}},
-        routes(unordered_map<pair<component_t, component_t>, vector<node_t>>()) {}
+        routes() {}
 
 
-void Solution::writeSolution(const Solution& solution, const int& solution_id, const int& minutes) {
+void Solution::writeSolution(const Solution* solution, const int& solution_id, const int& minutes) {
     const string folder = "results";
     const string prefix = "res";
     const string suffix = "popic.txt";
@@ -19,7 +19,7 @@ void Solution::writeSolution(const Solution& solution, const int& solution_id, c
     for (int i = 0; i < NUM_VMS; ++i) {
         cout << "[";
         for (int j = 0; j < NUM_SERVERS; ++j) {
-            cout << solution.x[i][j];
+            cout << solution->x[i][j];
             if (j != NUM_SERVERS - 1) {
                 cout << ",";
             }
@@ -30,12 +30,13 @@ void Solution::writeSolution(const Solution& solution, const int& solution_id, c
 
     int i = 0;
     cout << "routes={" << endl;
-    for (auto& route : solution.routes) {
-        cout << "<" << route.first.first << "," << route.first.second << ",";
+    for (auto& route : solution->routes) {
+        //todo human 2x
+        cout << "<" << to_string(route.first.first + 1) << "," << to_string(route.first.second + 1) << ",";
         cout << "[";
         int j = 0;
         for (auto& node  : route.second) {
-            cout << node;
+            cout << to_string(node + 1);//todo human 1x
             if (j != route.second.size()) {
                 cout << ",";
             }
@@ -43,7 +44,7 @@ void Solution::writeSolution(const Solution& solution, const int& solution_id, c
         }
         cout << "]";
         cout << ">";
-        if (i != solution.routes.size() - 1) {
+        if (i != solution->routes.size() - 1) {
             cout << ",";
         }
         cout << endl;
@@ -65,13 +66,19 @@ const double Solution::compute_fitness(Solution* solution) {
     for (int v = 0; v < NUM_VMS; v++) {
         int one_hot = 0;
         for (int s = 0; s < NUM_SERVERS; s++) {
-            one_hot += solution->x[v][s];
+            one_hot += (int) solution->x[v][s];
             y[s] |= solution->x[v][s];
             server_cpu[s] += REQ_CPU(v) * solution->x[v][s];
             // server_cpu > total_available_cpu
-            if (server_cpu[s] > AV_CPU(s)) return NOT_FEASABLE; // constraint 4
+            if (server_cpu[s] > AV_CPU(s)) {
+                cout << "constraint4" << endl;
+                return NOT_FEASABLE; // constraint 4
+            }
         }
-        if (one_hot != 1) return NOT_FEASABLE; // constraint 1
+        if (one_hot != 1) {
+            cout << "constraint1: v" << v << " one_hot:" << one_hot << endl;
+            return NOT_FEASABLE; // constraint 1
+        }
     }
 
     for (int s = 0; s < NUM_SERVERS; ++s) {
@@ -98,6 +105,8 @@ const double Solution::compute_fitness(Solution* solution) {
             const auto& node_b = route_nodes[i + 1];
             const auto edge = make_pair(node_a, node_b);
 
+            if (node_a == node_b) continue;
+
             // mark nodes as active
             z[node_a] = z[node_b] = 1;
 
@@ -105,7 +114,10 @@ const double Solution::compute_fitness(Solution* solution) {
             edge_bandwith[edge] += BANDWITH(component_a, component_b);
 
             // edge_bandwith < edge_capacity
-            if (edge_bandwith[edge] > CAPACITY(node_a, node_b)) return NOT_FEASABLE; // constraint 5
+            if (edge_bandwith[edge] > CAPACITY(node_a, node_b)) {
+                cout << "constraint5" << endl;
+                return NOT_FEASABLE; // constraint 5
+            }
         }
     }
 
@@ -121,13 +133,17 @@ const double Solution::compute_fitness(Solution* solution) {
     }
 
     for (int sc = 0; sc < NUM_SERVICE_CHAINS; ++sc) {
-        const auto& chain = SC_NEIGHBOURS(sc);
+        const auto& chain = Instance::service_chains_iterable[sc];
         int sc_latency = 0;
 
         for (int i = 0; i + 1 < chain.size(); ++i) {
-            const auto& component_a = chain[i];
-            const auto& component_b = chain[i + 1];
+            const component_t& component_a = chain[i];
+            const component_t& component_b = chain[i + 1];
 
+            auto found_routes = solution->routes.find(make_pair(component_a, component_b));
+            if (found_routes == solution->routes.end()) {
+                cout << "za v: " << component_a << ", " << component_b << " nema rute" << endl;
+            }
             const auto& nodes_on_path = solution->routes.at(make_pair(component_a, component_b));
 
             for (int j = 0; j + 1 < nodes_on_path.size(); j++) { // constraint 7
@@ -137,7 +153,10 @@ const double Solution::compute_fitness(Solution* solution) {
                 sc_latency += f_ij;
             }
         }
-        if (sc_latency > LAT(sc)) return NOT_FEASABLE; // constraint 8;
+        if (sc_latency > LAT(sc)) {
+            cout << "constraint8" << endl;
+            return NOT_FEASABLE; // constraint 8;
+        }
     }
 
     return total_cpu_consum + total_node_consum + total_edge_consum;

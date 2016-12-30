@@ -294,6 +294,7 @@ const unordered_map<pair<component_t, component_t>, int> Instance::VmDemands = {
         {make_pair(35 - 1, 36 - 1), 180},
         {make_pair(44 - 1, 36 - 1), 7}
 };
+
 const int Instance::latency[NUM_SERVICE_CHAINS] = {
     20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20
 };
@@ -333,7 +334,8 @@ const int ENERGY(const int node_a, const int node_b) {
 }
 
 const int LATENCY(const int node_a, const int node_b) {
-    return Instance::Edges.at(make_pair(node_a, node_b))[LATENCY_];
+    auto it = Instance::Edges.find(make_pair(node_a, node_b));
+    return (it != Instance::Edges.end()) ? it->second[LATENCY_] : 0;
 }
 
 const int BANDWITH(const int component_a, const int component_b) {

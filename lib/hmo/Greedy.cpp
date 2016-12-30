@@ -2,136 +2,40 @@
 
 //region EDGES
 
-const vector<vector<component_t>> service_chains_iterable = {
-        {0,  31, 34, 35},
-        {0,  40},
-        {1,  31, 33, 35},
-        {1,  38},
-        {2,  31, 32, 35},
-        {2,  37},
-        {3,  31, 33, 35},
-        {3,  38},
-        {4,  31, 32, 35},
-        {4,  37},
-        {5,  31, 34, 35},
-        {5,  41},
-        {6,  31, 34, 35},
-        {6,  40},
-        {7,  31, 33, 35},
-        {7,  39},
-        {8,  31, 34, 35},
-        {8,  40},
-        {9,  31, 32, 35},
-        {9,  37},
-        {10, 31, 32, 35},
-        {10, 37},
-        {11, 31, 32, 35},
-        {11, 37},
-        {12, 31, 32, 35},
-        {12, 36},
-        {13, 31, 33, 35},
-        {13, 39},
-        {14, 31, 33, 35},
-        {14, 39},
-        {15, 31, 34, 35},
-        {15, 40},
-        {16, 31, 33, 35},
-        {16, 39},
-        {17, 31, 34, 35},
-        {17, 41},
-        {18, 31, 32, 35},
-        {18, 36},
-        {19, 31, 34, 35},
-        {19, 41},
-        {20, 31, 32, 35},
-        {20, 36},
-        {21, 31, 33, 35},
-        {21, 39},
-        {22, 31, 33, 35},
-        {22, 38},
-        {23, 31, 33, 35},
-        {23, 39},
-        {24, 31, 34, 35},
-        {24, 40},
-        {25, 31, 34, 35},
-        {25, 41},
-        {26, 31, 32, 35},
-        {26, 37},
-        {27, 31, 32, 35},
-        {27, 36},
-        {28, 31, 32, 35},
-        {28, 37},
-        {29, 31, 32, 35},
-        {29, 36},
-        {30, 31, 33, 35},
-        {30, 39}
-};
-
 const unordered_map<pair<node_t, node_t>, vector<int>> EDGES = {
-        {make_pair(1, 4), {1, 4, 1100}},
-        {make_pair(1, 5), {1, 5, 1100}},
-        {make_pair(1, 6), {1, 6, 1100}},
-        {make_pair(2, 4), {2, 4, 1100}},
-        {make_pair(2, 5), {2, 5, 1100}},
-        {make_pair(2, 6), {2, 6, 1100}},
-        {make_pair(3, 4), {3, 4, 1100}},
-        {make_pair(3, 5), {3, 5, 1100}},
-        {make_pair(3, 6), {3, 6, 1100}},
-        {make_pair(4, 1), {4, 1, 1100}},
-        {make_pair(4, 2), {4, 2, 1100}},
-        {make_pair(4, 3), {4, 3, 1100}},
-        {make_pair(4, 7), {4, 7, 733}},
-        {make_pair(4, 8), {4, 8, 550}},
-        {make_pair(5, 1), {5, 1, 1100}},
-        {make_pair(5, 2), {5, 2, 1100}},
-        {make_pair(5, 3), {5, 3, 1100}},
-        {make_pair(5, 7), {5, 7, 550}},
-        {make_pair(5, 8), {5, 8, 733}},
-        {make_pair(6, 1), {6, 1, 1100}},
-        {make_pair(6, 2), {6, 2, 1100}},
-        {make_pair(6, 3), {6, 3, 1100}},
-        {make_pair(6, 7), {6, 7, 550}},
-        {make_pair(6, 8), {6, 8, 733}},
-        {make_pair(7, 4), {7, 4, 733}},
-        {make_pair(7, 5), {7, 5, 550}},
-        {make_pair(7, 6), {7, 6, 550}},
-        {make_pair(8, 4), {8, 4, 550}},
-        {make_pair(8, 5), {8, 5, 733}},
-        {make_pair(8, 6), {8, 6, 733}}
+        {make_pair(1 - 1, 4 - 1), {1, 4, 1100}},
+        {make_pair(1 - 1, 5 - 1), {1, 5, 1100}},
+        {make_pair(1 - 1, 6 - 1), {1, 6, 1100}},
+        {make_pair(2 - 1, 4 - 1), {2, 4, 1100}},
+        {make_pair(2 - 1, 5 - 1), {2, 5, 1100}},
+        {make_pair(2 - 1, 6 - 1), {2, 6, 1100}},
+        {make_pair(3 - 1, 4 - 1), {3, 4, 1100}},
+        {make_pair(3 - 1, 5 - 1), {3, 5, 1100}},
+        {make_pair(3 - 1, 6 - 1), {3, 6, 1100}},
+        {make_pair(4 - 1, 1 - 1), {4, 1, 1100}},
+        {make_pair(4 - 1, 2 - 1), {4, 2, 1100}},
+        {make_pair(4 - 1, 3 - 1), {4, 3, 1100}},
+        {make_pair(4 - 1, 7 - 1), {4, 7, 733}},
+        {make_pair(4 - 1, 8 - 1), {4, 8, 550}},
+        {make_pair(5 - 1, 1 - 1), {5, 1, 1100}},
+        {make_pair(5 - 1, 2 - 1), {5, 2, 1100}},
+        {make_pair(5 - 1, 3 - 1), {5, 3, 1100}},
+        {make_pair(5 - 1, 7 - 1), {5, 7, 550}},
+        {make_pair(5 - 1, 8 - 1), {5, 8, 733}},
+        {make_pair(6 - 1, 1 - 1), {6, 1, 1100}},
+        {make_pair(6 - 1, 2 - 1), {6, 2, 1100}},
+        {make_pair(6 - 1, 3 - 1), {6, 3, 1100}},
+        {make_pair(6 - 1, 7 - 1), {6, 7, 550}},
+        {make_pair(6 - 1, 8 - 1), {6, 8, 733}},
+        {make_pair(7 - 1, 4 - 1), {7, 4, 733}},
+        {make_pair(7 - 1, 5 - 1), {7, 5, 550}},
+        {make_pair(7 - 1, 6 - 1), {7, 6, 550}},
+        {make_pair(8 - 1, 4 - 1), {8, 4, 550}},
+        {make_pair(8 - 1, 5 - 1), {8, 5, 733}},
+        {make_pair(8 - 1, 6 - 1), {8, 6, 733}}
 };
 
-unordered_map<pair<node_t, node_t>, vector<int>> EDGES_LEFT = {
-        {make_pair(1, 4), {1, 4, 1100}},
-        {make_pair(1, 5), {1, 5, 1100}},
-        {make_pair(1, 6), {1, 6, 1100}},
-        {make_pair(2, 4), {2, 4, 1100}},
-        {make_pair(2, 5), {2, 5, 1100}},
-        {make_pair(2, 6), {2, 6, 1100}},
-        {make_pair(3, 4), {3, 4, 1100}},
-        {make_pair(3, 5), {3, 5, 1100}},
-        {make_pair(3, 6), {3, 6, 1100}},
-        {make_pair(4, 1), {4, 1, 1100}},
-        {make_pair(4, 2), {4, 2, 1100}},
-        {make_pair(4, 3), {4, 3, 1100}},
-        {make_pair(4, 7), {4, 7, 733}},
-        {make_pair(4, 8), {4, 8, 550}},
-        {make_pair(5, 1), {5, 1, 1100}},
-        {make_pair(5, 2), {5, 2, 1100}},
-        {make_pair(5, 3), {5, 3, 1100}},
-        {make_pair(5, 7), {5, 7, 550}},
-        {make_pair(5, 8), {5, 8, 733}},
-        {make_pair(6, 1), {6, 1, 1100}},
-        {make_pair(6, 2), {6, 2, 1100}},
-        {make_pair(6, 3), {6, 3, 1100}},
-        {make_pair(6, 7), {6, 7, 550}},
-        {make_pair(6, 8), {6, 8, 733}},
-        {make_pair(7, 4), {7, 4, 733}},
-        {make_pair(7, 5), {7, 5, 550}},
-        {make_pair(7, 6), {7, 6, 550}},
-        {make_pair(8, 4), {8, 4, 550}},
-        {make_pair(8, 5), {8, 5, 733}},
-        {make_pair(8, 6), {8, 6, 733}}
-};
+unordered_map<pair<node_t, node_t>, vector<int>> EDGES_LEFT = {EDGES};
 
 inline const int EDGE_CAPACITY_LEFT(const int node_a, const int node_b) {
     return EDGES_LEFT[make_pair(node_a, node_b)][CAPACITY_];
@@ -159,6 +63,9 @@ const vector<double> CPU_NEEDED = {
 vector<double> CPU_LEFT = {
         2.0, 1.2, 0.8, 1.2, 0.8, 2.4, 2.0, 1.8, 2.0, 0.8, 1.2, 0.8, 0.6, 1.8, 1.8, 2.0, 1.8, 2.4, 0.6, 2.4, 0.6, 1.6,
         1.2, 1.6, 2.0, 2.4, 0.8, 0.6};
+
+bool sort_by_cpu_left(const pair<double, int>& l, const pair<double, int>& r) { return l.first < r.first; }
+
 
 //endregion
 
@@ -215,42 +122,45 @@ Solution* Greedy::run() {
             auto server_of_a = comp_on_serv[component_a];
             auto server_of_b = comp_on_serv[component_b];
 
-            // ako su vec smjestene komponente dalje
-            if (server_of_a != NOT_FOUND and server_of_b != NOT_FOUND) continue;
+            // ako su vec smjestene komponente, samo moras staviti rutu dolje
+            if (server_of_a == NOT_FOUND or server_of_b == NOT_FOUND) {
 
-            // provjeri je li na neki node stanu obje komponente
-            for (auto node = 0; node < node_servers.size(); ++node) {
-                const auto& servers = node_servers[node];
+                //region provjeri je li na neki node stanu obje komponente
+                for (auto node = 0; node < node_servers.size(); ++node) {
+                    const auto& servers = node_servers[node];
 
-                // provjeri je li na neki server stanu obje komponente
-                // ako je jedna vec smjestena probaj i drugu stavit na taj node (do kraja pretraga)
-                for (const auto& server : servers) {
+                    // provjeri je li na neki server stanu obje komponente
+                    // ako je jedna vec smjestena probaj i drugu stavit na taj node (do kraja pretraga)
+                    for (const auto& server : servers) {
 
-                    // ne provjeravaj servere dalje ako si pronaso da su obje na istom node-u
-                    if (node_of_a == node_of_b and node_of_a != NOT_FOUND) break;
+                        // ne provjeravaj servere dalje ako si pronaso da su obje na istom node-u
+                        if (node_of_a == node_of_b and node_of_a != NOT_FOUND) break;
 
-                    if (comp_on_serv[component_a] == NOT_FOUND and CPU_NEEDED[component_a] <= CPU_LEFT[server]) {
+                        if (comp_on_serv[component_a] == NOT_FOUND and CPU_NEEDED[component_a] <= CPU_LEFT[server]) {
 
-                        node_of_a = node;
-                        server_of_a = server;
-                    }
-
-                    if (comp_on_serv[component_b] == NOT_FOUND and CPU_NEEDED[component_b] <= CPU_LEFT[server]) {
-                        // ako komponenta_a nije prije postavljena a zeli isto na taj server
-                        if ((comp_on_serv[component_a] == NOT_FOUND and server_of_a == server and
-                             // uvjeri se da obje mogu stati
-                             CPU_NEEDED[component_a] + CPU_NEEDED[component_b] <= CPU_LEFT[server]) or
-                            // ako samo b moze onda nema problema
-                            server_of_a != server) {
-
-                            node_of_b = node;
-                            server_of_b = server;
+                            node_of_a = node;
+                            server_of_a = server;
                         }
-                    }
 
+                        if (comp_on_serv[component_b] == NOT_FOUND and CPU_NEEDED[component_b] <= CPU_LEFT[server]) {
+                            // ako komponenta_a nije prije postavljena a zeli isto na taj server
+                            if ((comp_on_serv[component_a] == NOT_FOUND and server_of_a == server and
+                                 // uvjeri se da obje mogu stati
+                                 CPU_NEEDED[component_a] + CPU_NEEDED[component_b] <= CPU_LEFT[server]) or
+                                // ako samo b moze onda nema problema
+                                server_of_a != server) {
+
+                                node_of_b = node;
+                                server_of_b = server;
+                            }
+                        }
+
+                    }
+                    // ne provjeravaj nodove dalje
+                    if (node_of_a == node_of_b and node_of_a != NOT_FOUND) break;
                 }
-                // ne provjeravaj nodove dalje
-                if (node_of_a == node_of_b and node_of_a != NOT_FOUND) break;
+                //endregion
+
             }
 
             // ako nisi nasao node-ove za obje komponente
@@ -259,19 +169,24 @@ Solution* Greedy::run() {
                 return nullptr;
             }
 
-            //oznaci ih smjestene
-            comp_on_node[component_a] = node_of_a;
-            comp_on_node[component_b] = node_of_b;
-            comp_on_serv[component_a] = server_of_a;
-            comp_on_serv[component_b] = server_of_b;
+            if (server_of_a != comp_on_serv[component_a]) {
+                CPU_LEFT[server_of_a] -= CPU_NEEDED[component_a];
+                //oznaci ih smjestene
+                comp_on_node[component_a] = node_of_a;
+                comp_on_serv[component_a] = server_of_a;
+                // one hot
+                solution->x[component_a][server_of_a] = 1;
 
-            // one hot
-            solution->x[component_a][server_of_a] = 1;
-            solution->x[component_b][component_b] = 1;
+            }
 
-            // potrosi cpu na serverima
-            CPU_LEFT[server_of_a] -= CPU_NEEDED[component_a];
-            CPU_LEFT[server_of_b] -= CPU_NEEDED[component_b];
+            if (server_of_b != comp_on_serv[component_b]) {
+                CPU_LEFT[server_of_b] -= CPU_NEEDED[component_b];
+                //oznaci ih smjestene
+                comp_on_node[component_b] = node_of_b;
+                comp_on_serv[component_b] = server_of_b;
+                // one hot
+                solution->x[component_b][server_of_b] = 1;
+            }
 
             // ako nisu na istom node-u
             if (node_of_a != node_of_b) {
@@ -318,7 +233,7 @@ Solution* Greedy::run() {
                 // potrosi bandwith_needed na edge-ovima na ruti kad budes rekonstruirao put
                 // pazi rekonstrukcija ide od natraske a put ide od pocetka
 
-                vector<node_t> route;
+                vector<node_t>& route = solution->routes[make_pair(component_a, component_b)];
 
                 while (curr->parent) {
                     // potrosi brid
@@ -330,16 +245,75 @@ Solution* Greedy::run() {
                 }
                 // dodaj i pocetni node u rutu
                 route.insert(route.begin(), curr->node);
-
-                // oznaci ih usmjerenima
-                solution->routes[make_pair(component_a, component_b)] = vector<node_t>{route};
             }
                 //na istom su cvoru sam taj cvor stavi u "rutu"
             else {
-                solution->routes[make_pair(component_a, component_b)] = vector<node_t>{node_of_a};
+                solution->routes[make_pair(component_a, component_b)].push_back(node_of_a);
             }
         }
     }
+
+    // rijesi komponente koje se ne nalaze u usluznim lancima
+    // sortiraj servere po cpu koliko je kome ostalo (moras i index pamtiti jer mijenjaju mjesta)
+    vector<pair<double, int>> sorted_servers_cpu(NUM_SERVERS);
+    for (server_t s = 0; s < NUM_SERVERS; ++s) {
+        sorted_servers_cpu.push_back(make_pair(CPU_LEFT[s], s));
+    }
+
+
+    for (component_t component = 0; component < NUM_VMS; ++component) {
+
+        if (comp_on_serv[component] == NOT_FOUND) {
+
+            for (server_t server = 0; server < NUM_SERVERS; ++server) {
+                if (CPU_NEEDED[component] <= CPU_LEFT[server]) {
+                    CPU_LEFT[server] -= CPU_NEEDED[component];
+                    comp_on_serv[component] = server;
+                    solution->x[component][server] = 1;
+                    break;
+                }
+            }
+
+            if (comp_on_serv[component] == NOT_FOUND) {
+                cout << "Nema mjesta za samostalne komponente: " << component << endl;
+                return nullptr;
+            }
+
+//            sort(sorted_servers_cpu.begin(), sorted_servers_cpu.end(), sort_by_cpu_left);
+//
+//            // binary search servera (u lo je rezultat)
+//            int lo = 0, hi = NUM_SERVERS - 1;
+//            while (lo < hi) {
+//                int mid = lo + (hi - lo) / 2;
+//                if (CPU_NEEDED[component] <= sorted_servers_cpu[mid].first)
+//                    hi = mid;
+//                else
+//                    lo = mid + 1;
+//            }
+//
+//            // <cpu_left, server_t>
+//            server_t server = sorted_servers_cpu[lo].second;
+//
+//            if (CPU_NEEDED[component] <= CPU_LEFT[server]) {
+//                //oznaci smjestenom
+//                comp_on_serv[component] = server;
+//                // one hot
+//                solution->x[component][server] = 1;
+//                // potrosi cpu na serveru
+//                CPU_LEFT[server] -= CPU_NEEDED[component];
+//                // potrosi cpu na serveru na sortiranom polju
+//                sorted_servers_cpu[lo].first -= CPU_NEEDED[component];
+//            }
+
+//            else {
+//                cout << "Nema mjesta za samostalne komponente: " << component << endl;
+//                return nullptr;
+//            }
+
+        }
+    }
+
+
     solution->fitness = Solution::compute_fitness(solution);
     return solution;
 }

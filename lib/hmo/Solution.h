@@ -34,7 +34,7 @@ struct Solution {
      * @param solution_id  redni broj rjesenja
      * @param minutes  max {1, 5, 60} minuta
      */
-    static void writeSolution(const Solution& solution, const int& solution_id, const int& minutes);
+    static void writeSolution(const Solution* solution, const int& solution_id, const int& minutes);
 
 };
 
