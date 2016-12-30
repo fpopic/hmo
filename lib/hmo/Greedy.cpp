@@ -82,7 +82,8 @@ struct BFSNode {
 };
 
 struct BFSNodeComparator : public binary_function<BFSNode*, BFSNode*, bool> {
-    // u priority_queue ako je < onda je najveci napocetku
+    // u priority_queue ako je < onda je najveci (dobrota ako se koristi) napocetku
+    // negacija znaci da ce najmanji (cost) biti napocetku
     bool operator()(const BFSNode* lhs, const BFSNode* rhs) { return !(lhs->cost < rhs->cost); }
 };
 
@@ -218,7 +219,7 @@ Solution* Greedy::run() {
                             const auto capacity_left = EDGE_CAPACITY_LEFT(curr->node, succ);
                             // dodaj samo one edge-ove koji mogu izdrzati prijelaz
                             if (bandwith_needed <= capacity_left) {
-                                open.push(new BFSNode(curr, succ, curr->cost + capacity_left));
+                                open.push(new BFSNode(curr, succ, curr->cost + 1));
                             }
                         }
                     }
@@ -255,9 +256,10 @@ Solution* Greedy::run() {
             }
         }
     }
-
+#define ONE_HOT 0
 #define BINARY_SEARCH 1
 
+#ifdef ONE_HOT
     for (component_t component = 0; component < NUM_VMS; ++component) {
 
         if (comp_on_serv[component] == NOT_FOUND) {
@@ -314,8 +316,7 @@ Solution* Greedy::run() {
 
         }
     }
-
-
+#endif
     solution->fitness = Solution::compute_fitness(solution);
     return solution;
 }

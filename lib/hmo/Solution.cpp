@@ -28,6 +28,8 @@ void Solution::writeSolution(const Solution* solution, const int& solution_id, c
     }
     out << "];" << endl;
 
+    out << endl;
+
     int i = 0;
     out << "routes={" << endl;
     for (auto& route : solution->routes) {
@@ -75,7 +77,7 @@ const double Solution::compute_fitness(Solution* solution) {
                 return NOT_FEASABLE; // constraint 4
             }
         }
-        if (one_hot != 1) {
+        if (one_hot > 1) {
             cout << "constraint1: v" << v << " one_hot:" << one_hot << endl;
             return NOT_FEASABLE; // constraint 1
         }
