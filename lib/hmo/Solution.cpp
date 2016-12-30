@@ -9,48 +9,48 @@ void Solution::writeSolution(const Solution* solution, const int& solution_id, c
     const string folder = "results";
     const string prefix = "res";
     const string suffix = "popic.txt";
-    const string subfolder = to_string(minutes);
-    const string file_path = folder + "/" + subfolder + "/" + prefix + "-" + to_string(solution_id) + "-" + suffix;
+    const string mins = to_string(minutes) + "min";
+    const string file_path = folder + "/" + prefix + "-" + to_string(solution_id) + "-" + mins + "-" + suffix;
 
+    cout << file_path << endl;
     ofstream out(file_path);
-    cout.rdbuf(out.rdbuf());
 
-    cout << "x=[" << endl;
+    out << "x=[" << endl;
     for (int i = 0; i < NUM_VMS; ++i) {
-        cout << "[";
+        out << "[";
         for (int j = 0; j < NUM_SERVERS; ++j) {
-            cout << solution->x[i][j];
+            out << solution->x[i][j];
             if (j != NUM_SERVERS - 1) {
-                cout << ",";
+                out << ",";
             }
         }
-        cout << "]" << endl;
+        out << "]" << endl;
     }
-    cout << "];" << endl;
+    out << "];" << endl;
 
     int i = 0;
-    cout << "routes={" << endl;
+    out << "routes={" << endl;
     for (auto& route : solution->routes) {
         //todo human 2x
-        cout << "<" << to_string(route.first.first + 1) << "," << to_string(route.first.second + 1) << ",";
-        cout << "[";
+        out << "<" + to_string(route.first.first + 1) + "," + to_string(route.first.second + 1) + ",";
+        out << "[";
         int j = 0;
         for (auto& node  : route.second) {
-            cout << to_string(node + 1);//todo human 1x
-            if (j != route.second.size()) {
-                cout << ",";
+            out << to_string(node + 1);//todo human 1x
+            if (j != route.second.size()-1) {
+                out << ",";
             }
             j++;
         }
-        cout << "]";
-        cout << ">";
+        out << "]";
+        out << ">";
         if (i != solution->routes.size() - 1) {
-            cout << ",";
+            out << ",";
         }
-        cout << endl;
+        out << endl;
         i++;
     }
-    cout << "};" << endl;
+    out << "};" << endl;
 }
 
 

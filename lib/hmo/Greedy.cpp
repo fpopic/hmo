@@ -248,7 +248,10 @@ Solution* Greedy::run() {
             }
                 //na istom su cvoru sam taj cvor stavi u "rutu"
             else {
-                solution->routes[make_pair(component_a, component_b)].push_back(node_of_a);
+                vector<node_t>& route = solution->routes[make_pair(component_a, component_b)];
+                if (route.empty()) {
+                    route.push_back(node_of_a);
+                }
             }
         }
     }
