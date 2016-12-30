@@ -256,18 +256,14 @@ Solution* Greedy::run() {
         }
     }
 
-    // rijesi komponente koje se ne nalaze u usluznim lancima
-    // sortiraj servere po cpu koliko je kome ostalo (moras i index pamtiti jer mijenjaju mjesta)
-    vector<pair<double, int>> sorted_servers_cpu(NUM_SERVERS);
-    for (server_t s = 0; s < NUM_SERVERS; ++s) {
-        sorted_servers_cpu.push_back(make_pair(CPU_LEFT[s], s));
-    }
-
+#define BINARY_SEARCH 1
 
     for (component_t component = 0; component < NUM_VMS; ++component) {
 
         if (comp_on_serv[component] == NOT_FOUND) {
 
+            // trazi prvi (ne-minimalni) na koji stane
+#if !BINARY_SEARCH
             for (server_t server = 0; server < NUM_SERVERS; ++server) {
                 if (CPU_NEEDED[component] <= CPU_LEFT[server]) {
                     CPU_LEFT[server] -= CPU_NEEDED[component];
@@ -276,42 +272,45 @@ Solution* Greedy::run() {
                     break;
                 }
             }
+#endif
+            //trazi minimalni na koji stane
+#if BINARY_SEARCH
+            // rijesi komponente koje se ne nalaze u usluznim lancima
+            // sortiraj servere po cpu koliko je kome ostalo (moras i index pamtiti jer mijenjaju mjesta)
+            vector<pair<double, int>> sorted_servers_cpu;
+            for (server_t s = 0; s < NUM_SERVERS; ++s) {
+                sorted_servers_cpu.push_back(make_pair(CPU_LEFT[s], s));
+            }
+            sort(sorted_servers_cpu.begin(), sorted_servers_cpu.end(), sort_by_cpu_left);
 
+            // binary search servera (u lo je rezultat)
+            int lo = 0, hi = NUM_SERVERS - 1;
+            while (lo < hi) {
+                int mid = lo + (hi - lo) / 2;
+                if (CPU_NEEDED[component] <= sorted_servers_cpu[mid].first)
+                    hi = mid;
+                else
+                    lo = mid + 1;
+            }
+
+            // <cpu_left, server_t>
+            server_t server = sorted_servers_cpu[lo].second;
+
+            if (CPU_NEEDED[component] <= CPU_LEFT[server]) {
+                //oznaci smjestenom
+                comp_on_serv[component] = server;
+                // one hot
+                solution->x[component][server] = 1;
+                // potrosi cpu na serveru
+                CPU_LEFT[server] -= CPU_NEEDED[component];
+                // potrosi cpu na serveru na sortiranom polju
+                sorted_servers_cpu[lo].first -= CPU_NEEDED[component];
+            }
+#endif
             if (comp_on_serv[component] == NOT_FOUND) {
                 cout << "Nema mjesta za samostalne komponente: " << component << endl;
                 return nullptr;
             }
-
-//            sort(sorted_servers_cpu.begin(), sorted_servers_cpu.end(), sort_by_cpu_left);
-//
-//            // binary search servera (u lo je rezultat)
-//            int lo = 0, hi = NUM_SERVERS - 1;
-//            while (lo < hi) {
-//                int mid = lo + (hi - lo) / 2;
-//                if (CPU_NEEDED[component] <= sorted_servers_cpu[mid].first)
-//                    hi = mid;
-//                else
-//                    lo = mid + 1;
-//            }
-//
-//            // <cpu_left, server_t>
-//            server_t server = sorted_servers_cpu[lo].second;
-//
-//            if (CPU_NEEDED[component] <= CPU_LEFT[server]) {
-//                //oznaci smjestenom
-//                comp_on_serv[component] = server;
-//                // one hot
-//                solution->x[component][server] = 1;
-//                // potrosi cpu na serveru
-//                CPU_LEFT[server] -= CPU_NEEDED[component];
-//                // potrosi cpu na serveru na sortiranom polju
-//                sorted_servers_cpu[lo].first -= CPU_NEEDED[component];
-//            }
-
-//            else {
-//                cout << "Nema mjesta za samostalne komponente: " << component << endl;
-//                return nullptr;
-//            }
 
         }
     }
