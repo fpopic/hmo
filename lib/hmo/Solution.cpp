@@ -1,8 +1,8 @@
 #include "Solution.h"
 
-Solution::Solution() : fitness(compute_fitness(*this)),
-                       x{{0}},
-                       routes(unordered_map<pair<component_t, component_t>, vector<node_t>>()) {}
+Solution::Solution() : /*fitness(compute_fitness(*this)),*/
+        x{{0}},
+        routes(unordered_map<pair<component_t, component_t>, vector<node_t>>()) {}
 
 
 void Solution::writeSolution(const Solution& solution, const int& solution_id, const int& minutes) {
@@ -54,7 +54,7 @@ void Solution::writeSolution(const Solution& solution, const int& solution_id, c
 
 
 // ovo mora biti sto krace moguce, jer ce se pozivati pri GA nakon krizanja/mutacije
-const double Solution::compute_fitness(const Solution& solution) {
+const double Solution::compute_fitness(Solution* solution) {
 
     double total_cpu_consum = 0.0;
 
@@ -65,9 +65,9 @@ const double Solution::compute_fitness(const Solution& solution) {
     for (int v = 0; v < NUM_VMS; v++) {
         int one_hot = 0;
         for (int s = 0; s < NUM_SERVERS; s++) {
-            one_hot += solution.x[v][s];
-            y[s] |= solution.x[v][s];
-            server_cpu[s] += REQ_CPU(v) * solution.x[v][s];
+            one_hot += solution->x[v][s];
+            y[s] |= solution->x[v][s];
+            server_cpu[s] += REQ_CPU(v) * solution->x[v][s];
             // server_cpu > total_available_cpu
             if (server_cpu[s] > AV_CPU(s)) return NOT_FEASABLE; // constraint 4
         }
@@ -86,7 +86,7 @@ const double Solution::compute_fitness(const Solution& solution) {
 
     unordered_map<pair<node_t, node_t>, double> edge_bandwith;
 
-    for (const auto& route : solution.routes) {             // <7, 9> [4, 1, 2]
+    for (const auto& route : solution->routes) {             // <7, 9> [4, 1, 2]
         const auto& component_a = route.first.first;        // 7
         const auto& component_b = route.first.second;       // 9
 
@@ -128,7 +128,7 @@ const double Solution::compute_fitness(const Solution& solution) {
             const auto& component_a = chain[i];
             const auto& component_b = chain[i + 1];
 
-            const auto& nodes_on_path = solution.routes.at(make_pair(component_a, component_b));
+            const auto& nodes_on_path = solution->routes.at(make_pair(component_a, component_b));
 
             for (int j = 0; j + 1 < nodes_on_path.size(); j++) { // constraint 7
                 const auto& node_a = nodes_on_path[j];

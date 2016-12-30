@@ -16,7 +16,7 @@ P_max = [160.0, 180.0, 150.0];
 /***Minimum Server Power***********/
 P_min = [45, 55, 40];
 
-/***Static Node/Switch Power Consumption when activated ***********/
+/***Static BFSNode/Switch Power Consumption when activated ***********/
 P = [480, 600, 350, 480, 290, 220];
 
 

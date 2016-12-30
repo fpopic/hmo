@@ -55,16 +55,6 @@ const bool Instance::allocation[NUM_SERVERS][NUM_NODES] = {
     {1, 0, 0, 0, 0, 0, 0, 0}
 };
 
-const vector<node_t> server_node = {
-    2, 1, 0, 1, 0, 2, 2, 1, 2, 0, 0, 0, 0, 1, 1, 2, 1, 2, 0, 2, 0, 1, 1, 1, 2, 2, 0, 0
-};
-
-const vector<vector<int>> nodes_hosting_servers = {
-        {2, 4, 9, 10, 11, 12, 18, 20, 26, 27},
-        {1, 3, 7, 13, 14, 16, 21, 22, 23},
-        {0, 5, 6, 8, 15, 17, 19, 24, 25}
-};
-
 const bool Instance::service_chains[NUM_SERVICE_CHAINS][NUM_VMS] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
@@ -200,176 +190,166 @@ const int Instance::P[NUM_NODES] = {
 };
 
 const unordered_map<pair<node_t, node_t>, vector<int>> Instance::Edges = {
-    {make_pair(1, 4), {1, 4, 1100}},
-    {make_pair(1, 5), {1, 5, 1100}},
-    {make_pair(1, 6), {1, 6, 1100}},
-    {make_pair(2, 4), {2, 4, 1100}},
-    {make_pair(2, 5), {2, 5, 1100}},
-    {make_pair(2, 6), {2, 6, 1100}},
-    {make_pair(3, 4), {3, 4, 1100}},
-    {make_pair(3, 5), {3, 5, 1100}},
-    {make_pair(3, 6), {3, 6, 1100}},
-    {make_pair(4, 1), {4, 1, 1100}},
-    {make_pair(4, 2), {4, 2, 1100}},
-    {make_pair(4, 3), {4, 3, 1100}},
-    {make_pair(4, 7), {4, 7, 733}},
-    {make_pair(4, 8), {4, 8, 550}},
-    {make_pair(5, 1), {5, 1, 1100}},
-    {make_pair(5, 2), {5, 2, 1100}},
-    {make_pair(5, 3), {5, 3, 1100}},
-    {make_pair(5, 7), {5, 7, 550}},
-    {make_pair(5, 8), {5, 8, 733}},
-    {make_pair(6, 1), {6, 1, 1100}},
-    {make_pair(6, 2), {6, 2, 1100}},
-    {make_pair(6, 3), {6, 3, 1100}},
-    {make_pair(6, 7), {6, 7, 550}},
-    {make_pair(6, 8), {6, 8, 733}},
-    {make_pair(7, 4), {7, 4, 733}},
-    {make_pair(7, 5), {7, 5, 550}},
-    {make_pair(7, 6), {7, 6, 550}},
-    {make_pair(8, 4), {8, 4, 550}},
-    {make_pair(8, 5), {8, 5, 733}},
-    {make_pair(8, 6), {8, 6, 733}}
+        {make_pair(1 - 1, 4 - 1), {1, 4, 1100}},
+        {make_pair(1 - 1, 5 - 1), {1, 5, 1100}},
+        {make_pair(1 - 1, 6 - 1), {1, 6, 1100}},
+        {make_pair(2 - 1, 4 - 1), {2, 4, 1100}},
+        {make_pair(2 - 1, 5 - 1), {2, 5, 1100}},
+        {make_pair(2 - 1, 6 - 1), {2, 6, 1100}},
+        {make_pair(3 - 1, 4 - 1), {3, 4, 1100}},
+        {make_pair(3 - 1, 5 - 1), {3, 5, 1100}},
+        {make_pair(3 - 1, 6 - 1), {3, 6, 1100}},
+        {make_pair(4 - 1, 1 - 1), {4, 1, 1100}},
+        {make_pair(4 - 1, 2 - 1), {4, 2, 1100}},
+        {make_pair(4 - 1, 3 - 1), {4, 3, 1100}},
+        {make_pair(4 - 1, 7 - 1), {4, 7, 733}},
+        {make_pair(4 - 1, 8 - 1), {4, 8, 550}},
+        {make_pair(5 - 1, 1 - 1), {5, 1, 1100}},
+        {make_pair(5 - 1, 2 - 1), {5, 2, 1100}},
+        {make_pair(5 - 1, 3 - 1), {5, 3, 1100}},
+        {make_pair(5 - 1, 7 - 1), {5, 7, 550}},
+        {make_pair(5 - 1, 8 - 1), {5, 8, 733}},
+        {make_pair(6 - 1, 1 - 1), {6, 1, 1100}},
+        {make_pair(6 - 1, 2 - 1), {6, 2, 1100}},
+        {make_pair(6 - 1, 3 - 1), {6, 3, 1100}},
+        {make_pair(6 - 1, 7 - 1), {6, 7, 550}},
+        {make_pair(6 - 1, 8 - 1), {6, 8, 733}},
+        {make_pair(7 - 1, 4 - 1), {7, 4, 733}},
+        {make_pair(7 - 1, 5 - 1), {7, 5, 550}},
+        {make_pair(7 - 1, 6 - 1), {7, 6, 550}},
+        {make_pair(8 - 1, 4 - 1), {8, 4, 550}},
+        {make_pair(8 - 1, 5 - 1), {8, 5, 733}},
+        {make_pair(8 - 1, 6 - 1), {8, 6, 733}}
 };
 
 const unordered_map<pair<component_t, component_t>, int> Instance::VmDemands = {
-    {make_pair(1, 32), 15},
-    {make_pair(1, 41), 35},
-    {make_pair(2, 32), 15},
-    {make_pair(2, 39), 35},
-    {make_pair(3, 32), 15},
-    {make_pair(3, 38), 35},
-    {make_pair(4, 32), 15},
-    {make_pair(4, 39), 35},
-    {make_pair(5, 32), 15},
-    {make_pair(5, 38), 35},
-    {make_pair(6, 32), 15},
-    {make_pair(6, 42), 35},
-    {make_pair(7, 32), 15},
-    {make_pair(7, 41), 35},
-    {make_pair(8, 32), 15},
-    {make_pair(8, 40), 35},
-    {make_pair(9, 32), 15},
-    {make_pair(9, 41), 35},
-    {make_pair(10, 32), 15},
-    {make_pair(10, 38), 35},
-    {make_pair(11, 32), 15},
-    {make_pair(11, 38), 35},
-    {make_pair(12, 32), 15},
-    {make_pair(12, 38), 35},
-    {make_pair(13, 32), 15},
-    {make_pair(13, 37), 35},
-    {make_pair(14, 32), 15},
-    {make_pair(14, 40), 35},
-    {make_pair(15, 32), 15},
-    {make_pair(15, 40), 35},
-    {make_pair(16, 32), 15},
-    {make_pair(16, 41), 35},
-    {make_pair(17, 32), 15},
-    {make_pair(17, 40), 35},
-    {make_pair(18, 32), 15},
-    {make_pair(18, 42), 35},
-    {make_pair(19, 32), 15},
-    {make_pair(19, 37), 35},
-    {make_pair(20, 32), 15},
-    {make_pair(20, 42), 35},
-    {make_pair(21, 32), 15},
-    {make_pair(21, 37), 35},
-    {make_pair(22, 32), 15},
-    {make_pair(22, 40), 35},
-    {make_pair(23, 32), 15},
-    {make_pair(23, 39), 35},
-    {make_pair(24, 32), 15},
-    {make_pair(24, 40), 35},
-    {make_pair(25, 32), 15},
-    {make_pair(25, 41), 35},
-    {make_pair(26, 32), 15},
-    {make_pair(26, 42), 35},
-    {make_pair(27, 32), 15},
-    {make_pair(27, 38), 35},
-    {make_pair(28, 32), 15},
-    {make_pair(28, 37), 35},
-    {make_pair(29, 32), 15},
-    {make_pair(29, 38), 35},
-    {make_pair(30, 32), 15},
-    {make_pair(30, 37), 35},
-    {make_pair(31, 32), 15},
-    {make_pair(31, 40), 35},
-    {make_pair(32, 33), 240},
-    {make_pair(32, 34), 200},
-    {make_pair(32, 35), 180},
-    {make_pair(32, 43), 7},
-    {make_pair(33, 36), 240},
-    {make_pair(34, 36), 200},
-    {make_pair(35, 36), 180},
-    {make_pair(44, 36), 7}
+        {make_pair(1 - 1, 32 - 1),  15},
+        {make_pair(1 - 1, 41 - 1),  35},
+        {make_pair(2 - 1, 32 - 1),  15},
+        {make_pair(2 - 1, 39 - 1),  35},
+        {make_pair(3 - 1, 32 - 1),  15},
+        {make_pair(3 - 1, 38 - 1),  35},
+        {make_pair(4 - 1, 32 - 1),  15},
+        {make_pair(4 - 1, 39 - 1),  35},
+        {make_pair(5 - 1, 32 - 1),  15},
+        {make_pair(5 - 1, 38 - 1),  35},
+        {make_pair(6 - 1, 32 - 1),  15},
+        {make_pair(6 - 1, 42 - 1),  35},
+        {make_pair(7 - 1, 32 - 1),  15},
+        {make_pair(7 - 1, 41 - 1),  35},
+        {make_pair(8 - 1, 32 - 1),  15},
+        {make_pair(8 - 1, 40 - 1),  35},
+        {make_pair(9 - 1, 32 - 1),  15},
+        {make_pair(9 - 1, 41 - 1),  35},
+        {make_pair(10 - 1, 32 - 1), 15},
+        {make_pair(10 - 1, 38 - 1), 35},
+        {make_pair(11 - 1, 32 - 1), 15},
+        {make_pair(11 - 1, 38 - 1), 35},
+        {make_pair(12 - 1, 32 - 1), 15},
+        {make_pair(12 - 1, 38 - 1), 35},
+        {make_pair(13 - 1, 32 - 1), 15},
+        {make_pair(13 - 1, 37 - 1), 35},
+        {make_pair(14 - 1, 32 - 1), 15},
+        {make_pair(14 - 1, 40 - 1), 35},
+        {make_pair(15 - 1, 32 - 1), 15},
+        {make_pair(15 - 1, 40 - 1), 35},
+        {make_pair(16 - 1, 32 - 1), 15},
+        {make_pair(16 - 1, 41 - 1), 35},
+        {make_pair(17 - 1, 32 - 1), 15},
+        {make_pair(17 - 1, 40 - 1), 35},
+        {make_pair(18 - 1, 32 - 1), 15},
+        {make_pair(18 - 1, 42 - 1), 35},
+        {make_pair(19 - 1, 32 - 1), 15},
+        {make_pair(19 - 1, 37 - 1), 35},
+        {make_pair(20 - 1, 32 - 1), 15},
+        {make_pair(20 - 1, 42 - 1), 35},
+        {make_pair(21 - 1, 32 - 1), 15},
+        {make_pair(21 - 1, 37 - 1), 35},
+        {make_pair(22 - 1, 32 - 1), 15},
+        {make_pair(22 - 1, 40 - 1), 35},
+        {make_pair(23 - 1, 32 - 1), 15},
+        {make_pair(23 - 1, 39 - 1), 35},
+        {make_pair(24 - 1, 32 - 1), 15},
+        {make_pair(24 - 1, 40 - 1), 35},
+        {make_pair(25 - 1, 32 - 1), 15},
+        {make_pair(25 - 1, 41 - 1), 35},
+        {make_pair(26 - 1, 32 - 1), 15},
+        {make_pair(26 - 1, 42 - 1), 35},
+        {make_pair(27 - 1, 32 - 1), 15},
+        {make_pair(27 - 1, 38 - 1), 35},
+        {make_pair(28 - 1, 32 - 1), 15},
+        {make_pair(28 - 1, 37 - 1), 35},
+        {make_pair(29 - 1, 32 - 1), 15},
+        {make_pair(29 - 1, 38 - 1), 35},
+        {make_pair(30 - 1, 32 - 1), 15},
+        {make_pair(30 - 1, 37 - 1), 35},
+        {make_pair(31 - 1, 32 - 1), 15},
+        {make_pair(31 - 1, 40 - 1), 35},
+        {make_pair(32 - 1, 33 - 1), 240},
+        {make_pair(32 - 1, 34 - 1), 200},
+        {make_pair(32 - 1, 35 - 1), 180},
+        {make_pair(32 - 1, 43 - 1), 7},
+        {make_pair(33 - 1, 36 - 1), 240},
+        {make_pair(34 - 1, 36 - 1), 200},
+        {make_pair(35 - 1, 36 - 1), 180},
+        {make_pair(44 - 1, 36 - 1), 7}
 };
-
 const int Instance::latency[NUM_SERVICE_CHAINS] = {
     20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20
 };
 
 //@formatter:on
 
-        const double P_MAX(const int server) {
-            return Instance::P_max[server];
-        }
+const double P_MAX(const int server) {
+    return Instance::P_max[server];
+}
 
-        const double P_MIN(const int server) {
-            return Instance::P_min[server];
-        }
+const double P_MIN(const int server) {
+    return Instance::P_min[server];
+}
 
-        const double REQ(const int resource, const int component) {
-            return Instance::requirement[resource][component];
-        }
+const double REQ_CPU(const int component) {
+    return Instance::requirement[CPU_][component];
+}
 
-        const double AV(const int resource, const int server) {
-            return Instance::availability[resource][server];
-        }
+const double AV_CPU(const int server) {
+    return Instance::availability[CPU_][server];
+}
 
-        const double REQ_CPU(const int component) {
-            return Instance::requirement[CPU_][component];
-        }
+const bool AL(const int server, const int node) {
+    return Instance::allocation[server][node];
+}
 
-        const double AV_CPU(const int server) {
-            return Instance::availability[CPU_][server];
-        }
+const int P(const int node) {
+    return Instance::P[node];
+}
 
+const int CAPACITY(const int node_a, const int node_b) {
+    return Instance::Edges.at(make_pair(node_a, node_b))[CAPACITY_];
+}
 
+const int ENERGY(const int node_a, const int node_b) {
+    return Instance::Edges.at(make_pair(node_a, node_b))[ENERGY_];
+}
 
-        const bool AL(const int server, const int node) {
-            return Instance::allocation[server][node];
-        }
+const int LATENCY(const int node_a, const int node_b) {
+    return Instance::Edges.at(make_pair(node_a, node_b))[LATENCY_];
+}
 
-        const int P(const int node) {
-            return Instance::P[node];
-        }
+const int BANDWITH(const int component_a, const int component_b) {
+    auto it = Instance::VmDemands.find(make_pair(component_a, component_b));
+    return (it != Instance::VmDemands.end()) ? it->second : 0;
+}
 
-        const int CAPACITY(const int node_a, const int node_b) {
-            return Instance::Edges.at(make_pair(node_a, node_b))[CAPACITY_];
-        }
+const bool SC(const int service_chain, const int component) {
+    return Instance::service_chains[service_chain][component];
+}
 
-        const int ENERGY(const int node_a, const int node_b) {
-            return Instance::Edges.at(make_pair(node_a, node_b))[ENERGY_];
-        }
+const int LAT(const int service_chain) {
+    return Instance::latency[service_chain];
+}
 
-        const int LATENCY(const int node_a, const int node_b) {
-            return Instance::Edges.at(make_pair(node_a, node_b))[LATENCY_];
-        }
-
-        const int BANDWITH(const int component_a, const int component_b) {
-            return Instance::VmDemands.at(make_pair(component_a, component_b));
-        }
-
-        const bool SC(const int service_chain, const int component) {
-            return Instance::service_chains[service_chain][component];
-        }
-
-        const int LAT(const int service_chain) {
-            return Instance::latency[service_chain];
-        }
-
-        const vector<node_t>& SC_NEIGHBOURS(const int sc) {
-            return Instance::service_chains_iterable.at(sc);
-        }
+const vector<node_t>& SC_NEIGHBOURS(const int sc) {
+    return Instance::service_chains_iterable.at(sc);
+}
 

@@ -1,15 +1,22 @@
 #include <iostream>
-#include <vector>
-#include "hmo/Instance.h"
+#include <hmo/Greedy.h>
 
 using namespace std;
 
 
 int main() {
 
-    cout << "Kapacitet 15. veze: " << CAPACITY(1, 4) << endl;
+    Solution* solution = Greedy::run();
+
+    if (solution) {
+        cout << "Greedy Solution Fitness: " << solution->fitness << endl;
+    }
+    else {
+        cout << "nullptr";
+    }
 
     return 0;
+
 }
 
 

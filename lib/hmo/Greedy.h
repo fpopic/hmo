@@ -3,9 +3,11 @@
 
 #include <vector>
 #include <queue>
+#include <list>
 #include <algorithm>
 #include "Solution.h"
 
+#define NOT_FOUND -1
 
 using namespace std;
 
@@ -17,5 +19,6 @@ public:
 
 };
 
-
 #endif //HMO_PROJECT_GREEDY_H
+
+

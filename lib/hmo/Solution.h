@@ -21,13 +21,13 @@ struct Solution {
     unordered_map<pair<component_t, component_t>, vector<node_t>> routes;
 
     // only computed once
-    const double fitness;
+    double fitness;
 
     ///////////////////////////////////////////////////////////////
 
     Solution();
 
-    static const double compute_fitness(const Solution& solution);
+    static const double compute_fitness(Solution* solution);
 
     /**
      * @param solution rjesenje
