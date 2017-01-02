@@ -1,6 +1,6 @@
 #include "Solution.h"
 
-Solution::Solution() : /*fitness(compute_fitness(*this)),*/
+Solution::Solution() :
         x{{0}},
         routes() {}
 
@@ -9,10 +9,9 @@ void Solution::writeSolution(const Solution* solution, const int& solution_id, c
     const string folder = "results";
     const string prefix = "res";
     const string suffix = "popic.txt";
-    const string mins = to_string(minutes) + "min";
+    const string mins = to_string(minutes);
     const string file_path = folder + "/" + prefix + "-" + to_string(solution_id) + "-" + mins + "-" + suffix;
 
-    cout << file_path << endl;
     ofstream out(file_path);
 
     out << "x=[" << endl;
@@ -39,7 +38,7 @@ void Solution::writeSolution(const Solution* solution, const int& solution_id, c
         int j = 0;
         for (auto& node  : route.second) {
             out << to_string(node + 1);//todo human 1x
-            if (j != route.second.size()-1) {
+            if (j != route.second.size() - 1) {
                 out << ",";
             }
             j++;

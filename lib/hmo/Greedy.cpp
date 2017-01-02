@@ -110,6 +110,7 @@ Solution* Greedy::run() {
     vector<component_t> comp_on_node(NUM_VMS, NOT_FOUND);
 
     // idi po usluznim lancima
+
     for (const auto& service_chain : Instance::service_chains_iterable) {
 
         // probaj susjedne komponente sto blize staviti
@@ -192,10 +193,11 @@ Solution* Greedy::run() {
             // ako nisu na istom node-u
             if (node_of_a != node_of_b) {
 
-                // nadji rutu izmedju komponenti
+                //BFS [node_of_a] => ... => [node_of_b]
+
+                // nadji najjeftiniju rutu izmedju komponenti
                 auto const& bandwith_needed = BANDWITH(component_a, component_b);
 
-                //BFS   node_of_a => ... => node_of_b
                 priority_queue<BFSNode*, vector<BFSNode*>, BFSNodeComparator> open;
                 vector<node_t> visited(NUM_NODES, 0);
 
@@ -216,10 +218,10 @@ Solution* Greedy::run() {
                     for (const auto& succ : successors(curr->node)) {
                         if (!visited[succ]) {
                             // sortirani su po tome koliko je na edgu ostalo kapaciteta
-                            const auto capacity_left = EDGE_CAPACITY_LEFT(curr->node, succ);
+                            const auto cost_of_edge = EDGE_CAPACITY_LEFT(curr->node, succ);
                             // dodaj samo one edge-ove koji mogu izdrzati prijelaz
-                            if (bandwith_needed <= capacity_left) {
-                                open.push(new BFSNode(curr, succ, curr->cost + 1));
+                            if (bandwith_needed <= cost_of_edge) {
+                                open.push(new BFSNode(curr, succ, curr->cost + cost_of_edge));
                             }
                         }
                     }
@@ -229,7 +231,6 @@ Solution* Greedy::run() {
                     cout << "Ne valja pohlepni, protok neodrziv!" << endl;
                     return nullptr;
                 }
-
 
                 // potrosi bandwith_needed na edge-ovima na ruti kad budes rekonstruirao put
                 // pazi rekonstrukcija ide od natraske a put ide od pocetka
@@ -256,10 +257,10 @@ Solution* Greedy::run() {
             }
         }
     }
-#define ONE_HOT 0
+#define TREBA_RASPOREDIT_USAMLJENE_KOMPONENTE 0
 #define BINARY_SEARCH 1
 
-#ifdef ONE_HOT
+#if TREBA_RASPOREDIT_USAMLJENE_KOMPONENTE
     for (component_t component = 0; component < NUM_VMS; ++component) {
 
         if (comp_on_serv[component] == NOT_FOUND) {
