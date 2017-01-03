@@ -1,16 +1,18 @@
 #include "Solution.h"
 
 Solution::Solution() :
-        x{{0}},
-        routes() {}
+        x(NUM_VMS, vector<int>(NUM_SERVERS)), routes(), fitness(0) {}
 
+Solution::Solution(vector<vector<int>>& _x, unordered_map<pair<component_t, component_t>, vector<node_t>>& _routes)
+        : x(_x), routes(_routes), fitness(Solution::compute_fitness(this)) {}
 
-void Solution::writeSolution(const Solution* solution, const int& solution_id, const int& minutes) {
+void Solution::writeSolution(const Solution* solution, const int& id, string mins, const double& fitness) {
     const string folder = "results";
     const string prefix = "res";
     const string suffix = "popic.txt";
-    const string mins = to_string(minutes);
-    const string file_path = folder + "/" + prefix + "-" + to_string(solution_id) + "-" + mins + "-" + suffix;
+    mins = (mins.size()!=0) ? ("-" + mins) : mins;
+    const string file_path =
+            folder + "/" + prefix + "-" + to_string(id) + "-" + to_string((int) fitness) + "-" + suffix;
 
     ofstream out(file_path);
 
@@ -32,12 +34,12 @@ void Solution::writeSolution(const Solution* solution, const int& solution_id, c
     int i = 0;
     out << "routes={" << endl;
     for (auto& route : solution->routes) {
-        //todo human 2x
+        //human +1 2x
         out << "<" + to_string(route.first.first + 1) + "," + to_string(route.first.second + 1) + ",";
         out << "[";
         int j = 0;
         for (auto& node  : route.second) {
-            out << to_string(node + 1);//todo human 1x
+            out << to_string(node + 1);// human +1
             if (j != route.second.size() - 1) {
                 out << ",";
             }
@@ -54,8 +56,6 @@ void Solution::writeSolution(const Solution* solution, const int& solution_id, c
     out << "};" << endl;
 }
 
-
-// ovo mora biti sto krace moguce, jer ce se pozivati pri GA nakon krizanja/mutacije
 const double Solution::compute_fitness(Solution* solution) {
 
     double total_cpu_consum = 0.0;
@@ -65,9 +65,9 @@ const double Solution::compute_fitness(Solution* solution) {
     double server_cpu[NUM_SERVERS] = {0.0};
 
     for (int v = 0; v < NUM_VMS; v++) {
-        int one_hot = 0;
+        int max_one_hot = 0;
         for (int s = 0; s < NUM_SERVERS; s++) {
-            one_hot += (int) solution->x[v][s];
+            max_one_hot += solution->x[v][s];
             y[s] |= solution->x[v][s];
             server_cpu[s] += REQ_CPU(v) * solution->x[v][s];
             // server_cpu > total_available_cpu
@@ -76,8 +76,8 @@ const double Solution::compute_fitness(Solution* solution) {
                 return NOT_FEASABLE; // constraint 4
             }
         }
-        if (one_hot > 1) {
-            cout << "constraint1: v" << v << " one_hot:" << one_hot << endl;
+        if (max_one_hot > 1) {
+            cout << "constraint1: v" << v << " one_hot:" << max_one_hot << endl;
             return NOT_FEASABLE; // constraint 1
         }
     }
@@ -134,7 +134,7 @@ const double Solution::compute_fitness(Solution* solution) {
     }
 
     for (int sc = 0; sc < NUM_SERVICE_CHAINS; ++sc) {
-        const auto& chain = Instance::service_chains_iterable[sc];
+        const auto& chain = Instance::service_chains[sc];
         int sc_latency = 0;
 
         for (int i = 0; i + 1 < chain.size(); ++i) {

@@ -14,11 +14,11 @@ public:
 
     static vector<Solution*> run();
 
-    static vector<Solution*> generateStartPopulation(int pop_size);
+    static vector<Solution*> generateStartPopulation(int size);
 
-    static void mutate(Solution& solution);
+    static void mutate(Solution* c);
 
-    static Solution* crossover(Solution& parent1, Solution& parent2);
+    static Solution* crossover(Solution* p1, Solution* p2);
 
 };
 

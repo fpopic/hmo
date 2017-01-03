@@ -1,43 +1,13 @@
 #include "Greedy.h"
 
-//region EDGES
 
-const unordered_map<pair<node_t, node_t>, vector<int>> EDGES = {
-        {make_pair(1 - 1, 4 - 1), {1, 4, 1100}},
-        {make_pair(1 - 1, 5 - 1), {1, 5, 1100}},
-        {make_pair(1 - 1, 6 - 1), {1, 6, 1100}},
-        {make_pair(2 - 1, 4 - 1), {2, 4, 1100}},
-        {make_pair(2 - 1, 5 - 1), {2, 5, 1100}},
-        {make_pair(2 - 1, 6 - 1), {2, 6, 1100}},
-        {make_pair(3 - 1, 4 - 1), {3, 4, 1100}},
-        {make_pair(3 - 1, 5 - 1), {3, 5, 1100}},
-        {make_pair(3 - 1, 6 - 1), {3, 6, 1100}},
-        {make_pair(4 - 1, 1 - 1), {4, 1, 1100}},
-        {make_pair(4 - 1, 2 - 1), {4, 2, 1100}},
-        {make_pair(4 - 1, 3 - 1), {4, 3, 1100}},
-        {make_pair(4 - 1, 7 - 1), {4, 7, 733}},
-        {make_pair(4 - 1, 8 - 1), {4, 8, 550}},
-        {make_pair(5 - 1, 1 - 1), {5, 1, 1100}},
-        {make_pair(5 - 1, 2 - 1), {5, 2, 1100}},
-        {make_pair(5 - 1, 3 - 1), {5, 3, 1100}},
-        {make_pair(5 - 1, 7 - 1), {5, 7, 550}},
-        {make_pair(5 - 1, 8 - 1), {5, 8, 733}},
-        {make_pair(6 - 1, 1 - 1), {6, 1, 1100}},
-        {make_pair(6 - 1, 2 - 1), {6, 2, 1100}},
-        {make_pair(6 - 1, 3 - 1), {6, 3, 1100}},
-        {make_pair(6 - 1, 7 - 1), {6, 7, 550}},
-        {make_pair(6 - 1, 8 - 1), {6, 8, 733}},
-        {make_pair(7 - 1, 4 - 1), {7, 4, 733}},
-        {make_pair(7 - 1, 5 - 1), {7, 5, 550}},
-        {make_pair(7 - 1, 6 - 1), {7, 6, 550}},
-        {make_pair(8 - 1, 4 - 1), {8, 4, 550}},
-        {make_pair(8 - 1, 5 - 1), {8, 5, 733}},
-        {make_pair(8 - 1, 6 - 1), {8, 6, 733}}
-};
+//region SERVERS
 
-unordered_map<pair<node_t, node_t>, vector<int>> EDGES_LEFT = {EDGES};
+vector<double> CPU_NEEDED;
+vector<double> CPU_LEFT;
+unordered_map<pair<int, int>, vector<int>> EDGES_LEFT;
 
-inline const int EDGE_CAPACITY_LEFT(const int node_a, const int node_b) {
+inline int EDGE_CAPACITY_LEFT(const int node_a, const int node_b) {
     return EDGES_LEFT[make_pair(node_a, node_b)][CAPACITY_];
 }
 
@@ -45,27 +15,7 @@ inline void CONSUME_EDGE(const int node_a, const int node_b, const int bandwith)
     EDGES_LEFT[make_pair(node_a, node_b)][CAPACITY_] -= bandwith;
 }
 
-// nodes 0, 1, 2 are hosts for servers
-const vector<vector<server_t>> node_servers = {
-        {2, 4, 9, 10, 11, 12, 18, 20, 26, 27},
-        {1, 3, 7, 13, 14, 16, 21, 22, 23},
-        {0, 5, 6, 8,  15, 17, 19, 24, 25}
-};
-
-//endregion
-
-//region SERVERS
-
-const vector<double> CPU_NEEDED = {
-        0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
-        0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.4, 0.5, 0.5, 0.5, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
-
-vector<double> CPU_LEFT = {
-        2.0, 1.2, 0.8, 1.2, 0.8, 2.4, 2.0, 1.8, 2.0, 0.8, 1.2, 0.8, 0.6, 1.8, 1.8, 2.0, 1.8, 2.4, 0.6, 2.4, 0.6, 1.6,
-        1.2, 1.6, 2.0, 2.4, 0.8, 0.6};
-
 bool sort_by_cpu_left(const pair<double, int>& l, const pair<double, int>& r) { return l.first < r.first; }
-
 
 //endregion
 
@@ -74,35 +24,24 @@ bool sort_by_cpu_left(const pair<double, int>& l, const pair<double, int>& r) { 
 struct BFSNode {
     BFSNode* parent;
     node_t node;
-    double cost;
+    int cost;
 
-    BFSNode(BFSNode* parent, node_t node, double cost) :
-            parent(parent), node(node), cost(cost) {}
+    BFSNode(BFSNode* parent, node_t node, int cost) : parent(parent), node(node), cost(cost) {}
 
 };
 
 struct BFSNodeComparator : public binary_function<BFSNode*, BFSNode*, bool> {
     // u priority_queue ako je < onda je najveci (dobrota ako se koristi) napocetku
     // negacija znaci da ce najmanji (cost) biti napocetku
-    bool operator()(const BFSNode* lhs, const BFSNode* rhs) { return !(lhs->cost < rhs->cost); }
+    bool operator()(const BFSNode* lhs, const BFSNode* rhs) { return lhs->cost >= rhs->cost; }
 };
-
-unordered_map<int, vector<int>> node_successors;
-
-vector<node_t> successors(node_t current) {
-    if (node_successors.empty()) {
-        for (const auto& edge : EDGES) {
-            const auto& node_a = edge.first.first;
-            const auto& node_b = edge.first.second;
-            node_successors[node_a].push_back(node_b);
-        }
-    }
-    return node_successors[current];
-}
 
 //endregion
 
 Solution* Greedy::run() {
+    EDGES_LEFT = {Instance::edges};
+    CPU_NEEDED = {Instance::cpu_requirement};
+    CPU_LEFT = {Instance::cpu_availability};
 
     Solution* solution = new Solution();
 
@@ -111,7 +50,7 @@ Solution* Greedy::run() {
 
     // idi po usluznim lancima
 
-    for (const auto& service_chain : Instance::service_chains_iterable) {
+    for (const auto& service_chain : Instance::service_chains) {
 
         // probaj susjedne komponente sto blize staviti
         for (int c = 0; c + 1 < service_chain.size(); c++) {
@@ -128,8 +67,8 @@ Solution* Greedy::run() {
             if (server_of_a == NOT_FOUND or server_of_b == NOT_FOUND) {
 
                 //region provjeri je li na neki node stanu obje komponente
-                for (auto node = 0; node < node_servers.size(); ++node) {
-                    const auto& servers = node_servers[node];
+                for (auto node = 0; node < Instance::node_servers.size(); ++node) {
+                    const auto& servers = Instance::node_servers[node];
 
                     // provjeri je li na neki server stanu obje komponente
                     // ako je jedna vec smjestena probaj i drugu stavit na taj node (do kraja pretraga)
@@ -215,7 +154,7 @@ Solution* Greedy::run() {
                     visited[curr->node] = 1;
 
                     //pronadji sve susjede od trenutnog node-a
-                    for (const auto& succ : successors(curr->node)) {
+                    for (const auto& succ : Instance::get_successors(curr->node)) {
                         if (!visited[succ]) {
                             // sortirani su po tome koliko je na edgu ostalo kapaciteta
                             const auto cost_of_edge = EDGE_CAPACITY_LEFT(curr->node, succ);
@@ -227,7 +166,7 @@ Solution* Greedy::run() {
                     }
                 }
 
-                if (curr->node != node_of_b) {
+                if (curr == nullptr || curr->node != node_of_b) {
                     cout << "Ne valja pohlepni, protok neodrziv!" << endl;
                     return nullptr;
                 }

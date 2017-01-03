@@ -15,7 +15,7 @@ using namespace std;
 struct Solution {
 
     // one hot vectors (component_t is/not stored on server_t)
-    bool x[NUM_VMS][NUM_SERVERS];
+    vector<vector<int>> x;
 
     // routes between components
     unordered_map<pair<component_t, component_t>, vector<node_t>> routes;
@@ -27,6 +27,8 @@ struct Solution {
 
     Solution();
 
+    Solution(vector<vector<int>>& _x, unordered_map<pair<component_t, component_t>, vector<node_t>>& _routes);
+
     static const double compute_fitness(Solution* solution);
 
     /**
@@ -34,7 +36,7 @@ struct Solution {
      * @param solution_id  redni broj rjesenja
      * @param minutes  max {1, 5, 60} minuta
      */
-    static void writeSolution(const Solution* solution, const int& solution_id, const int& minutes);
+    static void writeSolution(const Solution* solution, const int& id, string mins, const double& fitness);
 
 };
 

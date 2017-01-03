@@ -1,7 +1,3 @@
-//
-// Created by fpopic on 20.12.16..
-//
-
 #ifndef HMO_PROJECT_INSTANCE_H
 #define HMO_PROJECT_INSTANCE_H
 
@@ -16,9 +12,6 @@
 // broj komponenti virtualnih mreznih funkcija
 #define NUM_VMS 44
 
-// broj vrsta posluziteljskih resourcea
-#define NUM_RES 2
-
 // broj cvorova
 #define NUM_NODES 8
 
@@ -30,9 +23,6 @@
 #define ENERGY_ 3
 #define LATENCY_ 4
 
-#define CPU_ 0
-#define RES1_ 1
-
 typedef int node_t;
 typedef int server_t;
 typedef int component_t;
@@ -41,7 +31,7 @@ typedef int component_t;
 
 using namespace std;
 
-// to enable O(1) lookup for unordered container
+// to enable O(1) hash-lookup
 namespace std {
     template<typename T, typename U>
     class hash<pair<T, U>> {
@@ -51,7 +41,6 @@ namespace std {
 }
 
 struct Instance {
-
     // maksimalna potrosnja energije na posluzitelju
     // indeks oznacava broj posluzitelja
     static const double P_max[NUM_SERVERS];
@@ -60,79 +49,85 @@ struct Instance {
     // ukoliko je utilizacija procesora 0%
     static const double P_min[NUM_SERVERS];
 
-    // zahtjev svake komponente za oba resourcea (0 -> CPU, 1 -> RES_1)
-    // index je oznaka komponente
-    // [NUM_RES][NUM_VMS]
-    static const vector<vector<double>> requirement;
+    // potrosnja energije na cvorovima 1-8
+    static const int P[NUM_NODES];
 
-    // dostupnost oba resourcea na posluzitelju
-    // index je oznaka posluzitelja
+    // [NUM_RES][NUM_VMS]
+    static const vector<double> cpu_requirement;
+
     // [NUM_RES][NUM_SERVERS]
-    static const vector<vector<double>> availability;
+    static const vector<double> cpu_availability;
 
     // lokacija posluzitelja na cvorovima
     // redak oznacava posluzitelj, a stupac cvor
-    static bool const allocation[NUM_SERVERS][NUM_NODES];
-
-    // potrosnja energije na cvorovima 1-8
-    static const int P[NUM_NODES];
+    static const vector<vector<server_t>> node_servers;
 
     // definicija veza izmedju cvorova
     // <prvi cvor, drugi cvor, kapacitet, potrosnja energije, kasnjenje>
     // { <int, int> : [int, int, int] }
-    static const unordered_map<pair<node_t, node_t>, vector<int>> Edges;
+    static const unordered_map<pair<node_t, node_t>, vector<int>> edges;
 
     // zahtijevana propusnost izmedju komponenti koje komuniciraju
     // <komponenta1, komponenta2, propusnost>
-    static const unordered_map<pair<component_t, component_t>, int> VmDemands;
+    static const unordered_map<pair<component_t, component_t>, int> vm_demands;
 
     // definicije usluznih lanaca
-    // redak predstavlja lanac, a vrijednost 1 na i-tom mjestu u retku
-    // oznacava ukljucenost komponente i u lanac
-    static const bool service_chains[NUM_SERVICE_CHAINS][NUM_VMS];
-
-    // arg_index of  Instannce::service_chains
-    // to avoid searching for next neighbour with 2 while loops
-    static const vector<vector<component_t>> service_chains_iterable;
+    static const vector<vector<component_t>> service_chains;
 
     // maksimalno dopusteno kasnjenje za svaki usluzni lanac
     // indeks je oznaka usluznog lanca
     static const int latency[NUM_SERVICE_CHAINS];
+
+    static vector<node_t>& get_successors(node_t node);
+
+    static unordered_map<node_t, vector<node_t>> node_successors_;
+
 };
 
-/**
- * Safe (read-only) macros to avoid using class name prefix 'Instance::'
- * and using inline method as ::operator[] instead of ::.at()
- */
-const double P_MAX(const int server);
+//region inlines to avoid using class name prefix 'Instance::'
 
-const double P_MIN(const int server);
+inline const double P_MAX(const int server) {
+    return Instance::P_max[server];
+}
 
-const double REQ(const int resource, const int component);
+inline const double P_MIN(const int server) {
+    return Instance::P_min[server];
+}
 
-const double REQ_CPU(const int component);
+inline const double REQ_CPU(const int component) {
+    return Instance::cpu_requirement[component];
+}
 
-const double AV(const int resource, const int server);
+inline const double AV_CPU(const int server) {
+    return Instance::cpu_availability[server];
+}
 
-const double AV_CPU(const int server);
+inline const int P(const int node) {
+    return Instance::P[node];
+}
 
-const bool AL(const int server, const node_t node);
+inline const int CAPACITY(const int node_a, const int node_b) {
+    return Instance::edges.at(make_pair(node_a, node_b))[CAPACITY_];
+}
 
-const int P(const int node);
+inline const int ENERGY(const int node_a, const int node_b) {
+    return Instance::edges.at(make_pair(node_a, node_b))[ENERGY_];
+}
 
-const int CAPACITY(const int node_a, const int node_b);
+inline const int LATENCY(const int node_a, const int node_b) {
+    auto it = Instance::edges.find(make_pair(node_a, node_b));
+    return (it != Instance::edges.end()) ? it->second[LATENCY_] : 0;
+}
 
-const int ENERGY(const int node_a, const int node_b);
+inline const int BANDWITH(const int component_a, const int component_b) {
+    auto it = Instance::vm_demands.find(make_pair(component_a, component_b));
+    return (it != Instance::vm_demands.end()) ? it->second : 0;
+}
 
-const int LATENCY(const int node_a, const int node_b);
+inline const int LAT(const int service_chain) {
+    return Instance::latency[service_chain];
+}
 
-const int BANDWITH(const int component_a, const int component_b);
-
-const bool SC(const int service_chain, const int component);
-
-const vector<node_t>& SC_NEIGHBOURS(const int sc);
-
-const int LAT(const int service_chain);
-
+//endregion
 
 #endif //HMO_PROJECT_INSTANCE_H
