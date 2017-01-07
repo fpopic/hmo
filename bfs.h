@@ -2,6 +2,7 @@
 #define HMO_PROJECT_BFS_H
 
 #include "Instance.h"
+#include <queue>
 
 struct BFSNode {
     BFSNode* parent;
@@ -9,7 +10,10 @@ struct BFSNode {
     double cost;
 
     BFSNode(BFSNode* parent, node_t node, double cost) : parent(parent), node(node), cost(cost) {}
+};
 
+struct BFS {
+    static int run(const node_t& n1, const node_t& n2, vector<node_t>& route, const int& bandwith_needed);
 };
 
 struct BFSNodeComparator : public binary_function<BFSNode*, BFSNode*, bool> {

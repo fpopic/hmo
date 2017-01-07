@@ -8,7 +8,7 @@
 
 #include "Solution.h"
 #include "Rand.h"
-#include "BFS.h"
+#include "bfs.h"
 
 using namespace std;
 
@@ -19,11 +19,12 @@ public:
     static Solution best_solution;
     static vector<int> permutation;
 
-    static pair<Solution, vector<Solution>>
-    run(const Solution& greedy, const double& pM, const unsigned& pop_size, const unsigned& max_iter);
+    static int run(const Solution& pre_solution,
+                   const double& pM, const unsigned& pop_size, const unsigned& max_iter,
+                   pair<Solution, vector<Solution>>& solutions);
 
-    static vector<Solution>
-    generate_population_and_init_best_solution(const Solution& greedy_solution, const unsigned& pop_size, const double& pM);
+    static void generate_population_and_best(const Solution& pre_solution, const unsigned& pop_size, const double& pM,
+                                             vector<Solution>& population);
 
     static vector<pair<Solution, int>> select(vector<Solution>& population);
 

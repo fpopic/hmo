@@ -1,15 +1,13 @@
-#include <vector>
-#include "Instance.h"
-#include "Solution.h"
+#include <iostream>
+#include "GA.h"
 
 using namespace std;
-
 
 int main() {
 
     //region pre solution
-    vector<int> x = {10, 9, 12, 20, 26, 27, 25, 25, 25, 24, 24, 24, 19, 19, 19, 17, 17, 17, 15, 15, 15, 8, 8, 8, 6, 6, 6, 5, 5, 5, 0, 10,
-                     11, 4, 2, 4, 0, 18, 11, 0, 2, 18, -1, -1};
+    x_t x = {10, 9, 12, 20, 26, 27, 25, 25, 25, 24, 24, 24, 19, 19, 19, 17, 17, 17, 15, 15,
+             15, 8, 8, 8, 6, 6, 6, 5, 5, 5, 0, 10, 11, 4, 2, 4, 0, 18, 11, 0, 2, 18, -1, -1};
 
     routes_t routes = {
             {make_pair(30, 39), {2}},
@@ -83,8 +81,25 @@ int main() {
     };
     //endregion
 
-    Solution solution(x, routes);
-    solution.error = Solution::compute_error(solution);
+    Solution pre_solution(x, routes);
+    const double pM = 0.1;
+    const unsigned pop_size = 1000;
+    const unsigned max_iter = 100000;
+    pair<Solution, vector<Solution>> solutions;
 
-    cout << "Error: " << solution.error << endl;
+    GA::run(pre_solution, pM, pop_size, max_iter, solutions);
+
+    int num_of_feasable = 0;
+    if (solutions.first.error > 10000) { //moram jos vidit jel ovo oke
+        Solution::writeSolution(solutions.first, 1, "ga");
+        num_of_feasable++;
+    }
+
+    for (int i = 0; i < pop_size and num_of_feasable < 10; ++i) {
+        Solution::writeSolution(solutions.second[i], i, "ga");
+        num_of_feasable++;
+    }
+
+
+    return 0;
 }

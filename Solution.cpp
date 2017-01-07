@@ -3,11 +3,17 @@
 Solution::Solution() :
         x(NUM_VMS, NOT_PLACED), routes(), error(-1) {}
 
+Solution::Solution(const Solution& solution) {
+    this->x = solution.x;
+    this->routes = solution.routes;
+    this->error = solution.error;
+}
+
 Solution::Solution(x_t& x_, routes_t& routes_)
         : x(x_), routes(routes_), error(-1) {}
 
 void Solution::writeSolution(const Solution& solution, const int& id, string mins) {
-    const string folder = "results";
+    const string folder = "../../results";
     const string prefix = "res";
     const string suffix = "popic.txt";
     mins = (mins.size() != 0) ? ("-" + mins) : mins;
@@ -60,7 +66,6 @@ void Solution::writeSolution(const Solution& solution, const int& id, string min
     out << "};" << endl;
 }
 
-//constraint1 max_one_hot server per component already satisfied (bool[] -> int scalar)
 #define TRACE 0
 
 const double Solution::compute_error(const Solution& solution) {

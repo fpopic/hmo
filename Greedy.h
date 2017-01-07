@@ -5,7 +5,7 @@
 #include <queue>
 #include <list>
 #include <algorithm>
-#include "BFS.h"
+#include "bfs.h"
 #include "Solution.h"
 
 using namespace std;
@@ -14,7 +14,7 @@ class Greedy {
 
 public:
 
-    static Solution* run();
+    static int run(Solution& solution);
 
 };
 

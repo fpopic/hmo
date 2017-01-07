@@ -1,24 +1,9 @@
 #include "Greedy.h"
 
-vector<double> CPU_NEEDED;
-vector<double> CPU_LEFT;
-unordered_map<pair<int, int>, vector<double>> EDGES_LEFT;
+int Greedy::run(Solution& solution) {
 
-inline double CAPACITY_LEFT(const int node_a, const int node_b) {
-    return EDGES_LEFT[make_pair(node_a, node_b)][CAPACITY_];
-}
-
-inline void CONSUME_EDGE(const int node_a, const int node_b, const int bandwith) {
-    EDGES_LEFT[make_pair(node_a, node_b)][CAPACITY_] -= bandwith;
-}
-
-Solution* Greedy::run() {
-
-    Solution* solution = new Solution();
-
-    EDGES_LEFT = {Instance::edges};
-    CPU_NEEDED = {Instance::cpu_requirement};
-    CPU_LEFT = {Instance::cpu_availability};
+    vector<double> CPU_NEEDED = {Instance::cpu_requirement};
+    vector<double> CPU_LEFT = {Instance::cpu_availability};
 
     vector<component_t> comp_on_serv(NUM_VMS, NOT_PLACED);
     vector<component_t> comp_on_node(NUM_VMS, NOT_PLACED);
@@ -82,7 +67,7 @@ Solution* Greedy::run() {
             // ako nisi nasao node-ove za obje komponente
             if (n1 == NOT_PLACED or n2 == NOT_PLACED) {
                 cout << "Ne valja pohlepni, nema mjesta za sve komponente!" << endl;
-                return nullptr;
+                return -1;
             }
 
             if (s1 != comp_on_serv[c1]) {
@@ -91,7 +76,7 @@ Solution* Greedy::run() {
                 comp_on_node[c1] = n1;
                 comp_on_serv[c1] = s1;
                 // one hot
-                solution->x[c1] = s1;
+                solution.x[c1] = s1;
             }
 
             if (s2 != comp_on_serv[c2]) {
@@ -100,73 +85,28 @@ Solution* Greedy::run() {
                 comp_on_node[c2] = n2;
                 comp_on_serv[c2] = s2;
                 // one hot
-                solution->x[c2] = s2;
+                solution.x[c2] = s2;
             }
 
             // ako nisu na istom node-u
             if (n1 != n2) {
 
-                //BFS [n1] => ... => [n2]
-
                 // minimalni bandwith kroz sve edge-eve rute
                 auto const& bandwith_needed = BANDWITH(c1, c2);
 
-                // sortirani su po tome koliko je na edgu ostalo kapaciteta
-                priority_queue<BFSNode*, vector<BFSNode*>, BFSNodeComparator> open;
-                vector<node_t> visited(NUM_NODES, 0);
+                //BFS [n1] => ... => [n2]
+                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
+                int status = BFS::run(n1, n2, route, bandwith_needed);
 
-                open.push(new BFSNode(nullptr, n1, 0));
-                visited[n1] = 1;
-
-                BFSNode* curr = nullptr;
-
-                while (!open.empty()) {
-                    curr = open.top(); //dobije adresu u memoriji na koju pokazivac pokazuje
-                    open.pop();
-
-                    //pronaso si rutu
-                    if (curr->node == n2) break;
-                    visited[curr->node] = 1;
-
-                    //pronadji sve susjede od trenutnog node-a
-                    for (const auto& succ : Instance::get_successors(curr->node)) {
-                        if (!visited[succ]) {
-                            const auto capacity_cost_of_edge = CAPACITY(curr->node, succ);
-                            const auto capacity_left_on_edge = CAPACITY_LEFT(curr->node, succ);
-
-                            const auto energy_cost_of_edge = ENERGY(curr->node, succ);
-                            // dodaj samo one edge-ove koji mogu izdrzati prijelaz
-                            if (bandwith_needed <= capacity_left_on_edge and capacity_cost_of_edge <= capacity_left_on_edge) {
-                                open.push(new BFSNode(curr, succ, curr->cost + capacity_cost_of_edge));
-                            }
-                        }
-                    }
+                if (status < 0) {
+                    cout << "BFS nije uspio zavrsiti rutu!" << endl;
+                    return -2;
                 }
-
-                if (curr == nullptr || curr->node != n2) {
-                    cout << "Ne valja pohlepni, nije uspio zavrsiti rutu!" << endl;
-                    return nullptr;
-                }
-
-                // potrosi bandwith_needed na edge-ovima na ruti kad budes rekonstruirao put
-                // pazi rekonstrukcija ide od natraske a put ide od pocetka
-
-                vector<node_t>& route = solution->routes[make_pair(c1, c2)];
-
-                while (curr->parent) {
-                    // potrosi brid
-                    CONSUME_EDGE(curr->parent->node, curr->node, bandwith_needed);
-                    //dodaj u rutu
-                    route.insert(route.begin(), curr->node);
-                    //idi korak nazad
-                    curr = curr->parent;
-                }
-                // dodaj i pocetni node u rutu
-                route.insert(route.begin(), curr->node);
             }
-                //na istom su cvoru sam taj cvor stavi u "rutu"
+
             else {
-                vector<node_t>& route = solution->routes[make_pair(c1, c2)];
+                //na istom su cvoru sam taj cvor stavi u "rutu"
+                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
                 if (route.empty()) {
                     route.push_back(n1);
                 }
@@ -175,6 +115,7 @@ Solution* Greedy::run() {
     }
     //endregion
 
-    solution->error = Solution::compute_error(solution);
-    return solution;
+    solution.error = Solution::compute_error(solution);
+
+    return 0;
 }

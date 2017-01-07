@@ -3,7 +3,7 @@
 //region topologija
 unordered_map<pair<int, int>, vector<double>> EDGES_LEFT_GA = {Instance::edges};
 
-inline double EDGE_CAPACITY_LEFT_GA(const int node_a, const int node_b) {
+inline double EDGE_CAPACITY_LEFT_GREEDY(const int node_a, const int node_b) {
     return EDGES_LEFT_GA[make_pair(node_a, node_b)][CAPACITY_];
 }
 
@@ -15,10 +15,12 @@ inline void CONSUME_EDGE_GA(const int node_a, const int node_b, const int bandwi
 Solution GA::best_solution;
 vector<int> GA::permutation;
 
-pair<Solution, vector<Solution>> GA::run(const Solution& greedy, const double& pM, const unsigned& pop_size, const unsigned& max_iter) {
-    const clock_t begin_time = clock();
+int GA::run(const Solution& pre_solution, const double& pM, const unsigned& pop_size,
+            const unsigned& max_iter, pair<Solution, vector<Solution>>& solutions) {
 
-    vector<Solution> population = generate_population_and_init_best_solution(greedy, pop_size, pM);
+    const clock_t begin_time = clock();
+    vector<Solution> population;
+    generate_population_and_best(pre_solution, pop_size, pM, population);
     cout << "I=0" << " Error=" << best_solution.error << endl;
 
     int iter = 0;
@@ -49,29 +51,28 @@ pair<Solution, vector<Solution>> GA::run(const Solution& greedy, const double& p
     float time = float(clock() - begin_time) / CLOCKS_PER_SEC * 1000;
     cout << "Vrijeme " << to_string(time) << "s" << endl;
 
-    return make_pair(best_solution, population);
+    return 0;
 }
 
 //region operators
-vector<Solution> GA::generate_population_and_init_best_solution(const Solution& greedy_solution, const unsigned& pop_size, const double& pM) {
+void GA::generate_population_and_best(const Solution& pre_solution, const unsigned& pop_size, const double& pM,
+                                      vector<Solution>& population) {
     // pripremi prvi put za selekciju permutacijski vektor
     GA::permutation.resize(pop_size);
     for (int i = 0; i < pop_size; ++i) GA::permutation[i] = i;
 
     //generiraj pocetnu populaciju  treba im svima fitnes izracunat i pronac najbolju za best_solution
-    vector<Solution> population(pop_size);
-    population[0] = greedy_solution;
-    best_solution = greedy_solution;
+    population.push_back(pre_solution);
+    best_solution = pre_solution;
 
     for (int i = 1; i < pop_size; ++i) {
-        Solution greedy_mutation(greedy_solution);
-        mutate_and_evaluate(greedy_mutation, 0.01);
-        population[i] = greedy_mutation;
-        if (greedy_mutation.error < best_solution.error) {
-            best_solution = greedy_mutation;
+        Solution solution(pre_solution);
+        mutate_and_evaluate(solution, 0.01);
+        population.push_back(solution);
+        if (solution.error < best_solution.error) {
+            best_solution = solution;
         }
     }
-    return population;
 }
 
 vector<pair<Solution, int>> GA::select(vector<Solution>& population) {
@@ -121,79 +122,29 @@ void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
     for (const auto& service_chain : Instance::service_chains) {
 
         for (int c = 0; c + 1 < service_chain.size(); c++) {
-            const auto& component_a = service_chain[c];
-            const auto& component_b = service_chain[c + 1];
+            const auto& c1 = service_chain[c];
+            const auto& c2 = service_chain[c + 1];
 
             // provjeri jesi vec rijesio za neku komponentu
-            auto server_of_a = comp_on_serv[component_a];
-            auto server_of_b = comp_on_serv[component_b];
-            auto node_of_a = Instance::server_nodes[server_of_a];
-            auto node_of_b = Instance::server_nodes[server_of_b];
+            auto s1 = comp_on_serv[c1];
+            auto s2 = comp_on_serv[c2];
+            auto n1 = Instance::server_nodes[s1];
+            auto n2 = Instance::server_nodes[s2];
 
             // ako nisu na istom node-u
-            if (node_of_a != node_of_b) {
+            if (n1 != n2) {
 
-                //BFS [node_of_a] => ... => [node_of_b]
+                //todo BFS [n1] => ... => [n2]
 
                 // nadji najjeftiniju rutu izmedju komponenti
-                auto const& bandwith_needed = BANDWITH(component_a, component_b);
-
-                priority_queue<BFSNode*, vector<BFSNode*>, BFSNodeComparator> open;
-                vector<node_t> visited(NUM_NODES, 0);
-
-                open.push(new BFSNode(nullptr, node_of_a, 0));
-                visited[node_of_a] = 1;
-
-                BFSNode* curr = nullptr;
-
-                while (!open.empty()) {
-                    curr = open.top(); //dobije adresu u memoriji na koju pokazivac pokazuje
-                    open.pop();
-
-                    //pronaso si rutu
-                    if (curr->node == node_of_b) break;
-                    visited[curr->node] = 1;
-
-                    //pronadji sve susjede od trenutnog node-a
-                    for (const auto& succ : Instance::get_successors(curr->node)) {
-                        if (!visited[succ]) {
-                            // sortirani su po tome koliko je na edgu ostalo kapaciteta
-                            const auto cost_of_edge = EDGE_CAPACITY_LEFT_GA(curr->node, succ);
-                            // dodaj samo one edge-ove koji mogu izdrzati prijelaz
-                            if (bandwith_needed <= cost_of_edge) {
-                                open.push(new BFSNode(curr, succ, curr->cost + cost_of_edge));
-                            }
-                        }
-                    }
-                }
-
-                if (curr == nullptr || curr->node != node_of_b) {
-                    //cout << "Ne valja pohlepni, protok neodrziv!" << endl;
-                    solution.error = NOT_FEASABLE;
-                    return;
-                }
-
-                // potrosi bandwith_needed na edge-ovima na ruti kad budes rekonstruirao put
-                // pazi rekonstrukcija ide od natraske a put ide od pocetka
-
-                vector<node_t>& route = solution.routes[make_pair(component_a, component_b)];
-
-                while (curr->parent) {
-                    // potrosi brid
-                    CONSUME_EDGE_GA(curr->parent->node, curr->node, bandwith_needed);
-                    //dodaj u rutu
-                    route.insert(route.begin(), curr->node);
-                    //idi korak nazad
-                    curr = curr->parent;
-                }
-                // dodaj i pocetni node u rutu
-                route.insert(route.begin(), curr->node);
+                auto const& bandwith_needed = BANDWITH(c1, c2);
             }
+
                 //na istom su cvoru sam taj cvor stavi u "rutu"
             else {
-                vector<node_t>& route = solution.routes[make_pair(component_a, component_b)];
+                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
                 if (route.empty()) {
-                    route.push_back(node_of_a);
+                    route.push_back(n1);
                 }
             }
         }

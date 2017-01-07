@@ -22,6 +22,7 @@ typedef unordered_map<pair<component_t, component_t>, vector<node_t>> routes_t;
 
 struct Solution {
 
+
     // which component on which server
     x_t x;
 
@@ -33,9 +34,11 @@ struct Solution {
 
     ///////////////////////////////////////////////////////////////
 
-    Solution();
+    Solution(); // default
 
-    Solution(x_t& x_, routes_t& routes_);
+    Solution(const Solution& solution); // copy
+
+    Solution(x_t& x_, routes_t& routes_); //
 
     static const double compute_error(const Solution& solution);
 
