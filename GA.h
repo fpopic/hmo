@@ -16,21 +16,20 @@ class GA {
 
 public:
 
-    static Solution* best_solution;
+    static Solution best_solution;
     static vector<int> permutation;
 
-    static pair<Solution*, vector<Solution*>>
-    run(Solution* greedy, const double& pM, const unsigned& pop_size, const unsigned& max_iter);
+    static pair<Solution, vector<Solution>>
+    run(const Solution& greedy, const double& pM, const unsigned& pop_size, const unsigned& max_iter);
 
-    static vector<Solution*> generate_population_and_init_best_solution(
-            Solution* greedy_solution, const unsigned& pop_size, const double& pM
-    );
+    static vector<Solution>
+    generate_population_and_init_best_solution(const Solution& greedy_solution, const unsigned& pop_size, const double& pM);
 
-    static vector<pair<Solution*, int>> select(vector<Solution*>& population);
+    static vector<pair<Solution, int>> select(vector<Solution>& population);
 
-    static Solution* crossover(Solution* p1, Solution* p2);
+    static Solution crossover(const Solution& p1, const Solution& p2);
 
-    static void mutate_and_evaluate(Solution* solution, const double& pM);
+    static void mutate_and_evaluate(Solution& solution, const double& pM);
 
 };
 

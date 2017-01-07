@@ -7,4 +7,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static -std=c++11 -DONLINE_JUDGE -Wall 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}") # cin/cout in folder
 
 add_executable(main main.cpp Instance.cpp Solution.cpp Greedy.cpp GA.cpp Rand.cpp BFS.h)
-add_executable(main_compute_error main_compute_error.cpp Instance.cpp Solution.cpp)
+
+add_executable(main_compute_error compute_solution_error.cpp Instance.cpp Solution.cpp)

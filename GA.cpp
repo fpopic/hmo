@@ -3,7 +3,7 @@
 //region topologija
 unordered_map<pair<int, int>, vector<double>> EDGES_LEFT_GA = {Instance::edges};
 
-inline int EDGE_CAPACITY_LEFT_GA(const int node_a, const int node_b) {
+inline double EDGE_CAPACITY_LEFT_GA(const int node_a, const int node_b) {
     return EDGES_LEFT_GA[make_pair(node_a, node_b)][CAPACITY_];
 }
 
@@ -12,38 +12,38 @@ inline void CONSUME_EDGE_GA(const int node_a, const int node_b, const int bandwi
 }
 //endregion
 
-Solution* GA::best_solution;
+Solution GA::best_solution;
 vector<int> GA::permutation;
 
-pair<Solution*, vector<Solution*>> GA::run(Solution* greedy, const double& pM, const unsigned& pop_size, const unsigned& max_iter) {
+pair<Solution, vector<Solution>> GA::run(const Solution& greedy, const double& pM, const unsigned& pop_size, const unsigned& max_iter) {
     const clock_t begin_time = clock();
 
-    vector<Solution*> population = generate_population_and_init_best_solution(greedy, pop_size, pM);
-    cout << "I=0" << " Error=" << best_solution->error << endl;
+    vector<Solution> population = generate_population_and_init_best_solution(greedy, pop_size, pM);
+    cout << "I=0" << " Error=" << best_solution.error << endl;
 
     int iter = 0;
     while (iter < max_iter) {
 
         //Selekcija
-        vector<pair<Solution*, int>> selected = select(population);
-        Solution* parent1 = selected[0].first;
-        Solution* parent2 = selected[1].first;
-        Solution* worst = selected[2].first;
+        vector<pair<Solution, int>> selected = select(population);
+        Solution parent1 = selected[0].first;
+        Solution parent2 = selected[1].first;
+        Solution worst = selected[2].first;
 
         //Krizanje
-        Solution* child = crossover(parent1, parent2);
+        Solution child = crossover(parent1, parent2);
 
         //Mutiranje i Evaluacija
         mutate_and_evaluate(child, pM);
 
         //Eliminacija
-        if (child->error > worst->error) {
+        if (child.error > worst.error) {
             population[selected[2].second] = child;
         }
 
         //Evaluacija populacije
         if (iter % 1000 == 0)
-            cout << "I=" << iter << " Error=" << best_solution->error << endl;
+            cout << "I=" << iter << " Error=" << best_solution.error << endl;
         iter++;
     }
     float time = float(clock() - begin_time) / CLOCKS_PER_SEC * 1000;
@@ -53,41 +53,41 @@ pair<Solution*, vector<Solution*>> GA::run(Solution* greedy, const double& pM, c
 }
 
 //region operators
-vector<Solution*> GA::generate_population_and_init_best_solution(Solution* greedy_solution, const unsigned& pop_size, const double& pM) {
+vector<Solution> GA::generate_population_and_init_best_solution(const Solution& greedy_solution, const unsigned& pop_size, const double& pM) {
     // pripremi prvi put za selekciju permutacijski vektor
     GA::permutation.resize(pop_size);
     for (int i = 0; i < pop_size; ++i) GA::permutation[i] = i;
 
     //generiraj pocetnu populaciju  treba im svima fitnes izracunat i pronac najbolju za best_solution
-    vector<Solution*> population(pop_size);
+    vector<Solution> population(pop_size);
     population[0] = greedy_solution;
     best_solution = greedy_solution;
 
     for (int i = 1; i < pop_size; ++i) {
-        Solution* greedy_mutation = new Solution(greedy_solution);
+        Solution greedy_mutation(greedy_solution);
         mutate_and_evaluate(greedy_mutation, 0.01);
         population[i] = greedy_mutation;
-        if (greedy_mutation->error < best_solution->error) {
+        if (greedy_mutation.error < best_solution.error) {
             best_solution = greedy_mutation;
         }
     }
     return population;
 }
 
-vector<pair<Solution*, int>> GA::select(vector<Solution*>& population) {
+vector<pair<Solution, int>> GA::select(vector<Solution>& population) {
     random_shuffle(GA::permutation.begin(), GA::permutation.end());
 
     //zapamti najlosiju
     int worst_index = 0;
     double worst_error = 0;
 
-    vector<pair<Solution*, int>> tournament(3);
+    vector<pair<Solution, int>> tournament(3);
     for (int i = 0; i < 3; ++i) {
-        Solution* solution = population[GA::permutation[i]];
+        Solution solution = population[GA::permutation[i]];
         tournament[i] = make_pair(solution, GA::permutation[i]);
-        if (solution->error > worst_error) {
+        if (solution.error > worst_error) {
             worst_index = i;
-            worst_error = solution->error;
+            worst_error = solution.error;
         }
     }
     //najlosiju na kraj
@@ -95,24 +95,24 @@ vector<pair<Solution*, int>> GA::select(vector<Solution*>& population) {
     return tournament;
 }
 
-Solution* GA::crossover(Solution* p1, Solution* p2) {
-    Solution* child = new Solution();
+Solution GA::crossover(const Solution& p1, const Solution& p2) {
+    Solution child;
     const int crossover_point = Rand::random_int(0, NUM_VMS - 2);
-    for (int v = 0; v < child->x.size() - 2; ++v) { //zadnje dvije neka ne pali nikad
-        child->x[v] = (v < crossover_point) ? p1->x[v] : p2->x[v];
+    for (int v = 0; v < child.x.size() - 2; ++v) { //zadnje dvije neka ne pali nikad
+        child.x[v] = (v < crossover_point) ? p1.x[v] : p2.x[v];
     }
     return child;
 }
 
-void GA::mutate_and_evaluate(Solution* solution, const double& pM) {
+void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
     vector<component_t> comp_on_serv(NUM_VMS, NOT_PLACED);
 
     //mutacija
-    const auto& rand_probs = Rand::random_double(0.0, 1.0, NUM_VMS);
-    const auto& rand_servers = Rand::random_int(0, NUM_SERVERS - 1, NUM_VMS - 2); //zadnje dvije neka ne pali nikad
-    for (int v = 0; v < solution->x.size() - 2; ++v) {//zadnje dvije
-        solution->x[v] = (rand_probs[v] <= pM) ? rand_servers[v] : solution->x[v];
-        comp_on_serv[v] = solution->x[v];
+    vector<double> rand_probs = Rand::random_double(0.0, 1.0, NUM_VMS);
+    vector<int> rand_servers = Rand::random_int(0, NUM_SERVERS - 1, NUM_VMS - 2); //zadnje dvije neka ne pali nikad
+    for (int v = 0; v < solution.x.size() - 2; ++v) {//zadnje dvije
+        solution.x[v] = (rand_probs[v] <= pM) ? rand_servers[v] : solution.x[v];
+        comp_on_serv[v] = solution.x[v];
     }
 
     //todo rutu treba izracunat i error s kaznama i maknut pritnove
@@ -169,14 +169,14 @@ void GA::mutate_and_evaluate(Solution* solution, const double& pM) {
 
                 if (curr == nullptr || curr->node != node_of_b) {
                     //cout << "Ne valja pohlepni, protok neodrziv!" << endl;
-                    solution->error = NOT_FEASABLE;
+                    solution.error = NOT_FEASABLE;
                     return;
                 }
 
                 // potrosi bandwith_needed na edge-ovima na ruti kad budes rekonstruirao put
                 // pazi rekonstrukcija ide od natraske a put ide od pocetka
 
-                vector<node_t>& route = solution->routes[make_pair(component_a, component_b)];
+                vector<node_t>& route = solution.routes[make_pair(component_a, component_b)];
 
                 while (curr->parent) {
                     // potrosi brid
@@ -191,7 +191,7 @@ void GA::mutate_and_evaluate(Solution* solution, const double& pM) {
             }
                 //na istom su cvoru sam taj cvor stavi u "rutu"
             else {
-                vector<node_t>& route = solution->routes[make_pair(component_a, component_b)];
+                vector<node_t>& route = solution.routes[make_pair(component_a, component_b)];
                 if (route.empty()) {
                     route.push_back(node_of_a);
                 }
@@ -200,8 +200,8 @@ void GA::mutate_and_evaluate(Solution* solution, const double& pM) {
     }
 
     // compute error old one
-    solution->error = Solution::compute_error(solution);
-    if (solution->error < best_solution->error) {
+    solution.error = Solution::compute_error(solution);
+    if (solution.error < best_solution.error) {
         best_solution = solution;
     }
 }

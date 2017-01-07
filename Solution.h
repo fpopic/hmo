@@ -17,15 +17,16 @@
 
 using namespace std;
 
+typedef vector<int> x_t;
+typedef unordered_map<pair<component_t, component_t>, vector<node_t>> routes_t;
+
 struct Solution {
 
-    Solution(Solution* copySolution);
-
     // which component on which server
-    vector<server_t> x;
+    x_t x;
 
     // routes between components
-    unordered_map<pair<component_t, component_t>, vector<node_t>> routes;
+    routes_t routes;
 
     // only computed once
     double error;
@@ -34,16 +35,16 @@ struct Solution {
 
     Solution();
 
-    Solution(vector<int>& _x, unordered_map<pair<component_t, component_t>, vector<node_t>>& _routes);
+    Solution(x_t& x_, routes_t& routes_);
 
-    static const double compute_error(Solution* solution);
+    static const double compute_error(const Solution& solution);
 
     /**
      * @param solution rjesenje
      * @param solution_id  redni broj rjesenja
      * @param minutes  max {1, 5, 60} minuta
      */
-    static void writeSolution(const Solution* solution, const int& id, string mins);
+    static void writeSolution(const Solution& solution, const int& id, string mins);
 
 };
 

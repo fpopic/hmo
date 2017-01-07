@@ -4,12 +4,13 @@
 
 using namespace std;
 
+
 int main() {
 
     vector<int> x = {10, 9, 12, 20, 26, 27, 25, 25, 25, 24, 24, 24, 19, 19, 19, 17, 17, 17, 15, 15, 15, 8, 8, 8, 6, 6, 6, 5, 5, 5, 0, 10,
-                     11,
-                     4, 2, 4, 0, 18, 11, 0, 2, 18, -1, -1};
-    unordered_map<pair<component_t, component_t>, vector<node_t>> routes = {
+                     11, 4, 2, 4, 0, 18, 11, 0, 2, 18, -1, -1};
+
+    routes_t routes = {
             {make_pair(30, 39), {2}},
             {make_pair(29, 36), {2}},
             {make_pair(28, 37), {2, 3, 0}},
@@ -80,7 +81,8 @@ int main() {
             {make_pair(19, 41), {2, 3}},
     };
 
-    Solution* greedy_solution = new Solution(x, routes);
-    cout << "Greedy Solution Fitness: " << greedy_solution->error << endl;
+    Solution solution(x, routes);
+    solution.error = Solution::compute_error(solution);
 
+    cout << "Error: " << solution.error << endl;
 }

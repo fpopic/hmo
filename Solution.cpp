@@ -1,24 +1,18 @@
 #include "Solution.h"
 
 Solution::Solution() :
-        x(NUM_VMS, NOT_PLACED), routes(), error(0) {}
+        x(NUM_VMS, NOT_PLACED), routes(), error(-1) {}
 
-Solution::Solution(Solution* copySolution) {
-    this->x = x;
-    this->routes = routes;
-    this->error = error;
-}
+Solution::Solution(x_t& x_, routes_t& routes_)
+        : x(x_), routes(routes_), error(-1) {}
 
-Solution::Solution(vector<server_t>& _x, unordered_map<pair<component_t, component_t>, vector<node_t>>& _routes)
-        : x(_x), routes(_routes), error(Solution::compute_error(this)) {}
-
-void Solution::writeSolution(const Solution* solution, const int& id, string mins) {
+void Solution::writeSolution(const Solution& solution, const int& id, string mins) {
     const string folder = "results";
     const string prefix = "res";
     const string suffix = "popic.txt";
     mins = (mins.size() != 0) ? ("-" + mins) : mins;
     const string file_path =
-            folder + "/" + prefix + "-" + to_string(id) + "-" + to_string((int) solution->error) + "-" + suffix;
+            folder + "/" + prefix + "-" + to_string(id) + "-" + to_string((int) solution.error) + "-" + suffix;
 
     ofstream out(file_path);
 
@@ -26,8 +20,8 @@ void Solution::writeSolution(const Solution* solution, const int& id, string min
     for (int i = 0; i < NUM_VMS; ++i) {
         out << "[";
         vector<int> x_as_binary_vector(NUM_SERVERS, 0);
-        if (solution->x[i] != NOT_PLACED) {
-            x_as_binary_vector[solution->x[i]] = 1;
+        if (solution.x[i] != NOT_PLACED) {
+            x_as_binary_vector[solution.x[i]] = 1;
         }
         for (int j = 0; j < NUM_SERVERS; ++j) {
             out << x_as_binary_vector[j];
@@ -43,7 +37,7 @@ void Solution::writeSolution(const Solution* solution, const int& id, string min
 
     int i = 0;
     out << "routes={" << endl;
-    for (auto& route : solution->routes) {
+    for (auto& route : solution.routes) {
         //human +1 2x
         out << "<" + to_string(route.first.first + 1) + "," + to_string(route.first.second + 1) + ",";
         out << "[";
@@ -57,7 +51,7 @@ void Solution::writeSolution(const Solution* solution, const int& id, string min
         }
         out << "]";
         out << ">";
-        if (i != solution->routes.size() - 1) {
+        if (i != solution.routes.size() - 1) {
             out << ",";
         }
         out << endl;
@@ -69,14 +63,14 @@ void Solution::writeSolution(const Solution* solution, const int& id, string min
 //constraint1 max_one_hot server per component already satisfied (bool[] -> int scalar)
 #define TRACE 0
 
-const double Solution::compute_error(Solution* solution) {
+const double Solution::compute_error(const Solution& solution) {
 
     vector<int> y(NUM_SERVERS, 0);
     vector<double> arv_xvs(NUM_SERVERS, 0.0);
 
     //OK
     for (int v = 0; v < NUM_VMS; v++) {
-        const auto& server_v = solution->x[v];
+        const auto& server_v = solution.x[v];
         if (server_v != NOT_PLACED) {
             y[server_v] = 1;
             arv_xvs[server_v] += REQ_CPU(v);
@@ -102,7 +96,7 @@ const double Solution::compute_error(Solution* solution) {
     // tu trosim kapacitet edge-ova i odmah provjeravam jesam previse potrosio
     double total_edge_consum = 0.0;
 
-    for (const auto& route : solution->routes) {            // <7, 9> [4, 1, 2]
+    for (const auto& route : solution.routes) {            // <7, 9> [4, 1, 2]
         const auto& component_a = route.first.first;        // 7
         const auto& component_b = route.first.second;       // 9
 
@@ -145,13 +139,13 @@ const double Solution::compute_error(Solution* solution) {
             const component_t& component_a = chain[i];
             const component_t& component_b = chain[i + 1];
 
-            auto found_routes = solution->routes.find(make_pair(component_a, component_b));
-            if (found_routes == solution->routes.end()) {
+            auto found_routes = solution.routes.find(make_pair(component_a, component_b));
+            if (found_routes == solution.routes.end()) {
 #if TRACE
                 cout << "za v: " << component_a << ", " << component_b << " nema rute" << endl;
 #endif
             }
-            const auto& nodes_on_path = solution->routes.at(make_pair(component_a, component_b));
+            const auto& nodes_on_path = solution.routes.at(make_pair(component_a, component_b));
 
             for (int j = 0; j + 1 < nodes_on_path.size(); j++) { // constraint 7
                 const auto& node_a = nodes_on_path[j];
