@@ -3,7 +3,6 @@
 int BFS::run(const node_t& n1, const node_t& n2, const int& bandwith_needed,
              vector<int>& route, unordered_map<pair<node_t, node_t>, vector<double>>& capacity_left) {
 
-
     priority_queue<BFSNode*, vector<BFSNode*>, BFSNodeComparator> open;
     vector<node_t> visited(NUM_NODES, 0);
 
@@ -16,21 +15,15 @@ int BFS::run(const node_t& n1, const node_t& n2, const int& bandwith_needed,
         curr = open.top();
         open.pop();
 
-        //pronaso si rutu
         if (curr->node == n2) break;
         visited[curr->node] = 1;
 
-        //pronadji sve susjede od trenutnog node-a
         for (const auto& succ : Instance::get_successors(curr->node)) {
             if (!visited[succ]) {
-                int edge_capacity_cost = CAPACITY(curr->node, succ);
                 int edge_capacity_left = (int) capacity_left[make_pair(curr->node, succ)][CAPACITY_];
-
-                if (succ == n2) // GREADY TWEAK: AKO SE n2 POJAVIO U SUCCESSORIMA GREADY
-                    edge_capacity_cost = 0;
-
-                if (bandwith_needed <= edge_capacity_left and edge_capacity_cost <= edge_capacity_left)
-                    open.push(new BFSNode(curr, succ, curr->cost + edge_capacity_cost));
+                if (bandwith_needed <= edge_capacity_left) {
+                    open.push(new BFSNode(curr, succ, curr->cost + (succ != n2 ? 1 : 0))); //tweak greedy zadnji korak
+                }
             }
         }
     }

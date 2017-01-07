@@ -2,15 +2,15 @@
 
 int Greedy::run(Solution& solution) {
 
-    vector<double> CPU_NEEDED = {Instance::cpu_requirement};
+    //razmjestaj
+    const vector<double>& CPU_NEEDED = {Instance::cpu_requirement};
     vector<double> CPU_LEFT = {Instance::cpu_availability};
-    //region rutu treba izracunat i error s kaznama i maknut pritnove
-    unordered_map<pair<node_t, node_t>, vector<double>> CAPACITY_LEFT = {Instance::edges};
 
     vector<component_t> comp_on_serv(NUM_VMS, NOT_PLACED);
     vector<component_t> comp_on_node(NUM_VMS, NOT_PLACED);
 
     //region rasporedi komponente s usluznih lanaca
+    unordered_map<pair<node_t, node_t>, vector<double>> CAPACITY_LEFT = {Instance::edges};
 
     for (const auto& service_chain : Instance::service_chains) {
 
@@ -108,7 +108,6 @@ int Greedy::run(Solution& solution) {
                 // provjeri je li prije vec izracunata ruta izmedju ova dva cvora za neki drugi lanac
                 vector<node_t>& route = solution.routes[make_pair(c1, c2)];
 
-//                auto ed = Instance::edges; //todo OVO ODKOMENTIRAJ I RADIT CE 5k
                 int status = BFS::run(n1, n2, bandwith_needed, route, CAPACITY_LEFT);
 
                 if (status != OK) {
