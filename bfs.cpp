@@ -1,7 +1,8 @@
 #include "bfs.h"
 
-int BFS::run(const node_t& n1, const node_t& n2, vector<int>& route, const int& bandwith_needed) {
-    unordered_map<pair<node_t, node_t>, vector<double>> CAPACITY_LEFT = {Instance::edges};
+int BFS::run(const node_t& n1, const node_t& n2, const int& bandwith_needed,
+             vector<int>& route, unordered_map<pair<node_t, node_t>, vector<double>>& capacity_left) {
+
 
     priority_queue<BFSNode*, vector<BFSNode*>, BFSNodeComparator> open;
     vector<node_t> visited(NUM_NODES, 0);
@@ -23,14 +24,13 @@ int BFS::run(const node_t& n1, const node_t& n2, vector<int>& route, const int& 
         for (const auto& succ : Instance::get_successors(curr->node)) {
             if (!visited[succ]) {
                 int edge_capacity_cost = CAPACITY(curr->node, succ);
-                int edge_capacity_left = (int) CAPACITY_LEFT[make_pair(curr->node, succ)][CAPACITY_];
+                int edge_capacity_left = (int) capacity_left[make_pair(curr->node, succ)][CAPACITY_];
 
-                if (succ == n2) // TODO AKO SE n2 POJAVIO U SUCCESSORIMA GREADY
+                if (succ == n2) // GREADY TWEAK: AKO SE n2 POJAVIO U SUCCESSORIMA GREADY
                     edge_capacity_cost = 0;
 
-                if (bandwith_needed <= edge_capacity_left and edge_capacity_cost <= edge_capacity_left) {
+                if (bandwith_needed <= edge_capacity_left and edge_capacity_cost <= edge_capacity_left)
                     open.push(new BFSNode(curr, succ, curr->cost + edge_capacity_cost));
-                }
             }
         }
     }
@@ -39,7 +39,7 @@ int BFS::run(const node_t& n1, const node_t& n2, vector<int>& route, const int& 
 
     while (curr->parent) {
         // potrosi brid
-        CAPACITY_LEFT[make_pair(curr->parent->node, curr->node)][CAPACITY_] -= bandwith_needed;
+        capacity_left[make_pair(curr->parent->node, curr->node)][CAPACITY_] -= bandwith_needed;
         //dodaj u rutu
         route.insert(route.begin(), curr->node);
         //idi korak nazad

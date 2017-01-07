@@ -40,7 +40,9 @@ struct Solution {
 
     Solution(x_t& x_, routes_t& routes_); //
 
-    static const double compute_error(const Solution& solution);
+    static double compute_error(const Solution& solution);
+
+    static double compute_constraint_penalty_error(const Solution& solution);
 
     /**
      * @param solution rjesenje

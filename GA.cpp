@@ -1,17 +1,5 @@
 #include "GA.h"
 
-//region topologija
-unordered_map<pair<int, int>, vector<double>> EDGES_LEFT_GA = {Instance::edges};
-
-inline double EDGE_CAPACITY_LEFT_GREEDY(const int node_a, const int node_b) {
-    return EDGES_LEFT_GA[make_pair(node_a, node_b)][CAPACITY_];
-}
-
-inline void CONSUME_EDGE_GA(const int node_a, const int node_b, const int bandwith) {
-    EDGES_LEFT_GA[make_pair(node_a, node_b)][CAPACITY_] -= bandwith;
-}
-//endregion
-
 Solution GA::best_solution;
 vector<int> GA::permutation;
 
@@ -108,16 +96,18 @@ Solution GA::crossover(const Solution& p1, const Solution& p2) {
 void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
     vector<component_t> comp_on_serv(NUM_VMS, NOT_PLACED);
 
-    //mutacija
+    //region mutacija
     vector<double> rand_probs = Rand::random_double(0.0, 1.0, NUM_VMS);
-    vector<int> rand_servers = Rand::random_int(0, NUM_SERVERS - 1, NUM_VMS - 2); //zadnje dvije neka ne pali nikad
-    for (int v = 0; v < solution.x.size() - 2; ++v) {//zadnje dvije
+    vector<int> rand_servers = Rand::random_int(0, NUM_SERVERS - 1, NUM_ACTIVE_VMS);
+
+    for (int v = 0; v < NUM_ACTIVE_VMS; ++v) {
         solution.x[v] = (rand_probs[v] <= pM) ? rand_servers[v] : solution.x[v];
         comp_on_serv[v] = solution.x[v];
     }
+    //endregion
 
-    //todo rutu treba izracunat i error s kaznama i maknut pritnove
-    EDGES_LEFT_GA = {Instance::edges};
+    //region rutu treba izracunat i error s kaznama i maknut pritnove
+    unordered_map<pair<node_t, node_t>, vector<double>> CAPACITY_LEFT = {Instance::edges};
 
     for (const auto& service_chain : Instance::service_chains) {
 
@@ -126,32 +116,64 @@ void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
             const auto& c2 = service_chain[c + 1];
 
             // provjeri jesi vec rijesio za neku komponentu
-            auto s1 = comp_on_serv[c1];
-            auto s2 = comp_on_serv[c2];
-            auto n1 = Instance::server_nodes[s1];
-            auto n2 = Instance::server_nodes[s2];
+            const auto& s1 = comp_on_serv[c1];
+            const auto& s2 = comp_on_serv[c2];
+            const auto& n1 = Instance::server_nodes[s1];
+            const auto& n2 = Instance::server_nodes[s2];
 
-            // ako nisu na istom node-u
-            if (n1 != n2) {
-
-                //todo BFS [n1] => ... => [n2]
-
-                // nadji najjeftiniju rutu izmedju komponenti
-                auto const& bandwith_needed = BANDWITH(c1, c2);
-            }
-
-                //na istom su cvoru sam taj cvor stavi u "rutu"
-            else {
+            //ako su na istom cvoru sam taj cvor stavi u "rutu"
+            if (n1 == n2) {
                 vector<node_t>& route = solution.routes[make_pair(c1, c2)];
+                // provjeri je li vec izracunata ruta (tj. taj jedan cvor)
                 if (route.empty()) {
                     route.push_back(n1);
+                }
+            }
+
+            else {
+                // ako nisu na istom node-u  BFS [n1] => ... => [n2]
+                auto const& bandwith_needed = BANDWITH(c1, c2);
+
+                // provjeri je li prije vec izracunata ruta izmedju ova dva cvora za neki drugi lanac
+                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
+
+                // provjeri jel izdrzi postojeca routa
+                bool route_can_hold_it = 1;
+                if (!route.empty()) {
+                    for (int i = 0; i + 1 < route.size(); ++i) {
+                        const node_t n_a = route[i];
+                        const node_t n_b = route[i + 1];
+                        if (bandwith_needed >= CAPACITY_LEFT[make_pair(n_a, n_b)][CAPACITY_]) {
+                            route_can_hold_it = 0;
+                            break;
+                        }
+                    }
+                }
+
+                // ako izdrzi potrosi postojecu rutu jos jednom
+                if (!route.empty() and route_can_hold_it) {
+                    for (int i = 0; i + 1 < route.size(); ++i) {
+                        const node_t n_a = route[i];
+                        const node_t n_b = route[i + 1];
+                        CAPACITY_LEFT[make_pair(n_a, n_b)][CAPACITY_] -= bandwith_needed;
+                    }
+                }
+
+                    // napravi novu rutu koja je jaca od prosle (i sve ostale ce je koristiti)
+                else {
+                    int status = BFS::run(n1, n2, bandwith_needed, route, CAPACITY_LEFT);
+                    if (status != OK) {
+                        // ako nije uspio pronac rutu
+                        solution.error = NOT_FEASABLE;
+                        return;
+                    }
                 }
             }
         }
     }
 
     // compute error old one
-    solution.error = Solution::compute_error(solution);
+    solution.error = Solution::compute_constraint_penalty_error(solution);
     if (solution.error < best_solution.error) {
         best_solution = solution;
     }

@@ -4,6 +4,8 @@ int Greedy::run(Solution& solution) {
 
     vector<double> CPU_NEEDED = {Instance::cpu_requirement};
     vector<double> CPU_LEFT = {Instance::cpu_availability};
+    //region rutu treba izracunat i error s kaznama i maknut pritnove
+    unordered_map<pair<node_t, node_t>, vector<double>> CAPACITY_LEFT = {Instance::edges};
 
     vector<component_t> comp_on_serv(NUM_VMS, NOT_PLACED);
     vector<component_t> comp_on_node(NUM_VMS, NOT_PLACED);
@@ -88,34 +90,37 @@ int Greedy::run(Solution& solution) {
                 solution.x[c2] = s2;
             }
 
-            // ako nisu na istom node-u
-            if (n1 != n2) {
-
-                // minimalni bandwith kroz sve edge-eve rute
-                auto const& bandwith_needed = BANDWITH(c1, c2);
-
-                //BFS [n1] => ... => [n2]
+            if (n1 == n2) {
+                // ako su na istom cvoru samo taj cvor stavi u "rutu"
                 vector<node_t>& route = solution.routes[make_pair(c1, c2)];
-                int status = BFS::run(n1, n2, route, bandwith_needed);
-
-                if (status < 0) {
-                    cout << "BFS nije uspio zavrsiti rutu!" << endl;
-                    return -2;
+                // ako ga vec prije nisi stavio
+                if (route.empty()) {
+                    route.push_back(n1);
                 }
             }
 
             else {
-                //na istom su cvoru sam taj cvor stavi u "rutu"
+                // ako nisu na istom node-u
+
+                // minimalni bandwith kroz sve edge-eve rute
+                auto const& bandwith_needed = BANDWITH(c1, c2);
+
+                // provjeri je li prije vec izracunata ruta izmedju ova dva cvora za neki drugi lanac
                 vector<node_t>& route = solution.routes[make_pair(c1, c2)];
-                if (route.empty()) {
-                    route.push_back(n1);
+
+//                auto ed = Instance::edges; //todo OVO ODKOMENTIRAJ I RADIT CE 5k
+                int status = BFS::run(n1, n2, bandwith_needed, route, CAPACITY_LEFT);
+
+                if (status != OK) {
+                    // ako nije uspio pronac rutu
+                    cout << "BFS nije uspio zavrsiti rutu!" << endl;
+                    solution.error = NOT_FEASABLE;
+                    return status;
                 }
             }
         }
     }
     //endregion
-
     solution.error = Solution::compute_error(solution);
-
-    return 0;
+    return OK;
 }

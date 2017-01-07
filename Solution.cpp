@@ -68,7 +68,7 @@ void Solution::writeSolution(const Solution& solution, const int& id, string min
 
 #define TRACE 0
 
-const double Solution::compute_error(const Solution& solution) {
+double Solution::compute_error(const Solution& solution) {
 
     vector<int> y(NUM_SERVERS, 0);
     vector<double> arv_xvs(NUM_SERVERS, 0.0);
@@ -171,3 +171,7 @@ const double Solution::compute_error(const Solution& solution) {
     return total_cpu_consum + total_node_consum + total_edge_consum;
 }
 
+
+double Solution::compute_constraint_penalty_error(const Solution& solution) {
+
+}

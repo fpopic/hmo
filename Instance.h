@@ -11,6 +11,7 @@
 
 // broj komponenti virtualnih mreznih funkcija
 #define NUM_VMS 44
+#define NUM_ACTIVE_VMS 42
 
 // broj cvorova
 #define NUM_NODES 8
