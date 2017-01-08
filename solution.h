@@ -7,13 +7,13 @@
 #include <fstream>
 #include <iostream>
 
-#include "Instance.h"
+#include "instance.h"
 
-// solution breaks some constraints
-#define NOT_FEASABLE 100000
+#define INF_ERROR 1e6
+#define ACCEPTED_ERROR 1e4
 
 // component not placed on any server
-#define NOT_PLACED -1
+#define NONE -1
 
 using namespace std;
 
@@ -21,7 +21,6 @@ typedef vector<int> x_t;
 typedef unordered_map<pair<component_t, component_t>, vector<node_t>> routes_t;
 
 struct Solution {
-
 
     // which component on which server
     x_t x;
@@ -49,7 +48,7 @@ struct Solution {
      * @param solution_id  redni broj rjesenja
      * @param minutes  max {1, 5, 60} minuta
      */
-    static void writeSolution(const Solution& solution, const int& id, string mins);
+    static void writeSolution(const Solution& solution, const int& id, const int& seconds);
 
 };
 

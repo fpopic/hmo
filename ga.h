@@ -6,8 +6,8 @@
 #include <list>
 #include <vector>
 
-#include "Solution.h"
-#include "Rand.h"
+#include "solution.h"
+#include "random_with_chrono.h"
 #include "bfs.h"
 
 using namespace std;
@@ -20,10 +20,11 @@ public:
     static vector<int> permutation;
 
     static int run(const Solution& pre_solution,
-                   const double& pM, const unsigned& pop_size, const unsigned& max_iter,
-                   pair<Solution, vector<Solution>>& solutions);
+                   const double& pM, const unsigned& pop_size, const unsigned& max_iter, const unsigned& max_time,
+                   vector<Solution>& solutions);
 
-    static void generate_population_and_best(const Solution& pre_solution, const unsigned& pop_size, const double& pM,
+    static void generate_population_and_best(const Solution& pre_solution,
+                                             const unsigned& pop_size, const double& pM,
                                              vector<Solution>& population);
 
     static vector<pair<Solution, int>> select(vector<Solution>& population);

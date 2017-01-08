@@ -1,4 +1,4 @@
-#include "Instance.h"
+#include "instance.h"
 
 //@formatter:off
 
@@ -8,9 +8,9 @@ const double Instance::P_min[NUM_SERVERS] = {108.0, 66.0, 38.0, 66.0, 38.0, 116.
 
 const int Instance::P[NUM_NODES] = {480, 350, 290, 350, 290, 600, 480, 600};
 
-const vector<double> Instance::cpu_requirement = {0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.4, 0.5, 0.5, 0.5, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
+const vector<double> Instance::cpu_requirement = {0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.4,0.5,0.5,0.5,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3};
 
-const vector<double> Instance::cpu_availability = {2.0, 1.2, 0.8, 1.2, 0.8, 2.4, 2.0, 1.8, 2.0, 0.8, 1.2, 0.8, 0.6, 1.8, 1.8, 2.0, 1.8, 2.4, 0.6, 2.4, 0.6, 1.6, 1.2, 1.6, 2.0, 2.4, 0.8, 0.6};
+const vector<double> Instance::cpu_availability = {2.0,1.2,0.8,1.2,0.8,2.4,2.0,1.8,2.0,0.8,1.2,0.8,0.6,1.8,1.8,2.0,1.8,2.4,0.6,2.4,0.6,1.6,1.2,1.6,2.0,2.4,0.8,0.6};
 
 const int Instance::latency[NUM_SERVICE_CHAINS] = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
 
@@ -131,9 +131,7 @@ const vector<vector<server_t>> Instance::node_servers = {
 };
 
 // od nule
-const vector<node_t> Instance::server_nodes = {
-        2, 1, 0, 1, 0, 2, 2, 1, 2, 0, 0, 0, 0, 1, 1, 2, 1, 2, 0, 2, 0, 1, 1, 1, 2, 2, 0, 0
-};
+const vector<node_t> Instance::server_nodes = {2, 1, 0, 1, 0, 2, 2, 1, 2, 0, 0, 0, 0, 1, 1, 2, 1, 2, 0, 2, 0, 1, 1, 1, 2, 2, 0, 0};
 
 // od nule
 const vector<vector<component_t>> Instance::service_chains = {

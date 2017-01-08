@@ -1,5 +1,5 @@
 #include <iostream>
-#include "GA.h"
+#include "ga.h"
 
 using namespace std;
 
@@ -80,26 +80,23 @@ int main() {
             {make_pair(19, 41), {2, 3}},
     };
     //endregion
-
     Solution pre_solution(x, routes);
     const double pM = 0.1;
     const unsigned pop_size = 1000;
     const unsigned max_iter = 100000;
-    pair<Solution, vector<Solution>> solutions;
+    const unsigned max_time = 300; //seconds
 
-    GA::run(pre_solution, pM, pop_size, max_iter, solutions);
+    vector<Solution> solutions;
+    int status = GA::run(pre_solution, pM, pop_size, max_iter, max_time, solutions);
 
-    int num_of_feasable = 0;
-    if (solutions.first.error > 10000) { //moram jos vidit jel ovo oke
-        Solution::writeSolution(solutions.first, 1, "ga");
-        num_of_feasable++;
+    if (status == OK) {
+        for (int i = 0; i < solutions.size(); ++i) {
+            const Solution& solution = solutions[i];
+            if (solution.error <= ACCEPTED_ERROR) {
+                Solution::writeSolution(solution, i, max_time);
+            }
+        }
     }
-
-    for (int i = 0; i < pop_size and num_of_feasable < 10; ++i) {
-        Solution::writeSolution(solutions.second[i], i, "ga");
-        num_of_feasable++;
-    }
-
 
     return 0;
 }

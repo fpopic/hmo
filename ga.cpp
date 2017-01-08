@@ -1,18 +1,24 @@
-#include "GA.h"
+#include "ga.h"
 
 Solution GA::best_solution;
 vector<int> GA::permutation;
 
-int GA::run(const Solution& pre_solution, const double& pM, const unsigned& pop_size,
-            const unsigned& max_iter, pair<Solution, vector<Solution>>& solutions) {
+int GA::run(const Solution& pre_solution,
+            const double& pM, const unsigned& pop_size,
+            const unsigned& max_iter, const unsigned& max_time,
+            vector<Solution>& solutions) {
 
-    const clock_t begin_time = clock();
-    vector<Solution> population;
+    vector<Solution>& population = solutions;
     generate_population_and_best(pre_solution, pop_size, pM, population);
-    cout << "I=0" << " Error=" << best_solution.error << endl;
+
+    fsec elapsed_seconds;
 
     int iter = 0;
-    while (iter < max_iter) {
+    auto start = Time::now();
+
+    printf("I=%d Error=%f Time=%ds\n", iter, best_solution.error, (int) elapsed_seconds.count());
+
+    while (iter < max_iter and elapsed_seconds.count() < max_time) {
 
         //Selekcija
         vector<pair<Solution, int>> selected = select(population);
@@ -31,19 +37,21 @@ int GA::run(const Solution& pre_solution, const double& pM, const unsigned& pop_
             population[selected[2].second] = child;
         }
 
-        //Evaluacija populacije
-        if (iter % 1000 == 0)
-            cout << "I=" << iter << " Error=" << best_solution.error << endl;
         iter++;
+        elapsed_seconds = Time::now() - start;
+
+        //Evaluacija populacije
+        if (iter % 10000 == 0) {
+            printf("I=%d Error=%f Time=%ds\n", iter, best_solution.error, (int) floor(elapsed_seconds.count()));
+        }
     }
-    float time = float(clock() - begin_time) / CLOCKS_PER_SEC * 1000;
-    cout << "Vrijeme " << to_string(time) << "s" << endl;
+
 
     return 0;
 }
 
-//region operators
-void GA::generate_population_and_best(const Solution& pre_solution, const unsigned& pop_size, const double& pM,
+void GA::generate_population_and_best(const Solution& pre_solution,
+                                      const unsigned& pop_size, const double& pM,
                                       vector<Solution>& population) {
     // pripremi prvi put za selekciju permutacijski vektor
     GA::permutation.resize(pop_size);
@@ -55,7 +63,7 @@ void GA::generate_population_and_best(const Solution& pre_solution, const unsign
 
     for (int i = 1; i < pop_size; ++i) {
         Solution solution(pre_solution);
-        mutate_and_evaluate(solution, 0.01);
+        mutate_and_evaluate(solution, 0.2);
         population.push_back(solution);
         if (solution.error < best_solution.error) {
             best_solution = solution;
@@ -94,9 +102,10 @@ Solution GA::crossover(const Solution& p1, const Solution& p2) {
 }
 
 void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
-    vector<component_t> comp_on_serv(NUM_VMS, NOT_PLACED);
 
-    //region mutacija
+    //region mutacija (smjestaja)
+    vector<component_t> comp_on_serv(NUM_VMS, NONE);
+
     vector<double> rand_probs = Rand::random_double(0.0, 1.0, NUM_VMS);
     vector<int> rand_servers = Rand::random_int(0, NUM_SERVERS - 1, NUM_ACTIVE_VMS);
 
@@ -106,7 +115,7 @@ void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
     }
     //endregion
 
-    //region rutu treba izracunat i error s kaznama i maknut pritnove
+    //region pronalazak ruti
     unordered_map<pair<node_t, node_t>, vector<double>> CAPACITY_LEFT = {Instance::edges};
 
     for (const auto& service_chain : Instance::service_chains) {
@@ -121,61 +130,32 @@ void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
             const auto& n1 = Instance::server_nodes[s1];
             const auto& n2 = Instance::server_nodes[s2];
 
-            //ako su na istom cvoru sam taj cvor stavi u "rutu"
-            if (n1 == n2) {
-                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
-                // provjeri je li vec izracunata ruta (tj. taj jedan cvor)
-                if (route.empty()) {
-                    route.push_back(n1);
-                }
-            }
+            // provjeri jel postoji ruta
+            vector<node_t>& route = solution.routes[make_pair(c1, c2)];
+
+            // ako si je vec naso, nista
+            if (!route.empty()) continue;
+
+            // ako su na istom cvoru samo taj cvor stavi u "rutu"
+            if (n1 == n2) solution.routes[make_pair(c1, c2)].push_back(n1);
 
             else {
-                // ako nisu na istom node-u  BFS [n1] => ... => [n2]
-                auto const& bandwith_needed = BANDWITH(c1, c2);
-
-                // provjeri je li prije vec izracunata ruta izmedju ova dva cvora za neki drugi lanac
-                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
-
-                // provjeri jel izdrzi postojeca routa
-                bool route_can_hold_it = 1;
-                if (!route.empty()) {
-                    for (int i = 0; i + 1 < route.size(); ++i) {
-                        const node_t n_a = route[i];
-                        const node_t n_b = route[i + 1];
-                        if (bandwith_needed >= CAPACITY_LEFT[make_pair(n_a, n_b)][CAPACITY_]) {
-                            route_can_hold_it = 0;
-                            break;
-                        }
-                    }
-                }
-
-                // ako izdrzi potrosi postojecu rutu jos jednom
-                if (!route.empty() and route_can_hold_it) {
-                    for (int i = 0; i + 1 < route.size(); ++i) {
-                        const node_t n_a = route[i];
-                        const node_t n_b = route[i + 1];
-                        CAPACITY_LEFT[make_pair(n_a, n_b)][CAPACITY_] -= bandwith_needed;
-                    }
-                }
-
-                    // napravi novu rutu koja je jaca od prosle (i sve ostale ce je koristiti)
-                else {
-                    int status = BFS::run(n1, n2, bandwith_needed, route, CAPACITY_LEFT);
-                    if (status != OK) {
-                        // ako nije uspio pronac rutu
-                        solution.error = NOT_FEASABLE;
-                        return;
-                    }
+                // pronadji rutu
+                int status = BFS::run(n1, n2, BANDWITH(c1, c2), route, CAPACITY_LEFT);
+                if (status != OK) {
+                    cout << "BFS nije uspio zavrsiti rutu!" << endl;
+                    solution.error = INF_ERROR;
                 }
             }
         }
     }
+    //endregion
 
-    // compute error old one
+    //region izracunaj penalty + error
     solution.error = Solution::compute_constraint_penalty_error(solution);
     if (solution.error < best_solution.error) {
         best_solution = solution;
     }
+    //endregion
+
 }
-//endregion

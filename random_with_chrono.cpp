@@ -1,4 +1,4 @@
-#include "Rand.h"
+#include "random_with_chrono.h"
 
 int Rand::random_int(const int& a, const int& b) {
     static default_random_engine re{};
@@ -35,4 +35,6 @@ vector<double> Rand::random_double(const double& a, const double& b, const unsig
     }
     return result;
 }
+
+
 

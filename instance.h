@@ -2,9 +2,9 @@
 #define HMO_PROJECT_INSTANCE_H
 
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <set>
-#include <unordered_set>
 
 //region macro
 
@@ -29,6 +29,8 @@
 typedef int node_t;
 typedef int server_t;
 typedef int component_t;
+typedef int chain_t;
+
 
 //endregion
 

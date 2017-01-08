@@ -3,8 +3,12 @@
 
 #include <random>
 #include <cfloat>
+#include <chrono>
 
 using namespace std;
+
+typedef chrono::high_resolution_clock Time;
+typedef chrono::duration<float> fsec;
 
 /** [a, b] */
 class Rand {

@@ -1,4 +1,4 @@
-#include "Greedy.h"
+#include "greedy.h"
 
 int Greedy::run(Solution& solution) {
 
@@ -6,13 +6,14 @@ int Greedy::run(Solution& solution) {
     const vector<double>& CPU_NEEDED = {Instance::cpu_requirement};
     vector<double> CPU_LEFT = {Instance::cpu_availability};
 
-    vector<component_t> comp_on_serv(NUM_VMS, NOT_PLACED);
-    vector<component_t> comp_on_node(NUM_VMS, NOT_PLACED);
+    vector<component_t> comp_on_serv(NUM_VMS, NONE);
+    vector<component_t> comp_on_node(NUM_VMS, NONE);
 
     //region rasporedi komponente s usluznih lanaca
     unordered_map<pair<node_t, node_t>, vector<double>> CAPACITY_LEFT = {Instance::edges};
 
-    for (const auto& service_chain : Instance::service_chains) {
+    for (chain_t sc = 0; sc < Instance::service_chains.size(); sc++) {
+        const auto& service_chain = Instance::service_chains[sc];
 
         // probaj susjedne komponente sto blize staviti
         for (int c = 0; c + 1 < service_chain.size(); c++) {
@@ -26,10 +27,10 @@ int Greedy::run(Solution& solution) {
             auto s2 = comp_on_serv[c2];
 
             // ako su vec smjestene komponente, samo moras staviti rutu dolje
-            if (s1 == NOT_PLACED or s2 == NOT_PLACED) {
+            if (s1 == NONE or s2 == NONE) {
 
                 //region provjeri je li na neki node stanu obje komponente
-                for (auto node = 0; node < Instance::node_servers.size(); ++node) {
+                for (node_t node = 0; node < Instance::node_servers.size(); ++node) {
                     const auto& servers = Instance::node_servers[node];
 
                     // provjeri je li na neki server stanu obje komponente
@@ -37,17 +38,17 @@ int Greedy::run(Solution& solution) {
                     for (auto server : servers) {
 
                         // ne provjeravaj servere dalje ako si pronaso da su obje na istom node-u
-                        if (n1 == n2 and n1 != NOT_PLACED) break;
+                        if (n1 == n2 and n1 != NONE) break;
 
-                        if (comp_on_serv[c1] == NOT_PLACED and CPU_NEEDED[c1] <= CPU_LEFT[server]) {
+                        if (comp_on_serv[c1] == NONE and CPU_NEEDED[c1] <= CPU_LEFT[server]) {
 
                             n1 = node;
                             s1 = server;
                         }
 
-                        if (comp_on_serv[c2] == NOT_PLACED and CPU_NEEDED[c2] <= CPU_LEFT[server]) {
+                        if (comp_on_serv[c2] == NONE and CPU_NEEDED[c2] <= CPU_LEFT[server]) {
                             // ako komponenta_a nije prije postavljena a zeli isto na taj server
-                            if ((comp_on_serv[c1] == NOT_PLACED and s1 == server and
+                            if ((comp_on_serv[c1] == NONE and s1 == server and
                                  // uvjeri se da obje mogu stati
                                  CPU_NEEDED[c1] + CPU_NEEDED[c2] <= CPU_LEFT[server]) or
                                 // ako samo b moze onda nema problema
@@ -60,14 +61,14 @@ int Greedy::run(Solution& solution) {
 
                     }
                     // ne provjeravaj nodove dalje
-                    if (n1 == n2 and n1 != NOT_PLACED) break;
+                    if (n1 == n2 and n1 != NONE) break;
                 }
                 //endregion
 
             }
 
             // ako nisi nasao node-ove za obje komponente
-            if (n1 == NOT_PLACED or n2 == NOT_PLACED) {
+            if (n1 == NONE or n2 == NONE) {
                 cout << "Ne valja pohlepni, nema mjesta za sve komponente!" << endl;
                 return -1;
             }
@@ -90,30 +91,21 @@ int Greedy::run(Solution& solution) {
                 solution.x[c2] = s2;
             }
 
-            if (n1 == n2) {
-                // ako su na istom cvoru samo taj cvor stavi u "rutu"
-                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
-                // ako ga vec prije nisi stavio
-                if (route.empty()) {
-                    route.push_back(n1);
-                }
-            }
+            // provjeri jel postoji ruta
+            vector<node_t>& route = solution.routes[make_pair(c1, c2)];
+
+            // ako si je vec naso, nista
+            if (!route.empty()) continue;
+
+            // ako su na istom cvoru samo taj cvor stavi u "rutu"
+            if (n1 == n2) solution.routes[make_pair(c1, c2)].push_back(n1);
 
             else {
-                // ako nisu na istom node-u
-
-                // minimalni bandwith kroz sve edge-eve rute
-                auto const& bandwith_needed = BANDWITH(c1, c2);
-
-                // provjeri je li prije vec izracunata ruta izmedju ova dva cvora za neki drugi lanac
-                vector<node_t>& route = solution.routes[make_pair(c1, c2)];
-
-                int status = BFS::run(n1, n2, bandwith_needed, route, CAPACITY_LEFT);
-
+                // pronadji rutu
+                int status = BFS::run(n1, n2, BANDWITH(c1, c2), route, CAPACITY_LEFT);
                 if (status != OK) {
-                    // ako nije uspio pronac rutu
                     cout << "BFS nije uspio zavrsiti rutu!" << endl;
-                    solution.error = NOT_FEASABLE;
+                    solution.error = INF_ERROR;
                     return status;
                 }
             }
