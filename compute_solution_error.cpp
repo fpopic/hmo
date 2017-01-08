@@ -1,6 +1,6 @@
 #include <vector>
-#include "instance.h"
-#include "solution.h"
+#include "model/instance.h"
+#include "model/solution.h"
 
 using namespace std;
 

@@ -11,10 +11,10 @@ int GA::run(const Solution& pre_solution,
     vector<Solution>& population = solutions;
     generate_population_and_best(pre_solution, pop_size, pM, population);
 
-    fsec elapsed_seconds;
 
     int iter = 0;
     auto start = Time::now();
+    fsec elapsed_seconds;
 
     printf("I=%d Error=%f Time=%ds\n", iter, best_solution.error, (int) elapsed_seconds.count());
 
@@ -41,8 +41,11 @@ int GA::run(const Solution& pre_solution,
         elapsed_seconds = Time::now() - start;
 
         //Evaluacija populacije
-        if (iter % 10000 == 0) {
+        if (iter % 20000 == 0) {
             printf("I=%d Error=%f Time=%ds\n", iter, best_solution.error, (int) floor(elapsed_seconds.count()));
+            if (best_solution.error < 5000) {
+                Solution::writeSolution(best_solution, -5, (int) floor(elapsed_seconds.count()));
+            }
         }
     }
 
@@ -63,7 +66,7 @@ void GA::generate_population_and_best(const Solution& pre_solution,
 
     for (int i = 1; i < pop_size; ++i) {
         Solution solution(pre_solution);
-        mutate_and_evaluate(solution, 0.2);
+        mutate_and_evaluate(solution, 0.1);
         population.push_back(solution);
         if (solution.error < best_solution.error) {
             best_solution = solution;

@@ -6,8 +6,8 @@
 #include <list>
 #include <vector>
 
-#include "solution.h"
-#include "random_with_chrono.h"
+#include "../model/solution.h"
+#include "../model/time_utils.h"
 #include "bfs.h"
 
 using namespace std;

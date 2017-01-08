@@ -6,7 +6,7 @@
 #include <list>
 #include <algorithm>
 #include "bfs.h"
-#include "solution.h"
+#include "../model/solution.h"
 
 using namespace std;
 

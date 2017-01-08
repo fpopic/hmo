@@ -1,5 +1,5 @@
 #include <iostream>
-#include "greedy.h"
+#include "search/greedy.h"
 
 using namespace std;
 

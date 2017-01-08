@@ -10,7 +10,6 @@
 #include "instance.h"
 
 #define INF_ERROR 1e6
-#define ACCEPTED_ERROR 1e4
 
 // component not placed on any server
 #define NONE -1

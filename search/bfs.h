@@ -1,7 +1,7 @@
 #ifndef HMO_PROJECT_BFS_H
 #define HMO_PROJECT_BFS_H
 
-#include "instance.h"
+#include "../model/instance.h"
 #include <queue>
 
 #define OK 0
