@@ -82,10 +82,10 @@ int main() {
 
     //endregion
     Solution pre_solution(x, routes);
-    const double pM = 0.1;
+    const double pM = 0.15;
     const unsigned pop_size = 1000;
     const unsigned max_iter = 1000000;
-    const unsigned max_time = 60; //seconds
+    const unsigned max_time = 10; //seconds
 
     vector<Solution> solutions;
     int status = GA::run(pre_solution, pM, pop_size, max_iter, max_time, solutions);

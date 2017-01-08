@@ -1,3 +1,4 @@
+#include <memory>
 #include "ga.h"
 
 Solution GA::best_solution;
@@ -57,7 +58,7 @@ void GA::generate_population_and_best(const Solution& pre_solution,
                                       const unsigned& pop_size, const double& pM,
                                       vector<Solution>& population) {
     // pripremi prvi put za selekciju permutacijski vektor
-    GA::permutation.resize(pop_size);
+    GA::permutation.reserve(pop_size);
     for (int i = 0; i < pop_size; ++i) GA::permutation[i] = i;
 
     //generiraj pocetnu populaciju  treba im svima fitnes izracunat i pronac najbolju za best_solution
