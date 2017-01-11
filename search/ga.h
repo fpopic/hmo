@@ -19,7 +19,7 @@ public:
     static Solution best_solution;
     static vector<int> permutation;
 
-    static int run(const Solution& pre_solution,
+    static void run(const Solution& pre_solution,
                    const double& pM, const unsigned& pop_size, const unsigned& max_iter, const unsigned& max_time,
                    vector<Solution>& solutions);
 
@@ -27,7 +27,7 @@ public:
                                              const unsigned& pop_size, const double& pM,
                                              vector<Solution>& population);
 
-    static vector<pair<Solution, int>> select(vector<Solution>& population);
+    static void select(const vector<Solution>& population, vector<pair<Solution, int>>& selected);
 
     static Solution crossover(const Solution& p1, const Solution& p2);
 

@@ -85,7 +85,7 @@ struct Instance {
     static const unordered_map<pair<component_t, component_t>, int> vm_demands;
 
     // definicije usluznih lanaca
-    static const vector<vector<component_t>> service_chains;
+    static  vector<vector<component_t>> service_chains;
 
     // maksimalno dopusteno kasnjenje za svaki usluzni lanac
     // indeks je oznaka usluznog lanca

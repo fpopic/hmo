@@ -4,28 +4,33 @@
 Solution GA::best_solution;
 vector<int> GA::permutation;
 
-int GA::run(const Solution& pre_solution,
+void GA::run(const Solution& pre_solution,
             const double& pM, const unsigned& pop_size,
             const unsigned& max_iter, const unsigned& max_time,
             vector<Solution>& solutions) {
 
     vector<Solution>& population = solutions;
     generate_population_and_best(pre_solution, pop_size, pM, population);
+    double pre_best_error = pre_solution.error;
 
 
     int iter = 0;
     auto start = Time::now();
     fsec elapsed_seconds;
 
+    printf("GA: pM=%f pop_size=%d pre_best_error=%f\n", pM, pop_size, pre_best_error);
     printf("I=%d Error=%f Time=%ds\n", iter, best_solution.error, (int) elapsed_seconds.count());
 
     while (iter < max_iter and elapsed_seconds.count() < max_time) {
 
         //Selekcija
-        vector<pair<Solution, int>> selected = select(population);
-        Solution parent1 = selected[0].first;
-        Solution parent2 = selected[1].first;
-        Solution worst = selected[2].first;
+
+        vector<pair<Solution, int>> selected(3);
+        select(population, selected);
+
+        Solution& parent1 = selected[0].first;
+        Solution& parent2 = selected[1].first;
+        Solution& worst = selected[2].first;
 
         //Krizanje
         Solution child = crossover(parent1, parent2);
@@ -34,24 +39,22 @@ int GA::run(const Solution& pre_solution,
         mutate_and_evaluate(child, pM);
 
         //Eliminacija
-        if (child.error > worst.error) {
-            population[selected[2].second] = child;
+        if (child.error <= worst.error) {
+            population.erase(population.begin() + selected[2].second);
+            population.push_back(child);
         }
 
         iter++;
         elapsed_seconds = Time::now() - start;
 
         //Evaluacija populacije
-        if (iter % 20000 == 0) {
+        if (iter % 10000 == 0) {
             printf("I=%d Error=%f Time=%ds\n", iter, best_solution.error, (int) floor(elapsed_seconds.count()));
-            if (best_solution.error < 5000) {
-                Solution::writeSolution(best_solution, -5, (int) floor(elapsed_seconds.count()));
+            if (best_solution.error < pre_best_error) {
+                Solution::writeSolution(best_solution, (int) floor(elapsed_seconds.count()));
             }
         }
     }
-
-
-    return 0;
 }
 
 void GA::generate_population_and_best(const Solution& pre_solution,
@@ -67,7 +70,7 @@ void GA::generate_population_and_best(const Solution& pre_solution,
 
     for (int i = 1; i < pop_size; ++i) {
         Solution solution(pre_solution);
-        mutate_and_evaluate(solution, 0.1);
+        mutate_and_evaluate(solution, 0.05);
         population.push_back(solution);
         if (solution.error < best_solution.error) {
             best_solution = solution;
@@ -75,25 +78,23 @@ void GA::generate_population_and_best(const Solution& pre_solution,
     }
 }
 
-vector<pair<Solution, int>> GA::select(vector<Solution>& population) {
+void GA::select(const vector<Solution>& population, vector<pair<Solution, int>>& selected) {
     random_shuffle(GA::permutation.begin(), GA::permutation.end());
 
     //zapamti najlosiju
     int worst_index = 0;
     double worst_error = 0;
 
-    vector<pair<Solution, int>> tournament(3);
     for (int i = 0; i < 3; ++i) {
         Solution solution = population[GA::permutation[i]];
-        tournament[i] = make_pair(solution, GA::permutation[i]);
+        selected[i] = make_pair(solution, GA::permutation[i]);
         if (solution.error > worst_error) {
             worst_index = i;
             worst_error = solution.error;
         }
     }
     //najlosiju na kraj
-    std::swap(tournament[worst_index], tournament[tournament.size() - 1]);
-    return tournament;
+    std::swap(selected[worst_index], selected[selected.size() - 1]);
 }
 
 Solution GA::crossover(const Solution& p1, const Solution& p2) {
@@ -107,7 +108,7 @@ Solution GA::crossover(const Solution& p1, const Solution& p2) {
 
 void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
 
-    //region mutacija (smjestaja)
+    //region mutacija (smjestaja)  //todo OVDJE STAVIT DA NE MOZE NA PRVI !!!!
     vector<component_t> comp_on_serv(NUM_VMS, NONE);
 
     vector<double> rand_probs = Rand::random_double(0.0, 1.0, NUM_VMS);

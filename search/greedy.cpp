@@ -30,7 +30,7 @@ int Greedy::run(Solution& solution) {
             if (s1 == NONE or s2 == NONE) {
 
                 //region provjeri je li na neki node stanu obje komponente
-                for (node_t node = 0; node < Instance::node_servers.size(); ++node) {
+                for (node_t node = Instance::node_servers.size() - 1; node >= 0; --node) {
                     const auto& servers = Instance::node_servers[node];
 
                     // provjeri je li na neki server stanu obje komponente
