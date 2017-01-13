@@ -1,5 +1,7 @@
 #include "time_utils.h"
 
+default_random_engine Rand::random_engine = std::default_random_engine{};
+
 int Rand::random_int(const int& a, const int& b) {
     static default_random_engine re{};
     using Dist = uniform_int_distribution<int>;
@@ -35,6 +37,3 @@ vector<double> Rand::random_double(const double& a, const double& b, const unsig
     }
     return result;
 }
-
-
-

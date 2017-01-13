@@ -122,11 +122,11 @@ const unordered_map<pair<component_t, component_t>, int> Instance::vm_demands = 
         {make_pair(44 - 1, 36 - 1), 7}
 };
 
-//od nule
+// od nule
 // nodes 0, 1, 2 are hosts for servers
 const vector<vector<server_t>> Instance::node_servers = {
-        {},//{2, 4, 9, 10, 11, 12, 18, 20, 26, 27},
-         {1, 3, 7, 13, 14, 16, 21, 22, 23},
+        {2, 4, 9, 10, 11, 12, 18, 20, 26, 27},
+        {1, 3, 7, 13, 14, 16, 21, 22, 23},
         {0, 5, 6, 8,  15, 17, 19, 24, 25}
 };
 
@@ -134,7 +134,7 @@ const vector<vector<server_t>> Instance::node_servers = {
 const vector<node_t> Instance::server_nodes = {2, 1, 0, 1, 0, 2, 2, 1, 2, 0, 0, 0, 0, 1, 1, 2, 1, 2, 0, 2, 0, 1, 1, 1, 2, 2, 0, 0};
 
 // od nule
- vector<vector<component_t>> Instance::service_chains = {
+vector<vector<component_t>> Instance::service_chains = {
         {29, 36},
         {29, 31, 32, 35},
         {30, 31, 33, 35},

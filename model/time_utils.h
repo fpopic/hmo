@@ -1,7 +1,7 @@
 #ifndef HMO_PROJECT_RANDOM_H
 #define HMO_PROJECT_RANDOM_H
 
-#include <random>
+#include <algorithm>
 #include <cfloat>
 #include <chrono>
 
@@ -14,6 +14,8 @@ typedef chrono::duration<float> fsec;
 class Rand {
 
 public:
+
+    static default_random_engine random_engine;
 
     static int random_int(const int& a, const int& b);
 

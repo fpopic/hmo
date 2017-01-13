@@ -22,7 +22,7 @@ int BFS::run(const node_t& n1, const node_t& n2, const int& bandwith_needed,
             if (!visited[succ]) {
                 int edge_capacity_left = (int) capacity_left[make_pair(curr->node, succ)][CAPACITY_];
                 if (bandwith_needed <= edge_capacity_left) {
-                    open.push(make_shared<BFSNode>(BFSNode(curr, succ, curr->cost + (succ != n2 ? 1 : 0)))); //tweak greedy zadnji korak
+                    open.push(make_shared<BFSNode>(BFSNode(curr, succ, curr->cost + 1)));
                 }
             }
         }
@@ -41,10 +41,6 @@ int BFS::run(const node_t& n1, const node_t& n2, const int& bandwith_needed,
     }
     // dodaj i pocetni node u rutu
     route.insert(route.begin(), curr->node);
-
-
-//    curr = nullptr;
-//    free(curr);
 
     return 0;
 }

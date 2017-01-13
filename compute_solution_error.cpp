@@ -158,7 +158,7 @@ int main() {
 
     Solution solution(x, routes);
     solution.error = Solution::compute_error(solution);
-    Solution::writeSolution(solution, 0, 0);
+   // Solution::writeSolution(solution, 0, 0);
 
     cout << "Error: " << solution.error << endl;
 }

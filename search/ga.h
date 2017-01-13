@@ -5,6 +5,7 @@
 #include <queue>
 #include <list>
 #include <vector>
+#include <memory>
 
 #include "../model/solution.h"
 #include "../model/time_utils.h"
@@ -20,8 +21,8 @@ public:
     static vector<int> permutation;
 
     static void run(const Solution& pre_solution,
-                   const double& pM, const unsigned& pop_size, const unsigned& max_iter, const unsigned& max_time,
-                   vector<Solution>& solutions);
+                    const double& pM_start, const double& pM, const unsigned& pop_size, const unsigned& max_iter, const unsigned& max_time,
+                    vector<Solution>& solutions);
 
     static void generate_population_and_best(const Solution& pre_solution,
                                              const unsigned& pop_size, const double& pM,

@@ -6,7 +6,7 @@ using namespace std;
 int main() {
 
     Solution solution;
-    int min = -999;
+    int min = 0;
 
     int status = Greedy::run(solution);
     if (status == 0) {
