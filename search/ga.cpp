@@ -111,13 +111,10 @@ void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
     vector<component_t> server_for(NUM_VMS, NONE);
 
     vector<double> rand_probs = Rand::random_double(0.0, 1.0, NUM_VMS);
-//    vector<int> rand_servers = Rand::random_int(0, NUM_SERVERS - 1, NUM_ACTIVE_VMS);
-
     vector<int> rand_servers = Rand::random_int(0, 17, NUM_ACTIVE_VMS);
 
 
     for (int v = 0; v < NUM_ACTIVE_VMS; ++v) {
-//        solution.x[v] = (rand_probs[v] <= pM) ? rand_servers[v] : solution.x[v];
         solution.x[v] = (rand_probs[v] <= pM) ? ok_servers[rand_servers[v]] : solution.x[v];
         server_for[v] = solution.x[v];
     }
@@ -151,10 +148,6 @@ void GA::mutate_and_evaluate(Solution& solution, const double& pM) {
             if (n1 == n2) solution.routes[make_pair(c1, c2)].push_back(n1);
 
             else {
-                //253
-//                CAPACITY_LEFT[make_pair(2 - 1, 5 - 1)][CAPACITY_] -= BANDWITH(c1, c2);
-//                CAPACITY_LEFT[make_pair(5 - 1, 3 - 1)][CAPACITY_] -= BANDWITH(c1, c2);
-//                route = {2 - 1, 5 - 1, 3 - 1};
                 // pronadji rutu
                 int status = BFS::run(n1, n2, BANDWITH(c1, c2), route, CAPACITY_LEFT);
                 if (status != OK) {

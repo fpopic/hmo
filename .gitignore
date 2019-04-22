@@ -75,5 +75,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-.idea/workspace.xml
-/blah
+.idea
+.fuse_*
+!HmoChecker2016.jar

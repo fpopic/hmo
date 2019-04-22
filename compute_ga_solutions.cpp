@@ -4,6 +4,8 @@
 
 using namespace std;
 
+// ./GA <pM_start> <pM> <pop_size> <pre_solution_path>
+  
 int main(int argc, char* argv[]) {
 
     string pre_solution_path = "results/best";
