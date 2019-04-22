@@ -5,11 +5,14 @@
 - CMake 3.6
 - C++11
 
-## Runing
+## Compiling
 
 ```bash
 cmake .
 make
+```
+
+## Running
 
 Compute an inital greedy solution:
 ```
