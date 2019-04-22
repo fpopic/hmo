@@ -25,13 +25,13 @@ make
     # Writes to "results/res-<SOLUTION_ERROR>-<SOLUTION_MINUTES>min-popic";
     ``` 
 
-2. Compute GA-optimised solution:
+2. Compute a GA-optimised solution:
     ```bash
     ./GA <pM_start> <pM> <pop_size> <pre_solution_path>
     ```
     
     Params:
-    - pM_start - mutation percentage for inital population
+    - pM_start - mutation percentage for an inital population
     - pM - mutation percentage
     - pop-size - population size
-    - pre_solution_path - path to file for the inital greedy solution 
+    - pre_solution_path - path to file for an inital greedy solution 
