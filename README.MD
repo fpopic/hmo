@@ -26,8 +26,8 @@ make
     ./GA <pM_start> <pM> <pop_size> <pre_solution_path>
     ```
     
-    Params:
-    - pM_start - mutation percentage for inital population
-    - pM - mutation percentage
-    - pop-size - population size
-    - pre_solution_path - path to file for the inital greedy solution 
+Params:
+- pM_start - mutation percentage for inital population
+- pM - mutation percentage
+- pop-size - population size
+- pre_solution_path - path to file for the inital greedy solution 
