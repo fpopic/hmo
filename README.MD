@@ -18,6 +18,8 @@ make
 
 ## Running
 
+BFS algorithm has been used to evaluate solution.
+
 1. Compute an inital greedy solution:
     ```bash
     ./GREEDY
@@ -35,3 +37,4 @@ make
     - pM - mutation percentage
     - pop_size - population size
     - pre_solution_path - path to file for an inital greedy solution 
+
