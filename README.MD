@@ -27,7 +27,7 @@ BFS algorithm has been used to evaluate solution.
     # Writes to "results/res-<SOLUTION_ERROR>-<SOLUTION_MINUTES>min-popic";
     ``` 
 
-2. Compute a GA-optimised solution:
+2. Compute a GA-optimised solution (best from population):
     ```bash
     ./GA <pM_start> <pM> <pop_size> <pre_solution_path>
     ```
