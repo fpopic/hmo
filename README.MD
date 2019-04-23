@@ -33,5 +33,5 @@ make
     Params:
     - pM_start - mutation percentage for an inital population
     - pM - mutation percentage
-    - pop-size - population size
+    - pop_size - population size
     - pre_solution_path - path to file for an inital greedy solution 
